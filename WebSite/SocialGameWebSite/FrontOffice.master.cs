@@ -4,9 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data;
+using System.Collections;
 
-public partial class MembersPages_Default : System.Web.UI.Page
+public partial class FrontOffice : System.Web.UI.MasterPage
 {
+
     protected void Page_Load(object sender, EventArgs e)
     {
 

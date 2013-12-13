@@ -1,0 +1,59 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="FrontOffice.master.cs" Inherits="FrontOffice" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>SocialGame</title>
+    <link href="Styles/Site.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="Scripts/Scripts.js"></script>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body onload="MM_preloadImages('imgs/botao_home_activo.png','imgs/botao_jogo_activo.png','imgs/botao_ranking_activo.png')">
+    <form id="form1" runat="server">
+        <div align="center">
+          <table border="0" cellpadding="0" cellspacing="0" id="pagina">
+            <tr>
+              <td colspan="3" class="linha_cima">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="cel_logotipo" style="width: 103px"><a href="Default.aspx"><img src="imgs/logotipo.png" height="113" border="0" style="width: 360px" /></a></td>
+              <td colspan="2" valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td colspan="11" class="cel_dados_utilizador"><p class="p_cel_dados_utilizador">
+                  <asp:ContentPlaceHolder ID="UserLoginContent" runat="server"></asp:ContentPlaceHolder></p></td>
+                  </tr>
+                <tr>
+                  <td valign="bottom" class="cel_espaco_esquerda">&nbsp;</td>
+                  <asp:ContentPlaceHolder ID="LayoutButtonsContent" runat="server"/>
+                  <td valign="bottom" class="cel_espaco_direita"&nbsp;</td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="cel_barra_texto_backoffice">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" class="linha_meio">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" valign="top" class="cel_area">
+                    <center>
+                    <div id="area">
+                        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                    </div>
+                </center>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="cel_links_baixo_pagina"><a href="#" class="links_baixo_pagina">Perguntas Frequentes</a> | <a href="#" class="links_baixo_pagina">Adicione aos Favoritos</a> | <a href="#" class="links_baixo_pagina">Pol&iacute;tica de Privacidade</a> | <a href="#" class="links_baixo_pagina">Sugira este site a um amigo</a></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="cel_copyright">Copyright &copy; SocialGame - 2013</td>
+            </tr>
+          </table>
+        </div>
+    </form>
+</body>
+</html>
