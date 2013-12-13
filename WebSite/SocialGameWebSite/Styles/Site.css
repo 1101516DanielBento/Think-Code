@@ -1,0 +1,315 @@
+﻿td.linha_cima {
+	padding: 0px;
+	height: 22px;
+}
+td.cel_logotipo {
+	padding: 0px;
+	height: 113px;
+	width: 157px;
+}
+table#pagina {
+	margin-top: 0px;
+	background-color: #FFFFFF;
+    width: 1294px;
+    height: 453px;
+}
+td.cel_dados_utilizador {
+	text-align: right;
+	height: 21px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	vertical-align: middle;
+	padding-right: 15px;
+	padding-left: 0px;
+	font-size: 12px;
+}
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #CCCCCC;
+}
+td.cel_espaco_esquerda {
+	width: 33px;
+	padding: 0px;
+}
+td.cel_espaco_botoes {
+	padding: 0px;
+	width: 4px;
+}
+td.cel_botoes {
+	padding-top: 65px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	vertical-align: bottom;
+	width: 117px;
+}
+td.cel_espaco_direita {
+
+	width: 9px;
+	padding: 0px;
+}
+p.p_cel_dados_utilizador {
+	margin: 0px;
+}
+td.linha_meio {
+	padding: 0px;
+	height: 19px;
+}
+a.links_dados_utilizador {
+	text-decoration: none;
+	color: #000000;
+}
+a.links_dados_utilizador:hover {
+
+	text-decoration: underline;
+}
+td.cel_area {
+	padding: 0px 15px;
+	width: 800px;
+	text-align: left;
+}
+td.cel_barra_texto_backoffice {
+	background-color: #619CC9;
+	height: 35px;
+	vertical-align: middle;
+	padding-left: 20px;
+	text-align: left;
+	font-size: 25px;
+	color: #B0CDE4;
+}
+a.cel_links_login {
+
+	text-decoration: underline;
+	color: #619CC9;
+}
+a.cel_links_login:hover {
+	text-decoration: none;
+}
+td.cel_recuperar_password_login {
+	padding-left: 3px;
+	padding-bottom: 4px;
+	border-bottom-width: 3px;
+	border-bottom-style: solid;
+	border-bottom-color: #D7E6F2;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D7E6F2;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #D7E6F2;
+	font-size: 10px;
+}
+td.cel_cabecalho_login {
+	font-weight: bold;
+	background-color: #D7E6F2;
+	color: #619CC9;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	height: 15px;
+}
+td.cel_utilizador_login {
+	color: #619CC9;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D7E6F2;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #D7E6F2;
+}
+td.cel_password_login {
+	color: #619CC9;
+	padding-top: 2px;
+	padding-bottom: 5px;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D7E6F2;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #D7E6F2;
+}
+td.cel_botao_entrar_login {
+	text-align: right;
+	padding-right: 3px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D7E6F2;
+	padding-bottom: 4px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #D7E6F2;
+}
+td.cel_titulo {
+	text-decoration: none;
+	color: #619CC9;
+	font-size: 14px;
+	font-weight: bold;
+	padding-top: 7px;
+}
+p.barra_titulo {
+	font-size: 2px;
+	line-height: 2px;
+	background-color: #619CC9;
+	margin-top: 2px;
+}
+td.cel_conteudos 
+{
+    padding-top: 5px;
+}
+p.p_texto_campo_formulario_geral {
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+p.p_componente_campo_formulario_geral {
+	margin-bottom: 4px;
+	margin-top: 0px;
+}
+p.p_mensagens_formulario_geral {
+	margin-bottom: 5px;
+	font-weight: bold;
+	margin-top: 5px;
+}
+table#tabela_login {
+	width: 220px;
+}
+.p_erro
+{
+	font-weight: bold;
+	color: #FF0000;
+}
+.p_sucesso 
+{
+    color: #3A8000;
+}
+table#MainContent_grdBackoffice th {
+    color: #619CC9;
+}
+table#MainContent_grdBackoffice td a {
+	color: #619CC9;
+}
+table#MainContent_grdBackoffice td a:hover {
+	text-decoration: none;
+}
+p.p_inserir {
+	margin-bottom: 5px;
+	margin-top: 10px;
+	text-align: right;
+}
+a.link_inserir {
+	color: #619CC9;
+	font-weight: bold;
+}
+a.link_inserir:hover {
+	text-decoration: none;
+}
+td.cel_links_baixo_pagina {
+	padding-top: 30px;
+	text-align: center;
+	vertical-align: bottom;
+	padding-bottom: 0px;
+	font-size: 10px;
+}
+a.links_baixo_pagina {
+	text-decoration: underline;
+	color: #000000;
+}
+a.links_baixo_pagina:hover {
+
+	text-decoration: none;
+	color: #000000;
+}
+td.cel_copyright {
+	text-align: center;
+	font-size: 10px;
+	vertical-align: bottom;
+	padding-bottom: 10px;
+	padding-top: 6px;
+}
+div#area {
+	min-height: 200px;
+	width: 550px;
+	text-align: left;
+}
+a.link_voltar_para_minha_conta {
+	text-decoration: none;
+	color: #619CC9;
+	font-weight: normal;
+}
+a.link_voltar_para_minha_conta:hover {
+	text-decoration: underline;
+}
+a.link_voltar_menu_principal {
+	color: #619CC9;
+	font-weight: bold;
+}
+a.link_voltar_menu_principal:hover {
+	text-decoration: none;
+}
+a.links_dados_utilizador {
+	text-decoration: none;
+	color: #000000;
+}
+a.links_dados_utilizador:hover {
+
+	text-decoration: underline;
+}
+a.cel_links_login {
+
+	text-decoration: underline;
+	color: #619CC9;
+}
+a.cel_links_login:hover {
+	text-decoration: none;
+}
+td.cel_registar_login {
+	padding-left: 3px;
+	padding-bottom: 2px;
+	padding-top: 3px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D7E6F2;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #D7E6F2;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #D7E6F2;
+	font-size: 10px;
+}
+a.link_normal_formularios {
+	color: #619CC9;
+	font-weight: bold;
+}
+a.link_normal_formularios:hover {
+	text-decoration: none;
+}
+table#MainContent_grdRanking {
+    width: 100%;
+    border: 0px none #FFFFFF;
+}
+table#MainContent_grdRanking th {
+    border: 0px none #FFFFFF;
+    padding-bottom: 10px;
+    color: #619CC9;
+    font-size: 12px;
+}
+table#MainContent_grdRanking td {
+    border: 0px none #FFFFFF;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+table#MainContent_grdRanking td a {
+	color: #619CC9;
+}
+table#MainContent_grdRanking td a:hover {
+	text-decoration: none;
+}
