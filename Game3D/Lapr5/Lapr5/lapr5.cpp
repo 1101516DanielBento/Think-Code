@@ -1,9 +1,21 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <stdlib.h>     
-#include <GL\glut.h>
+#include <stdlib.h>
+#include <cmath>
 #include <iostream>
 #include "grafos.h"
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
+
 
 using namespace std;
 
@@ -760,47 +772,68 @@ void keyboard(unsigned char key, int x, int y)
 				initEstado();
 				initModelo();
 				glutPostRedisplay();
+			break;
+		// movimento interactivo - voo livre (subir e descer)
+		case 'q':
+		case 'Q':
+			estado.camera.center[2]+=1;
+			glutPostRedisplay();
+			break;
+		case 'a':
+		case 'A':
+			estado.camera.center[2]-=1;
+			glutPostRedisplay();
 			break;    
 	}
 }
 
 void Special(int key, int x, int y){
-
+	
 	switch(key){
 		case GLUT_KEY_F1 :
-				gravaGrafo();
+			gravaGrafo();
 			break;
 		case GLUT_KEY_F2 :
-				leGrafo();
-				glutPostRedisplay();
-			break;	
-
+			leGrafo();
+			glutPostRedisplay();
+			break;
+			
 		case GLUT_KEY_F6 :
-				numNos=numArcos=0;
-				addNo(criaNo( 0, 10,0));  // 0
-				addNo(criaNo( 0,  5,0));  // 1
-				addNo(criaNo(-5,  5,0));  // 2
-				addNo(criaNo( 5,  5,0));  // 3
-				addNo(criaNo(-5,  0,0));  // 4
-				addNo(criaNo( 5,  0,0));  // 5
-				addNo(criaNo(-5, -5,0));  // 6
-				addArco(criaArco(0,1,1,1));  // 0 - 1
-				addArco(criaArco(1,2,1,1));  // 1 - 2
-				addArco(criaArco(1,3,1,1));  // 1 - 3
-				addArco(criaArco(2,4,1,1));  // 2 - 4
-				addArco(criaArco(3,5,1,1));  // 3 - 5
-				addArco(criaArco(4,5,1,1));  // 4 - 5
-				addArco(criaArco(4,6,1,1));  // 4 - 6
-				glutPostRedisplay();
-			break;	
+			numNos=numArcos=0;
+			addNo(criaNo( 0, 10,0));  // 0
+			addNo(criaNo( 0,  5,0));  // 1
+			addNo(criaNo(-5,  5,0));  // 2
+			addNo(criaNo( 5,  5,0));  // 3
+			addNo(criaNo(-5,  0,0));  // 4
+			addNo(criaNo( 5,  0,0));  // 5
+			addNo(criaNo(-5, -5,0));  // 6
+			addArco(criaArco(0,1,1,1));  // 0 - 1
+			addArco(criaArco(1,2,1,1));  // 1 - 2
+			addArco(criaArco(1,3,1,1));  // 1 - 3
+			addArco(criaArco(2,4,1,1));  // 2 - 4
+			addArco(criaArco(3,5,1,1));  // 3 - 5
+			addArco(criaArco(4,5,1,1));  // 4 - 5
+			addArco(criaArco(4,6,1,1));  // 4 - 6
+			glutPostRedisplay();
+			break;
 		case GLUT_KEY_UP:
-				estado.camera.dist-=1;
-				glutPostRedisplay();
+			estado.camera.dist-=1;
+			glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
-				estado.camera.dist+=1;
-				glutPostRedisplay();
-			break;	}
+			estado.camera.dist+=1;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_LEFT:
+			estado.camera.dir_long-=0.1;
+			glutPostRedisplay();
+			break;
+			
+		case GLUT_KEY_RIGHT:
+			estado.camera.dir_long+=0.1;
+			glutPostRedisplay();
+			break;
+	}
 }
 
 

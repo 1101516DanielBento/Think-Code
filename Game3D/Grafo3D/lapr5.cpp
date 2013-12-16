@@ -720,12 +720,12 @@ void keyboard(unsigned char key, int x, int y)
 			// movimento interactivo - voo livre (subir e descer)
 		case 'q':
 		case 'Q':
-			estado.camera.center[2]+=0.1;
+			estado.camera.center[2]+=1;
 			glutPostRedisplay();
 			break;
 		case 'a':
 		case 'A':
-			estado.camera.center[2]-=0.1;
+			estado.camera.center[2]-=1;
 			glutPostRedisplay();
 			break;
 	}
