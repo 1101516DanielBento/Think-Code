@@ -26,7 +26,8 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM User");
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User]");
+
                 return ds.Tables[0];
             }
             catch (SqlException ex)

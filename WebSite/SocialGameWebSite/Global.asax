@@ -6,7 +6,7 @@
     {
         // Code that runs on application startup
         Application["EncryptionKey"] = System.Web.Configuration.WebConfigurationManager.AppSettings["EncryptionKey"];
-        //Model.DAL.BaseGateway.ConnectionString = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+        DataModel.DAL.BaseGateway.ConnectionString = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         //Model.BLL.Configuracao.PasswordEncryptionKey = (string)Application["EncryptionKey"];
         //Model.BLL.Utilizador.PasswordEncryptionKey = (string)Application["EncryptionKey"];
     }

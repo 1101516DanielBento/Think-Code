@@ -39,8 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\ConfigurationBLL.cs" />
+    <Compile Include="BLL\UserBLL.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DAL\BaseGateway.cs" />
+    <Compile Include="DAL\ConfigurationGateway.cs" />
     <Compile Include="DAL\UserGateway.cs" />
     <Compile Include="Model\Tag.cs" />
     <Compile Include="Model\User.cs" />
