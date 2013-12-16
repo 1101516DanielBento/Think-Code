@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-#define __GRAFO__FILE__ "exemplo.grafo"
+#define __GRAFO__FILE__ "/Users/utilizador/Documents/Bitbucket/LAPRV/Game3D/Grafo3D/exemplo.grafo"
 
 No nos[_MAX_NOS_GRAFO];
 Arco arcos[_MAX_ARCOS_GRAFO];
