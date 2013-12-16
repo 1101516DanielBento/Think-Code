@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-#define __GRAFO__FILE__ "/Users/utilizador/Documents/Bitbucket/LAPRV/Game3D/Grafo3D/exemplo.grafo"
+#define __GRAFO__FILE__ "exemplo.grafo"
 
 No nos[_MAX_NOS_GRAFO];
 Arco arcos[_MAX_ARCOS_GRAFO];
@@ -15,7 +15,7 @@ void addNo(No no){
 		nos[numNos]=no;
 		numNos++;
 	}else{
-		cout << "NÃºmero de nÃ³s chegou ao limite" << endl;
+		cout << "Número de nós chegou ao limite" << endl;
 	}
 }
 
@@ -24,7 +24,7 @@ void deleteNo(int indNo){
 		for(int i=indNo; i<numNos; nos[i++]=nos[i+i]);
 		numNos--;
 	}else{
-		cout << "IndÃ­ce de nÃ³ invÃ¡lido" << endl;
+		cout << "Indíce de nó inválido" << endl;
 	}
 }
 
@@ -49,7 +49,7 @@ void addArco(Arco arco){
 		arcos[numArcos]=arco;
 		numArcos++;
 	}else{
-		cout << "NÃºmero de arcos chegou ao limite" << endl;
+		cout << "Número de arcos chegou ao limite" << endl;
 	}
 }
 
@@ -58,12 +58,12 @@ void deleteArco(int indArco){
 		for(int i=indArco; i<numArcos; arcos[i++]=arcos[i+i]);
 		numArcos--;
 	}else{
-		cout << "IndÃ­ce de arco invÃ¡lido" << endl;
+		cout << "Indíce de arco inválido" << endl;
 	}
 }
 
 void imprimeArco(Arco arco){
-	cout << "No inÃ­cio:" << arco.noi << "NÃ³ final:" << arco.nof << "Peso:" << arco.peso << "Largura:" << arco.largura << endl;
+	cout << "No início:" << arco.noi << "Nó final:" << arco.nof << "Peso:" << arco.peso << "Largura:" << arco.largura << endl;
 }
 
 void listArcos(){
@@ -81,7 +81,7 @@ Arco criaArco(int noi, int nof, float peso, float largura){
 
 void gravaGrafo(){
 	ofstream myfile;
-	
+
 	myfile.open (__GRAFO__FILE__, ios::out);
 	if (!myfile.is_open()) {
 		cout << "Erro ao abrir " << __GRAFO__FILE__ << "para escrever" <<endl;
@@ -97,7 +97,7 @@ void gravaGrafo(){
 }
 void leGrafo(){
 	ifstream myfile;
-	
+
 	myfile.open (__GRAFO__FILE__, ios::in);
 	if (!myfile.is_open()) {
 		cout << "Erro ao abrir " << __GRAFO__FILE__ << "para ler" <<endl;
@@ -110,11 +110,11 @@ void leGrafo(){
 	for(int i=0; i<numArcos;i++)
 		myfile >> arcos[i].noi >> arcos[i].nof >> arcos[i].peso >> arcos[i].largura ;
 	myfile.close();
-	// calcula a largura de cada no = maior largura dos arcos que divergem/convergem desse/nesse no
+	// calcula a largura de cada no = maior largura dos arcos que divergem/convergem desse/nesse no	
 	for(int i=0; i<numNos;i++){
 		nos[i].largura=0;
 		for(int j=0; j<numArcos; j++)
 			if ((arcos[j].noi == i || arcos[j].nof == i) && nos[i].largura < arcos[j].largura)
 				nos[i].largura = arcos[j].largura;
-	}
+	}		
 }
