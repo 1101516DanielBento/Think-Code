@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModel.DAL
+namespace DataModel.Model
 {
     public class User
     {
@@ -94,6 +94,7 @@ namespace DataModel.DAL
         public void remTagFromUser(Tag tag) {
             userTags.Remove(tag);
         }
+
 
 
     }
