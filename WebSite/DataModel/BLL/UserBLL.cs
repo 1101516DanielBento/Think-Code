@@ -38,27 +38,33 @@ namespace DataModel.BLL
 
                 loadTagsFromUser(user);
 
+                user.FriendshipList=loadFriendsFromUser(user.IdUser);
+
+                user.FriendshipRequestList = loadFriendsRequestFromUser(user.IdUser);
+
+                user.RelationshipRequestNegociation = loadFriendsRequestNegFromUser(user.IdUser);
+
                 userList.Add(user);
             }
 
             return userList;
         }
 
-
-        public User loadPersonalNetwork(int idUser)
+        public User loadUserById(int id)
         {
-            //IList<User> userList = new List<User>();
-
-            DataTable dt = userGateway.getUsersByID(idUser);
+            
             User user = new User();
+
+            DataTable dt = userGateway.getUsersByID(id);
+
             foreach (DataRow r in dt.Rows)
             {
-
+                
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
                 user.Password = (string)r["password"];
-                user.Email = (string)r["email"];
                 user.Name = (string)r["name"];
+                user.Email = (string)r["email"];
                 user.IdPermission = (int)r["idPermission"];
                 user.Points = (int)r["points"];
                 user.Active = (bool)r["active"];
@@ -68,11 +74,130 @@ namespace DataModel.BLL
 
                 user.FriendshipList = loadFriendsFromUser(user.IdUser);
 
+                user.FriendshipRequestList = loadFriendsRequestFromUser(user.IdUser);
 
+                user.RelationshipRequestNegociation = loadFriendsRequestNegFromUser(user.IdUser);
 
             }
 
             return user;
+        }
+
+        public IList<Tuple<int, DateTime, Tag>> loadFriendsFromUser(int id)
+        {
+
+
+            IList<Tuple<int, DateTime, Tag>> friends = new List<Tuple<int, DateTime, Tag>>();
+
+            DataTable dt = userGateway.getUsersFriends(id);
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int idFriend = -1;
+                Friendship f = new Friendship();
+                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
+                {
+                    idFriend= (int)r["idUserB"];
+                }
+                else
+                {
+                    idFriend = (int)r["idUserA"];
+                }
+                
+                DateTime d = (DateTime)r["date"];
+
+
+                Tag tag = new Tag() ;
+                if (!(r["idTag"] is DBNull))
+                {
+                    tag = loadTagsFromFriendship((int)r["idTag"]);
+                }
+
+                Tuple<int, DateTime, Tag> t = new Tuple<int, DateTime, Tag>(idFriend, d, tag);
+                friends.Add(t);
+            }
+
+            return friends;
+        }
+
+        public IList<Tuple<int, DateTime>> loadFriendsRequestFromUser(int id)
+        {
+
+
+            IList<Tuple<int, DateTime>> friends = new List<Tuple<int, DateTime>>();
+
+            DataTable dt = userGateway.getUsersFriendsRequest(id);
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int idFriend = -1;
+                Friendship f = new Friendship();
+                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
+                {
+                    idFriend = (int)r["idUserB"];
+                }
+                else
+                {
+                    idFriend = (int)r["idUserA"];
+                }
+
+                DateTime d = (DateTime)r["date"];
+
+
+                Tuple<int, DateTime> t = new Tuple<int, DateTime>(idFriend, d);
+                friends.Add(t);
+            }
+
+            return friends;
+        }
+
+        public IList<Tuple<int, IList<GameRequest>>> loadFriendsRequestNegFromUser(int id)
+        {
+
+
+            IList<Tuple<int, IList<GameRequest>>> friends = new List<Tuple<int, IList<GameRequest>>>();
+
+            DataTable dt = userGateway.getUsersFriendsRequestNeg(id);
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int idFriend = -1;
+                Friendship f = new Friendship();
+                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
+                {
+                    idFriend = (int)r["idUserB"];
+                }
+                else
+                {
+                    idFriend = (int)r["idUserA"];
+                }
+
+
+
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+                friends.Add(t);
+            }
+
+            return friends;
+        }
+
+        public IList<GameRequest> getGameList(int idUser)
+        {
+            IList<GameRequest> games = new List<GameRequest>();
+            DataTable dt = userGateway.getUsersFriendsRequestNegGame(idUser);
+
+            foreach (DataRow r in dt.Rows)
+            {
+                GameRequest g = new GameRequest();
+                g.IdGame = (int)r["idGame"];
+                g.GameName = (string)r["gameName"];
+                g.Difficulty = (int)r["difficulty"];
+                g.Status = (bool)r["status"];
+
+                games.Add(g);
+            }
+
+            return games;
         }
 
 
@@ -88,156 +213,19 @@ namespace DataModel.BLL
         }
 
 
-        public User getUserByUsernameAndPassword(string userName, string pass){
+        public User getUserByUsernameAndPassword(string userName, string pass)
+        {
             int id = verifyAutenticationUser(userName, pass);
-            if ( id != -1)
+            if (id != -1)
             {
-                return loadPersonalNetwork(id);
+                return loadUserById(id);
             }
 
 
             return null;
 
         }
-
-
-        public User loadUserSimpleDetails(int idUser)
-        {
-            //IList<User> userList = new List<User>();
-
-            DataTable dt = userGateway.getUsersByID(idUser);
-            User user = new User();
-            foreach (DataRow r in dt.Rows)
-            {
-
-                user.IdUser = (int)r["idUser"];
-                user.Username = (string)r["username"];
-                user.Password = (string)r["password"];
-                user.Email = (string)r["email"];
-                user.Name = (string)r["name"];
-                user.IdPermission = (int)r["idPermission"];
-                user.Points = (int)r["points"];
-                user.Active = (bool)r["active"];
-                if (!(r["birthdate"] is DBNull))
-                user.Birthdate = (DateTime)r["birthdate"];
-
-                loadTagsFromUser(user);
-
-                user.FriendshipList = loadFriendsFromUserSimple(user.IdUser);
-
-
-
-            }
-
-            return user;
-        }
-
-        private IList<Friendship> loadFriendsFromUserSimple(int id)
-        {
-            IList<Friendship> friends = new List<Friendship>();
-            DataTable dt = userGateway.getUsersFriends(id);
-
-            foreach (DataRow r in dt.Rows)
-            {
-                Friendship f = new Friendship();
-                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
-                {
-                    DataTable dt2 = userGateway.getUsersByID((int)r["idUserB"]);
-                    f.Friend= new User();
-                    foreach (DataRow r2 in dt2.Rows)
-                    {
-
-                        f.Friend.IdUser = (int)r2["idUser"];
-                        f.Friend.Username = (string)r2["username"];
-                        f.Friend.Password = (string)r2["password"];
-                        f.Friend.Name = (string)r2["name"];
-                        f.Friend.Email = (string)r2["email"];
-                        f.Friend.IdPermission = (int)r2["idPermission"];
-                        f.Friend.Points = (int)r2["points"];
-                        f.Friend.Active = (bool)r2["active"];
-                        if(! (r2["birthdate"] is DBNull))
-                            f.Friend.Birthdate = (DateTime)r2["birthdate"];
-
-                        loadTagsFromUser(f.Friend);
-                    }
-
-
-                }
-                else
-                {
-                    DataTable dt2 = userGateway.getUsersByID((int)r["idUserA"]);
-                    f.Friend = new User();
-                    foreach (DataRow r2 in dt2.Rows)
-                    {
-
-                        f.Friend.IdUser = (int)r2["idUser"];
-                        f.Friend.Name = (string)r2["name"];
-                        f.Friend.Username = (string)r2["username"];
-                        f.Friend.Password = (string)r2["password"];
-                        f.Friend.Email = (string)r2["email"];
-                        f.Friend.IdPermission = (int)r2["idPermission"];
-                        f.Friend.Points = (int)r2["points"];
-                        f.Friend.Active = (bool)r2["active"];
-                        if (!(r2["birthdate"] is DBNull))
-                            f.Friend.Birthdate = (DateTime)r2["birthdate"];
-
-                        loadTagsFromUser(f.Friend);
-                    }
-                }
-
-
-                f.Date = (DateTime)r["date"];
-                
-                if (r["idTag"] is DBNull)
-                {
-                    f.RelationTag = null;
-                }
-                else
-                {
-                    f.RelationTag = loadTagsFromFriendship((int)r["idTag"]);
-                }
-                
-
-                friends.Add(f);
-            }
-
-            return friends;
-        }
-
-        private IList<Friendship> loadFriendsFromUser(int id)
-        {
-            IList<Friendship> friends = new List<Friendship>();
-            DataTable dt = userGateway.getUsersFriends(id);
-
-            foreach (DataRow r in dt.Rows)
-            {
-                Friendship f = new Friendship();
-                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
-                {
-                    f.Friend = loadUserSimpleDetails((int)r["idUserB"]);
-                }
-                else
-                {
-                    f.Friend = loadUserSimpleDetails((int)r["idUserA"]);
-                }
-                f.Date = (DateTime)r["date"];
-
-
-                if (r["idTag"] is DBNull)
-                {
-                    f.RelationTag = null;
-                }
-                else
-                {
-                    f.RelationTag = loadTagsFromFriendship((int)r["idTag"]);
-                }
-
-                friends.Add(f);
-            }
-
-            return friends;
-        }
-
+        
 
         public void loadTagsFromUser(User u)
         {

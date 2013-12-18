@@ -60,10 +60,11 @@ namespace DataModel.DAL
             }
         }
 
-        public DataTable getUsersFriends(int idUser){
+        public DataTable getUsersFriends(int idUser)
+        {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = "+ idUser+") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB ="+ idUser+")");
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = " + idUser + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB =" + idUser + ")");
 
                 return ds.Tables[0];
             }
@@ -81,6 +82,48 @@ namespace DataModel.DAL
             {
                 string cmd = "SELECT * FROM [GameDataBase].[dbo].[User]  where username='" + userName + "' and password = '" + SimpleEncryptor.Encrypt(pass, PasswordEncryptionKey) + "'";
                 DataSet ds = ExecuteQuery(GetConnection(false), cmd);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getUsersFriendsRequest(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserB in (select idUserB from [GameDataBase].[dbo].[Request] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Request] where idUserB =" + id + ")");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getUsersFriendsRequestNeg(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getUsersFriendsRequestNegGame(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select ng.idGame, ng.difficulty, ng.[status], gl.gameName from [GameDataBase].[dbo].[RequestNegociation] ng join [GameDataBase].[dbo].[GameList] gl on ng.idGame=gl.idGame where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
 
                 return ds.Tables[0];
             }

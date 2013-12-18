@@ -101,56 +101,56 @@ namespace DataModel.Model
             _userTags.Remove(tag);
         }
 
-        private IList<Friendship> _friendshipList;
+        private IList<Tuple<int, DateTime, Tag>> _friendshipList;
 
-        public IList<Friendship> FriendshipList
+        public IList<Tuple<int, DateTime, Tag>> FriendshipList
         {
             get { return _friendshipList; }
             set { _friendshipList = value; }
         }
 
-        public void addRelationship(Friendship user)
+        public void addRelationship(Tuple<int, DateTime, Tag> user)
         {
             _friendshipList.Add(user);
         }
 
-        public void remRelationship(Friendship user)
+        public void remRelationship(Tuple<int, DateTime, Tag> user)
         {
             _friendshipList.Remove(user);
         }
 
-        private IList<FriendshipRequest> _friendshipRequestList;
+        private IList<Tuple<int, DateTime>> _friendshipRequestList;
 
-        public IList<FriendshipRequest> FriendshipRequestList
+        public IList<Tuple<int, DateTime>> FriendshipRequestList
         {
             get { return _friendshipRequestList; }
             set { _friendshipRequestList = value; }
         }
 
-        public void addFriendshipRequest(FriendshipRequest user)
+        public void addFriendshipRequest(Tuple<int, DateTime> user)
         {
             _friendshipRequestList.Add(user);
         }
 
-        public void remFriendshipRequest(FriendshipRequest user)
+        public void remFriendshipRequest(Tuple<int, DateTime> user)
         {
             _friendshipRequestList.Remove(user);
         }
 
-        private IList<FriendshipRequestNeg> _relationshipRequestNegociation;
+        private IList<Tuple<int, IList<GameRequest>>> _relationshipRequestNegociation;
 
-        public IList<FriendshipRequestNeg> RelationshipRequestNegociation
+        public IList<Tuple<int, IList<GameRequest>>> RelationshipRequestNegociation
         {
             get { return _relationshipRequestNegociation; }
             set { _relationshipRequestNegociation = value; }
         }
 
-        public void addRelationshipRequestNegociation(FriendshipRequestNeg user)
+        public void addRelationshipRequestNegociation(Tuple<int, IList<GameRequest>> user)
         {
             _relationshipRequestNegociation.Add(user);
         }
 
-        public void remRelationshipRequest(FriendshipRequestNeg user)
+        public void remRelationshipRequest(Tuple<int, IList<GameRequest>> user)
         {
             _relationshipRequestNegociation.Remove(user);
         }

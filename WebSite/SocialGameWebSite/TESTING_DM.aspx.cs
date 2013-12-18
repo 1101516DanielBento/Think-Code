@@ -19,7 +19,7 @@ public partial class TESTING_DM : System.Web.UI.Page
         //IList<User> userList = userBll.loadAllUsers();
         userBll.loadTagsFromUser(u);
 
-        User userBase = userBll.loadPersonalNetwork(4);
+        IList<User> userBase = userBll.loadAllUsers();
 
         Response.Write("OLA");
 
