@@ -2,7 +2,17 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef __APPLE__
+#define __GRAFO__FILE__ "/Users/utilizador/Documents/Bitbucket/LAPRV/Game3D/Lapr5/Lapr5/exemplo.grafo"
+#else
 #define __GRAFO__FILE__ "exemplo.grafo"
+#endif
+
+#ifdef _WIN32
+#define __GRAFO__FILE__ "exemplo.grafo"
+#endif
+
+//#define __GRAFO__FILE__ "exemplo.grafo"
 
 No nos[_MAX_NOS_GRAFO];
 Arco arcos[_MAX_ARCOS_GRAFO];
@@ -15,7 +25,7 @@ void addNo(No no){
 		nos[numNos]=no;
 		numNos++;
 	}else{
-		cout << "Número de nós chegou ao limite" << endl;
+		cout << "Nœmero de n—s chegou ao limite" << endl;
 	}
 }
 
@@ -24,7 +34,7 @@ void deleteNo(int indNo){
 		for(int i=indNo; i<numNos; nos[i++]=nos[i+i]);
 		numNos--;
 	}else{
-		cout << "Indíce de nó inválido" << endl;
+		cout << "Indice de n— inv‡lido" << endl;
 	}
 }
 
