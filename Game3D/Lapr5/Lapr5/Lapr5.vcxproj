@@ -72,6 +72,12 @@
   <ItemGroup>
     <ClInclude Include="grafos.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="exemplo.grafo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="exemplo2 grafo.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

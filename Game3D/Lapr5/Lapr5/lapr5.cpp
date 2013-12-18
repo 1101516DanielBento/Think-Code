@@ -1,10 +1,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <stdlib.h>
-#include <cmath>
+#include <stdlib.h>     
+#include <GL\glut.h>
 #include <iostream>
 #include "grafos.h"
 
+<<<<<<< HEAD
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -15,8 +16,8 @@
 #include <GL/glaux.h>
 #endif
 
-
-
+=======
+>>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
@@ -67,6 +68,9 @@ enum tipo_material {brass, red_plastic, emerald, slate, azul, preto, cinza};
 typedef	GLdouble Vertice[3];
 typedef	GLdouble Vector[4];
 
+typedef struct {
+	GLboolean   q,a,up,down,left,right;
+}Teclas;
 
 typedef struct Camera{
 	GLfloat fov;
@@ -79,6 +83,7 @@ typedef struct Camera{
 
 typedef struct Estado{
 	Camera		camera;
+	GLint         timer;
 	int			xMouse,yMouse;
 	GLboolean	light;
 	GLboolean	apresentaNormais;
@@ -103,8 +108,6 @@ typedef struct Modelo {
 
 Estado estado;
 Modelo modelo;
-
-GLUquadric *obj;
 
 void initEstado(){
 	estado.camera.dir_lat=M_PI/4;
@@ -136,6 +139,7 @@ void initModelo(){
 	modelo.g_pos_luz2[3]= 0.0;
 }
 
+
 void myInit()
 {
 
@@ -165,27 +169,27 @@ void myInit()
 
 void imprime_ajuda(void)
 {
-  printf("\n\nDesenho de um labirinto a partir de um grafo\n");
-  printf("h,H - Ajuda \n");
-  printf("i,I - Reset dos Valores \n");
-  printf("******* Diversos ******* \n");
-  printf("l,L - Alterna o calculo luz entre Z e eye (GL_LIGHT_MODEL_LOCAL_VIEWER)\n");
-  printf("k,K - Alerna luz de camera com luz global \n");
-  printf("s,S - PolygonMode Fill \n");
-  printf("w,W - PolygonMode Wireframe \n");
-  printf("p,P - PolygonMode Point \n");
-  printf("c,C - Liga/Desliga Cull Face \n");
-  printf("n,N - Liga/Desliga apresentação das normais \n");
-  printf("******* grafos ******* \n");
-  printf("F1  - Grava grafo do ficheiro \n");
-  printf("F2  - Lê grafo para ficheiro \n");
-  printf("F6  - Cria novo grafo\n");
-  printf("******* Camera ******* \n");
-  printf("Botão esquerdo - Arrastar os eixos (centro da camera)\n");
-  printf("Botão direito  - Rodar camera\n");
-  printf("Botão direito com CTRL - Zoom-in/out\n");
-  printf("PAGE_UP, PAGE_DOWN - Altera distância da camara \n");
-  printf("ESC - Sair\n");
+	printf("\n\nDesenho de um labirinto a partir de um grafo\n");
+	printf("h,H - Ajuda \n");
+	printf("i,I - Reset dos Valores \n");
+	printf("******* Diversos ******* \n");
+	printf("l,L - Alterna o calculo luz entre Z e eye (GL_LIGHT_MODEL_LOCAL_VIEWER)\n");
+	printf("k,K - Alerna luz de camera com luz global \n");
+	printf("s,S - PolygonMode Fill \n");
+	printf("w,W - PolygonMode Wireframe \n");
+	printf("p,P - PolygonMode Point \n");
+	printf("c,C - Liga/Desliga Cull Face \n");
+	printf("n,N - Liga/Desliga apresenta‹o das normais \n");
+	printf("******* grafos ******* \n");
+	printf("F1  - Grava grafo do ficheiro \n");
+	printf("F2  - L grafo para ficheiro \n");
+	printf("F6  - Cria novo grafo\n");
+	printf("******* Camera ******* \n");
+	printf("Bot‹o esquerdo - Arrastar os eixos (centro da camera)\n");
+	printf("Bot‹o direito  - Rodar camera\n");
+	printf("Bot‹o direito com CTRL - Zoom-in/out\n");
+	printf("PAGE_UP, PAGE_DOWN - Altera dist‰ncia da camara \n");
+	printf("ESC - Sair\n");
 }
 
 
@@ -252,8 +256,6 @@ void desenhaSolo(){
 	glEnd();
 }
 
-
-
 void CrossProduct (GLdouble v1[], GLdouble v2[], GLdouble cross[])
 {
 	cross[0] = v1[1]*v2[2] - v1[2]*v2[1];
@@ -307,81 +309,6 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 		glEnd();
 		glPopMatrix();
 	glEnable(GL_LIGHTING);
-}
-
-void desenhaTubo(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf,GLfloat largura)
-{
-		GLdouble p,h,s,alfa,incli,raio;
-		GLdouble v1[3],v2[3],cross[3];
-		GLdouble length;
-		v1[0]=xf-xi;
-		v1[1]=yf-yi;
-		v1[2]=0;
-		v2[0]=0;
-		v2[1]=0;
-		v2[2]=1;
-		CrossProduct(v1,v2,cross);
-		//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-		length=VectorNormalize(cross);
-		//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-
-
-		p = sqrt((xf-xi)*(xf-xi) + (yf-yi)*(yf-yi));//comprimento da projecção
-		h = zf-zi;//desnivel
-		s = sqrt((p*p)+(h*h));//comprimento
-		raio = largura/2.0;
-		alfa = atan2((yf-yi),(xf-xi));
-		incli = atan2(h,p);
-
-		material(red_plastic);
-		//glPushMatrix();
-		glBegin(GL_POLYGON);
-		glTranslatef(xi,yi,zi);
-		glRotatef(graus(alfa),0,0,1);
-		glRotatef(graus(M_PI/(2.0-incli)),1,0,0);
-		
-		gluCylinder(modelo.quad,largura/2,largura/2,s,16,16);
-		glEnd();
-		//glPopMatrix();
-		if(estado.apresentaNormais) {
-		desenhaNormal(xi,yi,zi,cross,emerald);
-		desenhaNormal(xf,yf,zf,cross,emerald);
-		desenhaNormal(xf,yf,zf+1,cross,emerald);
-		desenhaNormal(xi,yi,zi+1,cross,emerald);
-	}
-
-}
-
-
-void desenhaParede(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf){
-	GLdouble v1[3],v2[3],cross[3];
-	GLdouble length;
-	v1[0]=xf-xi;
-	v1[1]=yf-yi;
-	v1[2]=0;
-	v2[0]=0;
-	v2[1]=0;
-	v2[2]=1;
-	CrossProduct(v1,v2,cross);
-	//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-	length=VectorNormalize(cross);
-	//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-
-	material(emerald);
-	glBegin(GL_QUADS);
-		glNormal3dv(cross);
-		glVertex3f(xi,yi,zi);
-		glVertex3f(xf,yf,zf+0);
-		glVertex3f(xf,yf,zf+1);
-		glVertex3f(xi,yi,zi+1);
-	glEnd();
-
-	if(estado.apresentaNormais) {
-		desenhaNormal(xi,yi,zi,cross,emerald);
-		desenhaNormal(xf,yf,zf,cross,emerald);
-		desenhaNormal(xf,yf,zf+1,cross,emerald);
-		desenhaNormal(xi,yi,zi+1,cross,emerald);
-	}
 }
 
 void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
@@ -461,80 +388,50 @@ void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLf
 }
 
 
-void desenhaNo(int no){
-	GLboolean norte,sul,este,oeste;
-	GLfloat larguraNorte,larguraSul,larguraEste,larguraOeste;
-	Arco arco=arcos[0];
-	No *noi=&nos[no],*nof;
-	norte=sul=este=oeste=GL_TRUE;
-	desenhaChao(nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z,PLANO);
-	for(int i=0;i<numArcos; arco=arcos[++i]){
-		if(arco.noi==no)
-			nof=&nos[arco.nof];
-		else 
-			if(arco.nof==no)
-				nof=&nos[arco.noi];
-			else
-				continue;
-		if(noi->x==nof->x)
-			if(noi->y<nof->y){
-				norte=GL_FALSE;
-				larguraNorte=arco.largura;
-			}
-			else{
-				sul=GL_FALSE;
-				larguraSul=arco.largura;
-			}
-		else 
-			if(noi->y==nof->y)
-				if(noi->x<nof->x){
-					oeste=GL_FALSE;
-					larguraOeste=arco.largura;
+void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
+{
+	GLfloat vx = xf-xi;
+	GLfloat vy = yf-yi;
+	GLfloat vz = zf-zi;
+	GLfloat comp = sqrt(vx*vx + vy*vy + vz*vz);
+	GLfloat ax,rx,ry,rz,raio_c;
+	raio_c = raio/2.0;
+	glPushMatrix();
+			
+			glTranslatef(xi,yi,zi);
+			//glRotatef(graus(orientacao),0,0,1);
+			//glRotatef(graus(inclinacao),0,1,0);
+			if(fabs(vz) < 0.0001)
+			{
+				glRotatef(90,0,1,0);
+				ax = 57.2957795*-atan2(vy,vx);
+				if(vx < 0)
+				{
+					ax = ax + 180;
 				}
-				else{
-					este=GL_FALSE;
-					larguraEste=arco.largura;
+				rx = 1;
+				ry = 0;
+				rz = 0;
+			}else{
+				ax = 57.2957795*acos(vz/comp);
+				if(vz < 0.0){
+					ax = -ax;
 				}
-			else
-				cout << "Arco dioagonal: " << arco.noi << " " << arco.nof << endl;
-		if (norte && sul && este && oeste)
-			return;
-	}		
-	if(norte)
-		desenhaParede(nos[no].x-0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z);
-		//gluCylinder(obj,nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,1,16);
-	else
-		if (larguraNorte < noi->largura){
-			desenhaParede(nos[no].x-0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z,nos[no].x-0.5*larguraNorte,nos[no].y+0.5*noi->largura,nos[no].z);
-			desenhaParede(nos[no].x+0.5*larguraNorte,nos[no].y+0.5*noi->largura,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z);
-		}
-	if(sul)
-		desenhaParede(nos[no].x+0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z);
-	else
-		if (larguraSul < noi->largura){
-			desenhaParede(nos[no].x+0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x+0.5*larguraSul,nos[no].y-0.5*noi->largura,nos[no].z);
-			desenhaParede(nos[no].x-0.5*larguraSul,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z);
-		}
-	if(este)
-		desenhaParede(nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x-0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z);
-	else
-		if (larguraEste < noi->largura){
-			desenhaParede(nos[no].x-0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z,nos[no].x-0.5*noi->largura,nos[no].y-0.5*larguraEste,nos[no].z);
-			desenhaParede(nos[no].x-0.5*noi->largura,nos[no].y+0.5*larguraEste,nos[no].z,nos[no].x-0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z);
-		}
-	if(oeste)
-		desenhaParede(nos[no].x+0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z);
-	else
-		if (larguraOeste < noi->largura){
-			desenhaParede(nos[no].x+0.5*noi->largura,nos[no].y+0.5*noi->largura,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y+0.5*larguraOeste,nos[no].z);
-			desenhaParede(nos[no].x+0.5*noi->largura,nos[no].y-0.5*larguraOeste,nos[no].z,nos[no].x+0.5*noi->largura,nos[no].y-0.5*noi->largura,nos[no].z);
-		}
+				rx = -vy*vz;
+				ry = vx*vz;
+				rz = 0;
+			}
+			glRotatef(ax, rx, ry, rz);
+			gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
+			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);
+			glPopMatrix();	
+
 }
 
-
-void desenhaArco(Arco arco){
+void desenhaArco2(Arco arco)
+{
 	No *noi,*nof;
-	//GLdouble p,h,s,alfa,incli,raio;
+	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
 
 	if(nos[arco.noi].x==nos[arco.nof].x){
 		// arco vertical
@@ -545,11 +442,8 @@ void desenhaArco(Arco arco){
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
+			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
-		desenhaTubo(noi->x-0.5*arco.largura,noi->y+0.5*noi->largura,noi->z,nof->x-0.5*arco.largura,nof->y-0.5*nof->largura,nof->z,noi->largura);
-		//desenhaChao(noi->x-0.5*arco.largura,noi->y+0.5*noi->largura,noi->z,nof->x+0.5*arco.largura,nof->y-0.5*nof->largura,nof->z, NORTE_SUL);
-		//desenhaParede(noi->x-0.5*arco.largura,noi->y+0.5*noi->largura,noi->z,nof->x-0.5*arco.largura,nof->y-0.5*nof->largura,nof->z);
-		//desenhaParede(nof->x+0.5*arco.largura,nof->y-0.5*nof->largura,nof->z,noi->x+0.5*arco.largura,noi->y+0.5*noi->largura,noi->z);
 	}else{
 		if(nos[arco.noi].y==nos[arco.nof].y){
 			//arco horizontal
@@ -560,34 +454,33 @@ void desenhaArco(Arco arco){
 				nof=&nos[arco.noi];
 				noi=&nos[arco.nof];
 			}
-			desenhaTubo(noi->x-0.5*arco.largura,noi->y+0.5*noi->largura,noi->z,nof->x-0.5*arco.largura,nof->y-0.5*nof->largura,nof->z,noi->largura);
-			//desenhaChao(noi->x+0.5*noi->largura,noi->y-0.5*arco.largura,noi->z,nof->x-0.5*nof->largura,nof->y+0.5*arco.largura,nof->z, ESTE_OESTE);
-			//desenhaParede(noi->x+0.5*noi->largura,noi->y+0.5*arco.largura,noi->z,nof->x-0.5*nof->largura,nof->y+0.5*arco.largura,nof->z);
-			//desenhaParede(nof->x-0.5*nof->largura,nof->y-0.5*arco.largura,nof->z,noi->x+0.5*noi->largura,noi->y-0.5*arco.largura,noi->z);
-		}
-		else{
-			cout << "arco diagonal... não será desenhado";
+			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		}
 	}
 }
 
+#define K_ESFERA 2.1
 void desenhaLabirinto(){
+	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
 		glTranslatef(0,0,0.05);
 		glScalef(5,5,5);
-		material(slate);
-		for(int i=0; i<numNos; i++){//desenhar nos
+	
+		for(int i=0; i<numNos; i++){
 			glPushMatrix();
-			material(red_plastic);
-				glTranslatef(nos[i].x,nos[i].y,nos[i].z+0.25);
-				glutSolidSphere(1,50,50);
+			material(azul);
+				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 				//glutSolidCube(0.5);
+				glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
 			glPopMatrix();
 			//desenhaNo(i);
 		}
 		material(emerald);
-		for(int i=0; i<numArcos; i++)
-			desenhaArco(arcos[i]);
+		for(int i=0; i<numArcos; i++){
+			//desenhaArco(arcos[i]);
+			desenhaArco2(arcos[i]);
+
+		}
 	glPopMatrix();
 }
 
@@ -708,7 +601,10 @@ void display(void)
 
 }
 
-
+void Timer(int value)
+{
+	
+}
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -772,60 +668,51 @@ void keyboard(unsigned char key, int x, int y)
 				initEstado();
 				initModelo();
 				glutPostRedisplay();
-			break;
-		// movimento interactivo - voo livre (subir e descer)
-		case 'q':
-		case 'Q':
-			estado.camera.center[2]+=1;
-			glutPostRedisplay();
-			break;
-		case 'a':
-		case 'A':
-			estado.camera.center[2]-=1;
-			glutPostRedisplay();
 			break;    
 	}
 }
 
 void Special(int key, int x, int y){
-	
+
 	switch(key){
 		case GLUT_KEY_F1 :
-			gravaGrafo();
+				gravaGrafo();
 			break;
 		case GLUT_KEY_F2 :
-			leGrafo();
-			glutPostRedisplay();
-			break;
-			
+				leGrafo();
+				glutPostRedisplay();
+			break;	
+
 		case GLUT_KEY_F6 :
-			numNos=numArcos=0;
-			addNo(criaNo( 0, 10,0));  // 0
-			addNo(criaNo( 0,  5,0));  // 1
-			addNo(criaNo(-5,  5,0));  // 2
-			addNo(criaNo( 5,  5,0));  // 3
-			addNo(criaNo(-5,  0,0));  // 4
-			addNo(criaNo( 5,  0,0));  // 5
-			addNo(criaNo(-5, -5,0));  // 6
-			addArco(criaArco(0,1,1,1));  // 0 - 1
-			addArco(criaArco(1,2,1,1));  // 1 - 2
-			addArco(criaArco(1,3,1,1));  // 1 - 3
-			addArco(criaArco(2,4,1,1));  // 2 - 4
-			addArco(criaArco(3,5,1,1));  // 3 - 5
-			addArco(criaArco(4,5,1,1));  // 4 - 5
-			addArco(criaArco(4,6,1,1));  // 4 - 6
-			glutPostRedisplay();
-			break;
+				numNos=numArcos=0;
+				addNo(criaNo( 0, 10,0));  // 0
+				addNo(criaNo( 0,  5,0));  // 1
+				addNo(criaNo(-5,  5,0));  // 2
+				addNo(criaNo( 5,  5,0));  // 3
+				addNo(criaNo(-5,  0,0));  // 4
+				addNo(criaNo( 5,  0,0));  // 5
+				addNo(criaNo(-5, -5,0));  // 6
+				addArco(criaArco(0,1,1,1));  // 0 - 1
+				addArco(criaArco(1,2,1,1));  // 1 - 2
+				addArco(criaArco(1,3,1,1));  // 1 - 3
+				addArco(criaArco(2,4,1,1));  // 2 - 4
+				addArco(criaArco(3,5,1,1));  // 3 - 5
+				addArco(criaArco(4,5,1,1));  // 4 - 5
+				addArco(criaArco(4,6,1,1));  // 4 - 6
+				glutPostRedisplay();
+			break;	
 		case GLUT_KEY_UP:
-			estado.camera.dist-=1;
-			glutPostRedisplay();
+				estado.camera.dist-=1;
+				glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
+<<<<<<< HEAD
 			estado.camera.dist+=1;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
 			estado.camera.dir_long-=0.1;
+			
 			glutPostRedisplay();
 			break;
 			
@@ -834,6 +721,11 @@ void Special(int key, int x, int y){
 			glutPostRedisplay();
 			break;
 	}
+=======
+				estado.camera.dist+=1;
+				glutPostRedisplay();
+			break;	}
+>>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
 }
 
 
@@ -1015,7 +907,7 @@ void mouse(int btn, int state, int x, int y){
 	}
 }
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
 
@@ -1026,13 +918,18 @@ void main(int argc, char **argv)
     glutCreateWindow("OpenGL");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
+	
+	glutTimerFunc(estado.timer, Timer, 0);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(Special);
 	glutMouseFunc(mouse);
+	
 
 	myInit();
 
 	imprime_ajuda();
 
     glutMainLoop();
+	
+	return 0;
 }

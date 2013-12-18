@@ -10,7 +10,7 @@ namespace DataModel.DAL
     public abstract class BaseGateway
     {
 
-        private static string connectionString = System.Configuration.ConfigurationSettings.AppSettings["ConnectionString"];
+        private static string connectionString;
 
         public BaseGateway()
         {
