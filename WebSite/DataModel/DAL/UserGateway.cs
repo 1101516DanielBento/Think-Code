@@ -5,11 +5,21 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using DataModel.Tools;
 
 namespace DataModel.DAL
 {
     public class UserGateway : BaseGateway
     {
+
+        private static string _passwordEncryptionKey = string.Empty;
+
+        public static string PasswordEncryptionKey
+        {
+            get { return UserGateway._passwordEncryptionKey; }
+            set { UserGateway._passwordEncryptionKey = value; }
+        }
+
         //public const int EMAIL_MAX_LENGTH = 100;
         //public const int PASSWORD_MAX_LENGTH = 300;
         //public const int NOME_MAX_LENGTH = 100;
@@ -26,7 +36,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User]");
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [GameDataBase].[dbo].[User] ");
 
                 return ds.Tables[0];
             }
@@ -40,7 +50,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User] where idUser="+id);
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [GameDataBase].[dbo].[User]  where idUser=" + id);
 
                 return ds.Tables[0];
             }
@@ -63,6 +73,21 @@ namespace DataModel.DAL
             }
         }
 
-        
+
+
+        public DataTable getIdUserByUsernameAndPassword(string userName, string pass)
+        {
+            try
+            {
+                string cmd = "SELECT * FROM [GameDataBase].[dbo].[User]  where username='" + userName + "' and password = '" + SimpleEncryptor.Encrypt(pass, PasswordEncryptionKey) + "'";
+                DataSet ds = ExecuteQuery(GetConnection(false), cmd);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
     }
 }

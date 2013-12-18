@@ -11,6 +11,7 @@ namespace DataModel.BLL
 {
     public class UserBLL
     {
+
         UserGateway userGateway = new UserGateway();
         TagGateway tagGateway = new TagGateway();
         public UserBLL() { }
@@ -72,6 +73,31 @@ namespace DataModel.BLL
             }
 
             return user;
+        }
+
+
+        public int verifyAutenticationUser(string userName, string pass)
+        {
+            DataTable dt = userGateway.getIdUserByUsernameAndPassword(userName, pass);
+            foreach (DataRow r in dt.Rows)
+            {
+                return (int)r["idUser"];
+            }
+
+            return -1;
+        }
+
+
+        public User getUserByUsernameAndPassword(string userName, string pass){
+            int id = verifyAutenticationUser(userName, pass);
+            if ( id != -1)
+            {
+                return loadPersonalNetwork(id);
+            }
+
+
+            return null;
+
         }
 
 

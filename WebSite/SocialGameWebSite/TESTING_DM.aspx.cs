@@ -20,6 +20,14 @@ public partial class TESTING_DM : System.Web.UI.Page
         User userBase = userBll.loadPersonalNetwork(4);
 
         Response.Write("OLA");
+
+        User logged = userBll.getUserByUsernameAndPassword("Manuel", "qwerty");
+
+        if (logged != null)
+        {
+            Response.Write("LOGADO");
+
+        }
         
         //String Password = SimpleEncryptor.Encrypt((string)"qwerty", System.Web.Configuration.WebConfigurationManager.AppSettings["EncryptionKey"]);
     }
