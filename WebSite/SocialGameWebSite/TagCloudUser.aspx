@@ -20,41 +20,74 @@
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
     <center>
-        <div id="tcdiv"></div>
+            <div id="myCanvasContainer">
+              <canvas width="900" height="600" id="myCanvas">
+                <p>Anything in here will be replaced on browsers that support the canvas element</p>
+              </canvas>
+            </div>
+            <div id="tags">
+              <ul id="ulTags"></ul>
+            </div>
             <script type="text/javascript">
-                google.load("visualization", "1");
-                google.setOnLoadCallback(draw);
 
 
-                function draw() {
-                    data = new google.visualization.DataTable();
-                    data.addColumn('string', 'Label');
-                    data.addColumn('number', 'Value');
-                    data.addColumn('string', 'Link');
-                    data.addRows(3);
 
-                    //<%=getAllTags() %>
-                   
-                    var a = eval('[<% =string.Join(", ", lista) %>]');
+                $(document).ready(function () {
+                    $('#myCanvasContainer').hide();
+                    $('#tags').hide();
 
-                    var k;
+                    GetTagsList_ajax();
+                });
 
-                    for (key in a) {
-                        data.setValue(0, 0, 'First Term');
-                        data.setValue(0, 1, 10);
-                     }
+                function startTagCloud() {
+                    $('#myCanvasContainer').show();
+                    $('#tags').show();
 
-                    //data.setValue(0, 0, 'First Term');
-                    //data.setValue(0, 1, 10);
-                    //data.setValue(1, 0, 'Second');
-                    //data.setValue(1, 1, 30);
-                    //data.setValue(1, 2, 'http://www.google.com');
-                    //data.setValue(2, 0, 'Third');
-                    //data.setValue(2, 1, 20);
-                    var outputDiv = document.getElementById('tcdiv');
-                    var tc = new TermCloud(outputDiv);
-                    tc.draw(data, null);
+                    if (!$('#myCanvas').tagcanvas({
+                        textColour: '#00f',
+                        outlineColour: '#ccc',
+                        reverse: true,
+                        depth: 0.8,
+                        maxSpeed: 0.05,
+                        weight: true,
+                        weightMode: 'size',
+                        weightSize: 1,
+                        weightFrom: 'data-weight',
+                        weightSizeMin: 10,
+                        weightSizeMax : 100
+                    }, 'tags')) {
+                        // something went wrong, hide the canvas container
+                        $('#myCanvasContainer').hide();
+                    }
+
+                    
                 }
+
+
+                function GetTagsList_ajax() {
+
+                    var tagPageUrl = "paginaXPTO.aspx";
+
+                    $.ajax({
+                        url: 'Ajax/GetTagsListForCloud.aspx',
+                        type: 'GET',
+                        success: function (data) {
+
+                            var strTagList = $(data).filter("#form1").text().trim();
+
+                            var tagListArray = strTagList.split(";");
+
+                            for (i = 0 ; i < tagListArray.length ; i += 3)
+                                $('#ulTags').append('<li><a href="' + tagPageUrl + '?tag=' + tagListArray[i + 2] + '" data-weight="' + tagListArray[i + 1] + '">' + tagListArray[i] + '</a></li>');
+
+                            startTagCloud();
+
+                        }
+
+                    });
+                }
+
+
     </script>
 
     </center>
