@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GetTagsListForCloud.aspx.cs" Inherits="GetTagsListForCloud" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GetUserTagsList.aspx.cs" Inherits="GetTagsListForCloud" %>
 
 <!DOCTYPE html>
 
