@@ -11,8 +11,13 @@ public partial class TESTING_DM : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        User u = new User();
+        u.IdUser = 4;
         UserBLL userBll = new UserBLL();
-        IList<User> userList = userBll.loadAllUsers();
+        //IList<User> userList = userBll.loadAllUsers();
+        userBll.loadTagsFromUser(u);
+
+        User userBase = userBll.loadPersonalNetwork(4);
 
         Response.Write("OLA");
         

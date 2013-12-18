@@ -36,9 +36,33 @@ namespace DataModel.DAL
             }
         }
 
+        public DataTable getUsersByID(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User] where idUser="+id);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getUsersFriends(int idUser){
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = "+ idUser+") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB ="+ idUser+")");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
         
-
-
-
     }
 }
