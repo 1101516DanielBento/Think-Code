@@ -293,7 +293,7 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 		glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
-
+/*
 void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
 	GLdouble v1[3],v2[3],cross[3];
 	GLdouble length;
@@ -370,7 +370,7 @@ void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLf
 	}
 }
 
-
+*/
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
 {
 	GLfloat vx = xf-xi;
@@ -438,11 +438,27 @@ void desenhaArco2(Arco arco)
 				noi=&nos[arco.nof];
 			}
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+		}else{
+			if(nos[arco.noi].z==nos[arco.nof].z){
+				
+				if(nos[arco.noi].x<nos[arco.nof].x){
+				noi=&nos[arco.noi];
+				nof=&nos[arco.nof];
+				//nof->z+=1;
+			}else{
+				nof=&nos[arco.noi];
+				noi=&nos[arco.nof];
+				//noi->z+=1;
+			}
+			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+			}
+
 		}
 	}
+	
 }
 
-#define K_ESFERA 2.1
+#define K_ESFERA 4
 void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
@@ -454,7 +470,7 @@ void desenhaLabirinto(){
 			material(azul);
 				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 				//glutSolidCube(0.5);
-				glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+				glutSolidSphere((K_ESFERA/2.0),20,20);
 			glPopMatrix();
 			//desenhaNo(i);
 		}
@@ -564,9 +580,8 @@ void display(void)
 	glLoadIdentity();
 	setCamera();
 
-	material(slate);
-	desenhaSolo();
-
+	//material(slate);
+	//desenhaSolo();
 	
 	desenhaEixos();
 	
