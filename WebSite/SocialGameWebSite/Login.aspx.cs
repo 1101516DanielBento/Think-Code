@@ -17,23 +17,21 @@ public partial class Login : System.Web.UI.Page
     {
         //if (Page.IsValid)
         //{
-        //    Utilizador user = Utilizador.LoadByUsername(txtUsername.Text);
+        //    Utilizador user = Utilizador.LoadByUsername(txtUsername.Text, txtPassword.Text);
 
         //    if (user != null)
         //    {
-        //        if ((user.Password == txtPassword.Text) && (user.Activo == true))
-        //        {
-        //            Session["user"] = user.Username;
+                
+        //        Session["id"] = user.Id; // ??
 
-        //            if (Request.QueryString["RequestedPage"] != null)
-        //                Response.Redirect(Request.QueryString["RequestedPage"]);
-        //            else
-        //                Response.Redirect("UserAccountArea.aspx");
-        //        }
+        //        if (Request.QueryString["RequestedPage"] != null)
+        //            Response.Redirect(Request.QueryString["RequestedPage"]);
         //        else
-        //        {
-        //            lblMensagem.Visible = true;
-        //        }
+        //            Response.Redirect("UserAccountArea.aspx");
+                
+                
+                    
+                
         //    }
         //    else
         //        lblMensagem.Visible = true;
