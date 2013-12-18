@@ -80,22 +80,81 @@ namespace DataModel.Model
             set { _birthdate = value; }
         }
 
-        IList<Tag> userTags;
+        IList<Tag> _userTags;
+
+        public IList<Tag> UserTags
+        {
+            get { return _userTags; }
+            set { _userTags = value; }
+        }
 
         public User()
         {
-            userTags = new List<Tag>();
+            _userTags = new List<Tag>();
         }
 
         public void addTagToUser(Tag tag){
-            userTags.Add(tag);
+            _userTags.Add(tag);
         }
 
         public void remTagFromUser(Tag tag) {
-            userTags.Remove(tag);
+            _userTags.Remove(tag);
         }
 
+        private IList<Friendship> _friendshipList;
 
+        public IList<Friendship> FriendshipList
+        {
+            get { return _friendshipList; }
+            set { _friendshipList = value; }
+        }
+
+        public void addRelationship(Friendship user)
+        {
+            _friendshipList.Add(user);
+        }
+
+        public void remRelationship(Friendship user)
+        {
+            _friendshipList.Remove(user);
+        }
+
+        private IList<FriendshipRequest> _friendshipRequestList;
+
+        public IList<FriendshipRequest> FriendshipRequestList
+        {
+            get { return _friendshipRequestList; }
+            set { _friendshipRequestList = value; }
+        }
+
+        public void addFriendshipRequest(FriendshipRequest user)
+        {
+            _friendshipRequestList.Add(user);
+        }
+
+        public void remFriendshipRequest(FriendshipRequest user)
+        {
+            _friendshipRequestList.Remove(user);
+        }
+
+        private IList<FriendshipRequestNeg> _relationshipRequestNegociation;
+
+        public IList<FriendshipRequestNeg> RelationshipRequestNegociation
+        {
+            get { return _relationshipRequestNegociation; }
+            set { _relationshipRequestNegociation = value; }
+        }
+
+        public void addRelationshipRequestNegociation(FriendshipRequestNeg user)
+        {
+            _relationshipRequestNegociation.Add(user);
+        }
+
+        public void remRelationshipRequest(FriendshipRequestNeg user)
+        {
+            _relationshipRequestNegociation.Remove(user);
+        }
+        
 
     }
 }

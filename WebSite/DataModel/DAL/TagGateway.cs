@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataModel.DAL
 {
-    public class UserGateway : BaseGateway
+    public class TagGateway : BaseGateway
     {
         //public const int EMAIL_MAX_LENGTH = 100;
         //public const int PASSWORD_MAX_LENGTH = 300;
@@ -20,49 +20,40 @@ namespace DataModel.DAL
         //public const int TELEFONE_MAX_LENGTH = 9;
         //public const int OBSERVACOES_MAX_LENGTH = 200;
 
-        public UserGateway() { }
-
-        public DataTable getUsers()
-        {
-            try
-            {
-                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User]");
-
-                return ds.Tables[0];
-            }
-            catch (SqlException ex)
-            {
-                throw new ApplicationException("Erro BD", ex);
-            }
-        }
-
-        public DataTable getUsersByID(int id)
-        {
-            try
-            {
-                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [User] where idUser="+id);
-
-                return ds.Tables[0];
-            }
-            catch (SqlException ex)
-            {
-                throw new ApplicationException("Erro BD", ex);
-            }
-        }
-
-        public DataTable getUsersFriends(int idUser){
-            try
-            {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = "+ idUser+") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB ="+ idUser+")");
-
-                return ds.Tables[0];
-            }
-            catch (SqlException ex)
-            {
-                throw new ApplicationException("Erro BD", ex);
-            }
-        }
+        public TagGateway() { }
 
         
+        public DataTable getTagsByUserId(int idUser)
+        {
+
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select tl.* from [GameDataBase].[dbo].[UserTags] ut join [GameDataBase].[dbo].[TagList] tl on ut.idTag=tl.idTag where idUser = " + idUser);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getTagsByIdTag(int idTag)
+        {
+
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[TagList] where idTag = " + idTag);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+
+
     }
 }
