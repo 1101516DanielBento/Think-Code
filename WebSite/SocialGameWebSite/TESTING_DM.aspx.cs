@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataModel.BLL;
 using DataModel.Model;
+using DataModel.DAL;
 
 public partial class TESTING_DM : System.Web.UI.Page
 {
@@ -14,12 +15,16 @@ public partial class TESTING_DM : System.Web.UI.Page
         User u = new User();
         u.IdUser = 4;
         UserBLL userBll = new UserBLL();
+        TagBLL tg = new TagBLL();
         //IList<User> userList = userBll.loadAllUsers();
         userBll.loadTagsFromUser(u);
 
         User userBase = userBll.loadPersonalNetwork(4);
 
         Response.Write("OLA");
+
+        IList<Tuple<string, int, int>> relTagCloud = tg.getRelTagTupple();
+        IList<Tuple<string, int, int>> userTagCloud = tg.getUserTagTupple();
 
         User logged = userBll.getUserByUsernameAndPassword("Manuel", "qwerty");
 

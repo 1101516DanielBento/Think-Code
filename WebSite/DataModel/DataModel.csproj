@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\ConfigurationBLL.cs" />
+    <Compile Include="BLL\TagBLL.cs" />
     <Compile Include="BLL\UserBLL.cs" />
     <Compile Include="DAL\BaseGateway.cs" />
     <Compile Include="DAL\ConfigurationGateway.cs" />

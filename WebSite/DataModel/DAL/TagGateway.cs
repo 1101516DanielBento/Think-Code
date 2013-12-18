@@ -53,6 +53,87 @@ namespace DataModel.DAL
             }
         }
 
+        public DataTable getAllTags()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[TagList]");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            } 
+        }
+
+        public DataTable getAllUserTags()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[TagList] where type=0");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getAllRelTags()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[TagList] where type=1");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public int getNumberTagRel(int idTag)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select count(*) as TagNumber from [GameDataBase].[dbo].[Friendship] where idTag="+idTag);
+                int nr = 0;
+
+                foreach( DataRow r in ds.Tables[0].Rows){
+                    nr= (int)r["TagNumber"];
+                }
+
+                return nr;
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public int getNumberTagUser(int idTag)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select count(*) as TagNumber from [GameDataBase].[dbo].[UserTags] where idTag=" + idTag);
+                int nr = 0;
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    nr = (int)r["TagNumber"];
+                }
+
+                return nr;
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+        
 
 
     }
