@@ -19,11 +19,11 @@
    
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
-    <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+    <table  border="0" cellspacing="0" cellpadding="0" style="width: 900px; margin-left: 0px;">
        <br />
        <br />
        <br />
-       <br /><img src="imgs/redes-sociais.jpg" height="500" border="0" style="width: 636px"  />
+       <br /><img src="imgs/redes-sociais.jpg" height="500" border="0" style="width: 900px"  />
        <br />
        <br />
        <br />
