@@ -1,9 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GetTagsListForCloud.aspx.cs" Inherits="GetTagsListForCloud" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GetRelationTagsList.aspx.cs" Inherits="GetRelationTagsList" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+<head id="Head1" runat="server">
     <title></title>
 </head>
 <body>

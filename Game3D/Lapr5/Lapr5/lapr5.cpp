@@ -5,6 +5,19 @@
 #include <iostream>
 #include "grafos.h"
 
+<<<<<<< HEAD
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#ifdef _WIN32
+#include <GL/glaux.h>
+#endif
+
+=======
+>>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
@@ -55,6 +68,9 @@ enum tipo_material {brass, red_plastic, emerald, slate, azul, preto, cinza};
 typedef	GLdouble Vertice[3];
 typedef	GLdouble Vector[4];
 
+typedef struct {
+	GLboolean   q,a,up,down,left,right;
+}Teclas;
 
 typedef struct Camera{
 	GLfloat fov;
@@ -67,6 +83,7 @@ typedef struct Camera{
 
 typedef struct Estado{
 	Camera		camera;
+	GLint         timer;
 	int			xMouse,yMouse;
 	GLboolean	light;
 	GLboolean	apresentaNormais;
@@ -152,27 +169,27 @@ void myInit()
 
 void imprime_ajuda(void)
 {
-  printf("\n\nDesenho de um labirinto a partir de um grafo\n");
-  printf("h,H - Ajuda \n");
-  printf("i,I - Reset dos Valores \n");
-  printf("******* Diversos ******* \n");
-  printf("l,L - Alterna o calculo luz entre Z e eye (GL_LIGHT_MODEL_LOCAL_VIEWER)\n");
-  printf("k,K - Alerna luz de camera com luz global \n");
-  printf("s,S - PolygonMode Fill \n");
-  printf("w,W - PolygonMode Wireframe \n");
-  printf("p,P - PolygonMode Point \n");
-  printf("c,C - Liga/Desliga Cull Face \n");
-  printf("n,N - Liga/Desliga apresentaÁ„o das normais \n");
-  printf("******* grafos ******* \n");
-  printf("F1  - Grava grafo do ficheiro \n");
-  printf("F2  - LÍ grafo para ficheiro \n");
-  printf("F6  - Cria novo grafo\n");
-  printf("******* Camera ******* \n");
-  printf("Bot„o esquerdo - Arrastar os eixos (centro da camera)\n");
-  printf("Bot„o direito  - Rodar camera\n");
-  printf("Bot„o direito com CTRL - Zoom-in/out\n");
-  printf("PAGE_UP, PAGE_DOWN - Altera dist‚ncia da camara \n");
-  printf("ESC - Sair\n");
+	printf("\n\nDesenho de um labirinto a partir de um grafo\n");
+	printf("h,H - Ajuda \n");
+	printf("i,I - Reset dos Valores \n");
+	printf("******* Diversos ******* \n");
+	printf("l,L - Alterna o calculo luz entre Z e eye (GL_LIGHT_MODEL_LOCAL_VIEWER)\n");
+	printf("k,K - Alerna luz de camera com luz global \n");
+	printf("s,S - PolygonMode Fill \n");
+	printf("w,W - PolygonMode Wireframe \n");
+	printf("p,P - PolygonMode Point \n");
+	printf("c,C - Liga/Desliga Cull Face \n");
+	printf("n,N - Liga/Desliga apresentação das normais \n");
+	printf("******* grafos ******* \n");
+	printf("F1  - Grava grafo do ficheiro \n");
+	printf("F2  - Lê grafo para ficheiro \n");
+	printf("F6  - Cria novo grafo\n");
+	printf("******* Camera ******* \n");
+	printf("Botão esquerdo - Arrastar os eixos (centro da camera)\n");
+	printf("Botão direito  - Rodar camera\n");
+	printf("Botão direito com CTRL - Zoom-in/out\n");
+	printf("PAGE_UP, PAGE_DOWN - Altera distância da camara \n");
+	printf("ESC - Sair\n");
 }
 
 
@@ -599,7 +616,10 @@ void display(void)
 
 }
 
-
+void Timer(int value)
+{
+	
+}
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -701,9 +721,26 @@ void Special(int key, int x, int y){
 				glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
+<<<<<<< HEAD
+			estado.camera.dist+=1;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_LEFT:
+			estado.camera.dir_long-=0.1;
+			
+			glutPostRedisplay();
+			break;
+			
+		case GLUT_KEY_RIGHT:
+			estado.camera.dir_long+=0.1;
+			glutPostRedisplay();
+			break;
+	}
+=======
 				estado.camera.dist+=1;
 				glutPostRedisplay();
 			break;	}
+>>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
 }
 
 
@@ -885,7 +922,7 @@ void mouse(int btn, int state, int x, int y){
 	}
 }
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
 
@@ -896,13 +933,18 @@ void main(int argc, char **argv)
     glutCreateWindow("OpenGL");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
+	
+	glutTimerFunc(estado.timer, Timer, 0);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(Special);
 	glutMouseFunc(mouse);
+	
 
 	myInit();
 
 	imprime_ajuda();
 
     glutMainLoop();
+	
+	return 0;
 }
