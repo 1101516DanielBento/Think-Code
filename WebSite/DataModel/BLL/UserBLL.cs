@@ -29,7 +29,7 @@ namespace DataModel.BLL
                 User user = new User();
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
-                user.Password = SimpleEncryptor.Decrypt((string)r["password"], UserGateway.PasswordEncryptionKey);
+                user.Password = (string)r["password"];
                 user.Name = (string)r["name"];
                 user.Email = (string)r["email"];
                 user.IdPermission = (int)r["idPermission"];
@@ -63,7 +63,7 @@ namespace DataModel.BLL
                 
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
-                user.Password = SimpleEncryptor.Decrypt((string)r["password"], UserGateway.PasswordEncryptionKey);
+                user.Password = (string)r["password"];
                 user.Name = (string)r["name"];
                 user.Email = (string)r["email"];
                 user.IdPermission = (int)r["idPermission"];
