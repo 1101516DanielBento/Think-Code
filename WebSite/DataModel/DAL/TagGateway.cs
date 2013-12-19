@@ -133,6 +133,55 @@ namespace DataModel.DAL
                 throw new ApplicationException("Erro BD", ex);
             }
         }
+
+        public int getNetworkRelTagInfo(int idUser, int idTag)
+        {
+            try
+            {
+                string whereClause = "WHERE idTag =" + idTag + "and (idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = " + idUser + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB =" + idUser + "))";
+
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT idTag, COUNT(idTag) AS Number FROM [GameDataBase].[dbo].[Friendship] " + whereClause + " GROUP BY idTag;");
+                
+                int nr = 0;
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    nr = (int)r["Number"];
+                }
+
+                return nr;
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+
+        }
+
+        public int getNetworkUserTagInfo(int idUser, int idTag)
+        {
+            try
+            {
+
+                string whereClause = "WHERE idTag =" + idTag + "and (idUser in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = " + idUser + ") or  idUser in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB =" + idUser + ") or idUser =" + idUser + ")";
+
+                DataSet ds = ExecuteQuery(GetConnection(false), "SELECT idTag, COUNT(idTag) AS Number FROM [GameDataBase].[dbo].[UserTags] " + whereClause + " GROUP BY idTag;");
+
+                int nr = 0;
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    nr = (int)r["Number"];
+                }
+
+                return nr;
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+
+        }
         
 
 

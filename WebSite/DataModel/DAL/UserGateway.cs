@@ -132,5 +132,7 @@ namespace DataModel.DAL
                 throw new ApplicationException("Erro BD", ex);
             }
         }
+
+        
     }
 }

@@ -21,6 +21,9 @@ public partial class TESTING_DM : System.Web.UI.Page
 
         IList<User> userBase = userBll.loadAllUsers();
 
+        IList<Tuple<string, int, int>> relPrivTagCloud=tg.getNetworkRelTagTupple(7);
+        IList<Tuple<string, int, int>> userPrivTagCloud = tg.getNetworkUserTagTupple(7);
+
         Response.Write("OLA");
 
         IList<Tuple<string, int, int>> relTagCloud = tg.getRelTagTupple();
