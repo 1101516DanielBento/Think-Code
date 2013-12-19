@@ -52,7 +52,7 @@ namespace DataModel.DAL
         {
             try
             {
-                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where email="+email;
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where email='"+email+"'";
 
                 var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
 
@@ -73,7 +73,7 @@ namespace DataModel.DAL
         {
             try
             {
-                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where username="+username;
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where username='"+username+"'";
 
                 var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
 
