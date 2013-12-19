@@ -40,7 +40,7 @@
                         Display="Dynamic" ForeColor="Red"></asp:RequiredFieldValidator></td>
               </tr>
               <tr>
-                <td class="cel_password_login" align="left">Password:
+                <td class="cel_password_login" align="left">Password:&nbsp;
                     <asp:TextBox ID="txtPassword" runat="server" MaxLength="10" TextMode="Password" Width="70px"></asp:TextBox>
                     <asp:Button ID="btnEntrar" runat="server" Text="Entrar" 
                         onclick="btnEntrar_Click" />
