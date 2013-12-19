@@ -58,10 +58,10 @@ namespace DataModel.DAL
 
                 if (obj != null)
                 {
-                    return false;
+                    return true;
                 }
 
-                return true;
+                return false;
             }
             catch (SqlException ex)
             {
@@ -79,10 +79,10 @@ namespace DataModel.DAL
 
                 if (obj != null)
                 {
-                    return false;
+                    return true;
                 }
 
-                return true;
+                return false;
 
             }
             catch (SqlException ex)
