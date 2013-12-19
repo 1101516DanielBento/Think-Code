@@ -39,7 +39,7 @@ public partial class TESTING_DM : System.Web.UI.Page
         usr.Email = "BETA@CREATINGUSER.COM";
         usr.Username = "BETA";
 
-        usr.IdUser = userBll.resgisterUser(usr);
+        usr.IdUser = userBll.registerUser(usr);
         if(usr.IdUser!=-1)
             Response.Write("CREATED");
 

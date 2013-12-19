@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataModel.DAL;
 using DataModel.Model;
 using System.Data;
+using DataModel.Tools;
 
 namespace DataModel.BLL
 {
@@ -28,7 +29,7 @@ namespace DataModel.BLL
                 User user = new User();
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
-                user.Password = (string)r["password"];
+                user.Password = SimpleEncryptor.Decrypt((string)r["password"], UserGateway.PasswordEncryptionKey);
                 user.Name = (string)r["name"];
                 user.Email = (string)r["email"];
                 user.IdPermission = (int)r["idPermission"];
@@ -62,7 +63,7 @@ namespace DataModel.BLL
                 
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
-                user.Password = (string)r["password"];
+                user.Password = SimpleEncryptor.Decrypt((string)r["password"], UserGateway.PasswordEncryptionKey);
                 user.Name = (string)r["name"];
                 user.Email = (string)r["email"];
                 user.IdPermission = (int)r["idPermission"];
