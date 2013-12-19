@@ -259,7 +259,7 @@ namespace DataModel.BLL
 
         }
 
-        public int resgisterUser(User u)
+        public int registerUser(User u)
         {
             return userGateway.registerUser(u);
         }
