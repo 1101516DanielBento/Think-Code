@@ -78,7 +78,7 @@
                             var tagListArray = strTagList.split(";");
 
                             for (i = 0 ; i < tagListArray.length ; i += 3)
-                                $('#ulTags').append('<li><a href="' + tagPageUrl + '?tag=' + tagListArray[i + 2] + '" data-weight="' + tagListArray[i + 1] + '">' + tagListArray[i] + '</a></li>');
+                                $('#ulTags').append('<li><a href="#" data-weight="' + tagListArray[i + 1] + '">' + tagListArray[i] + '</a></li>');
 
                             startTagCloud();
 
