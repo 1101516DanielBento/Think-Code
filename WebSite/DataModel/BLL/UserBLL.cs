@@ -259,6 +259,21 @@ namespace DataModel.BLL
 
         }
 
+        public int resgisterUser(User u)
+        {
+            return userGateway.registerUser(u);
+        }
+
+        public bool usernameIsAlreadyInUse(string username)
+        {
+            return userGateway.usernameIsUsed(username);
+
+        }
+
+        public bool emailIsAlreadyInUse(string email)
+        {
+            return userGateway.emailIsUsed(email);
+        }
 
 
 
