@@ -6,6 +6,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using DataModel.Tools;
+using DataModel.Model;
+using DataModel.BLL;
 
 namespace DataModel.DAL
 {
@@ -39,6 +41,49 @@ namespace DataModel.DAL
                 DataSet ds = ExecuteQuery(GetConnection(false), "SELECT * FROM [GameDataBase].[dbo].[User] ");
 
                 return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public bool emailIsUsed(string email)
+        {
+            try
+            {
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where email="+email;
+
+                var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+
+                if (obj != null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public bool usernameIsUsed(string username)
+        {
+            try
+            {
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where username="+username;
+
+                var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+
+                if (obj != null)
+                {
+                    return false;
+                }
+
+                return true;
+
             }
             catch (SqlException ex)
             {
@@ -133,6 +178,42 @@ namespace DataModel.DAL
             }
         }
 
-        
+
+
+        public int registerUser(User u)
+        {
+
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [GameDataBase].[dbo].[User]([username],[password],[email],[name],[idPermission],[points],[active],[birthdate])VALUES(@username,@pass,@email,@name,@idPer, @points, @active,@birth);SELECT SCOPE_IDENTITY()");
+            string pass = SimpleEncryptor.Encrypt(u.Password, PasswordEncryptionKey);
+            int act = Convert.ToInt32(u.Active);
+            sqlCmd.Parameters.AddWithValue("@username", "'" + u.Username + "'");
+            sqlCmd.Parameters.AddWithValue("@pass", "'" + pass + "'");
+            sqlCmd.Parameters.AddWithValue("@email", "'" + u.Email + "'");
+            sqlCmd.Parameters.AddWithValue("@name", "'" + u.Name + "'");
+            sqlCmd.Parameters.AddWithValue("@idPer", u.IdPermission);
+            sqlCmd.Parameters.AddWithValue("@points", u.Points);
+            sqlCmd.Parameters.AddWithValue("@active", act);
+            //sqlCmd.Parameters.AddWithValue("@birth", "'"+u.Birthdate.Date+ "'");
+            sqlCmd.Parameters.AddWithValue("@birth", "'" + u.Birthdate.Year + "-" + u.Birthdate.Month + "-" + u.Birthdate.Day + "'");
+
+            string query = sqlCmd.CommandText;
+            foreach (SqlParameter p in sqlCmd.Parameters)
+            {
+                query = query.Replace(p.ParameterName, p.Value.ToString());
+            }
+
+
+            //int x = ExecuteNonQuery(GetConnection(true), query);
+            //ExecuteNonQuery(GetConnection(true), sqlCmd);
+            object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+
+            if (obj != null)
+            {
+                return Convert.ToInt32(obj);
+            }
+
+            return -1;
+        }
+
     }
 }

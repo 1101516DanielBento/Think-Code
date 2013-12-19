@@ -29,7 +29,21 @@ public partial class TESTING_DM : System.Web.UI.Page
         IList<Tuple<string, int, int>> relTagCloud = tg.getRelTagTupple();
         IList<Tuple<string, int, int>> userTagCloud = tg.getUserTagTupple();
 
-        User logged = userBll.getUserByUsernameAndPassword("Manuel", "qwerty");
+        User usr = new User();
+        usr.Name = "CREATED USER";
+        usr.Password = "qwertyuiop";
+        usr.Points = 0;
+        usr.IdPermission = 1;
+        usr.Active = false;
+        usr.Birthdate = new DateTime(2000, 5, 26);
+        usr.Email = "BETA@CREATINGUSER.COM";
+        usr.Username = "BETA";
+
+        usr.IdUser = userBll.resgisterUser(usr);
+        if(usr.IdUser!=-1)
+            Response.Write("CREATED");
+
+        User logged = userBll.getUserByUsernameAndPassword("BETA", "qwertyuiop");
 
         if (logged != null)
         {
@@ -37,6 +51,6 @@ public partial class TESTING_DM : System.Web.UI.Page
 
         }
         
-        //String Password = SimpleEncryptor.Encrypt((string)"qwerty", System.Web.Configuration.WebConfigurationManager.AppSettings["EncryptionKey"]);
+       
     }
 }
