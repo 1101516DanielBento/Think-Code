@@ -7,11 +7,16 @@ using System.Web.UI.WebControls;
 using DataModel.BLL;
 using DataModel.Model;
 using DataModel.DAL;
+using DataModel.Tools;
 
 public partial class TESTING_DM : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        string y = SimpleEncryptor.Decrypt("CmtUd5zmrqqHRXN29NY/QQ==", UserGateway.PasswordEncryptionKey);
+        string y2 = SimpleEncryptor.Decrypt("+Yuq/7xvDF2z9P7N8hMaGiQ==", UserGateway.PasswordEncryptionKey);
+        
+
         User u = new User();
         u.IdUser = 4;
         UserBLL userBll = new UserBLL();
@@ -50,6 +55,9 @@ public partial class TESTING_DM : System.Web.UI.Page
             Response.Write("LOGADO");
 
         }
+
+
+        
         
        
     }

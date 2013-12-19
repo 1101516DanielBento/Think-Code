@@ -9,6 +9,11 @@
         DataModel.DAL.BaseGateway.ConnectionString = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
         DataModel.DAL.UserGateway.PasswordEncryptionKey = (string)Application["EncryptionKey"];
+        
+        
+        //ChangePassword. = (string)Application["EncryptionKey"];
+        
+        
         //Model.BLL.Configuracao.PasswordEncryptionKey = (string)Application["EncryptionKey"];
         //Model.BLL.Utilizador.PasswordEncryptionKey = (string)Application["EncryptionKey"];
     }
