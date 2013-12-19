@@ -4,66 +4,59 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-//using Model.BLL;
+using DataModel.BLL;
+using DataModel.Model;
 
 public partial class Registar : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        //txtUsername.MaxLength = Utilizador.UsernameMaxLength;
-        //txtPassword.MaxLength = Utilizador.PasswordMaxLength;
-        //txtPassword2.MaxLength = Utilizador.PasswordMaxLength;
-        //txtNome.MaxLength = Utilizador.NomeMaxLength;
-        //txtEmail.MaxLength = Utilizador.EmailMaxLength;
+
     }
     protected void btnRegistar_Click(object sender, EventArgs e)
     {
-    //    if (Page.IsValid)
-    //    {
-    //        Utilizador user;
+        if (Page.IsValid)
+        {
+            UserBLL usrBll = new UserBLL();
 
-    //        if (Utilizador.LoadByUsername(txtUsername.Text) == null)
-    //        {
-    //            if (Utilizador.LoadByEmail(txtEmail.Text) == null)
-    //            {
-    //                user = new Utilizador(txtUsername.Text, txtPassword.Text, txtEmail.Text, txtNome.Text);
-    //                bool sucesso = user.Save();
+            if (txtPassword.Text != txtPassword2.Text)
+                lblMensagemErro.Text = "As passwords que inseriu são diferentes !";
+            else
+            {
 
-    //                if (sucesso)
-    //                {
-    //                    //constroi url de activacao do cliente
-    //                    string urlActivacao = Request.Url.AbsoluteUri.Replace("RegisterUser", "ActivateUser") + "?u=";
-    //                    urlActivacao += SimpleEncryptor.Encrypt(user.Email, Application["EncryptionKey"].ToString());
+                if (!usrBll.usernameIsAlreadyInUse(txtUsername.Text))
+                {
+                    if (!usrBll.emailIsAlreadyInUse(txtEmail.Text))
+                    {
+                        User user = new User();
+                        user.Name = txtNome.Text;
+                        user.Password = txtPassword.Text;
+                        user.Password = txtPassword2.Text;
+                        user.Points = 0;
+                        user.IdPermission = 1;
+                        user.Active = true;
+                        user.Birthdate = new DateTime(2000,05,06);
+                        user.Email = txtEmail.Text;
+                        user.Username = txtUsername.Text;
 
-    //                    //constroi texto do email
-    //                    string textoEmail = "Obrigado pelo seu registo. Para activar a sua conta clique <a href=\"" + urlActivacao + "\">aqui</a>";
+                        int flag = usrBll.registerUser(user); //se for -1 nao inseriu
 
-    //                    //obtem configuracoes
-    //                    Configuracao config = Configuracao.Load();
+                        if (flag != -1)
+                        {
+                            Response.Redirect("RegistSuccessfull.aspx");
+                        }
+                        else
+                        {
+                            //Logger.Log("Erro !!");
+                        }
 
-    //                    MailSender ms = new MailSender(config.SmtpEmailEnvio, config.EmailEnvio, config.PasswordEmailEnvio, "Game2Learn");
-    //                    sucesso = ms.SendMail(user.Email, "Activação de conta", textoEmail);     //envia email
-
-    //                    if (sucesso)    //se email foi enviado
-    //                        Response.Redirect("RegistSuccessfull.aspx");
-    //                    else
-    //                    {
-    //                        user.Delete();
-    //                        lblMensagemErro.Text = "De momento não é possível efectuar o registo. Por favor, tente mais tarde.";
-    //                        Logger.Log("Erro ao tentar enviar e-mail de activação de conta");
-    //                    }
-    //                }
-    //                else
-    //                {
-    //                    lblMensagemErro.Text = "De momento não é possível efectuar o registo. Por favor, tente mais tarde.";
-    //                    Logger.Log("Erro ao tentar registar utilizador");
-    //                }
-    //            }
-    //            else
-    //                lblMensagemErro.Text = "Não é possível registar porque o e-mail que indicou já está registado. Por favor, indique outro.";
-    //        }
-    //        else
-    //            lblMensagemErro.Text = "Não é possível registar porque o username que indicou já está registado. Por favor, indique outro.";
-    //    }
+                    }
+                    else
+                        lblMensagemErro.Text = "Não é possível registar porque o e-mail que indicou já está registado. Por favor, indique outro.";
+                }
+                else
+                    lblMensagemErro.Text = "Não é possível registar porque o username que indicou já está registado. Por favor, indique outro.";
+            }
+        }
     }
 }
