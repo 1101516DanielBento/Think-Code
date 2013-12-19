@@ -275,7 +275,10 @@ namespace DataModel.BLL
             return userGateway.emailIsUsed(email);
         }
 
-
+        public bool changePassword(int idUser, string newPass)
+        {
+            return userGateway.changePassword(idUser, newPass);
+        }
 
     }
 }

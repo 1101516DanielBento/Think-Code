@@ -215,5 +215,18 @@ namespace DataModel.DAL
             return -1;
         }
 
+
+        public bool changePassword(int idUser, string newPass)
+        {
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [password]= '+"+SimpleEncryptor.Encrypt(newPass, PasswordEncryptionKey)+"' WHERE idUser="+idUser;
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
+
     }
 }
