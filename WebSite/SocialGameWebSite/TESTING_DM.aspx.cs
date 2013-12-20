@@ -28,15 +28,15 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.IdTag = 5;
         tr2.TagName = "Amigo";
 
-        if (tg.addTagToUser(t1, 7))
-        {
-            Response.Write("STEP 1 COMPLETE <br>");
+        //if (tg.addTagToUser(t1, 7))
+        //{
+        //    Response.Write("STEP 1 COMPLETE <br>");
 
-        }
-        if (tg.addTagToFriendship(tr2, 4, 7))
-        {
-            Response.Write("STEP 2 COMPLETE <br>");
-        }
+        //}
+        //if (tg.addTagToFriendship(tr2, 4, 7))
+        //{
+        //    Response.Write("STEP 2 COMPLETE <br>");
+        //}
 
 
 

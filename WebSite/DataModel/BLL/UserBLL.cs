@@ -281,5 +281,28 @@ namespace DataModel.BLL
             return userGateway.changePassword(idUser, newPass);
         }
 
+        public IList<Tuple<int, string, int>> getTopTwentyUsersLeaderBoard()
+        {
+            IList<Tuple<int, string, int>> top = new List<Tuple<int, string, int>>();
+            
+            DataTable dt = userGateway.getTopTwentyUsers();
+            int i=1;
+            foreach (DataRow r in dt.Rows)
+            {
+                Tuple<int, string, int> row = new Tuple<int, string, int>(i, (string)r["username"], (int)r["points"]);
+                i++;
+
+                top.Add(row);
+            }
+            
+            return top;
+
+        }
+
+        public int countAllUsersInSystem()
+        {
+            return userGateway.getCountAllUsers();
+        }
+
     }
 }

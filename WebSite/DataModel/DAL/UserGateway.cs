@@ -229,5 +229,33 @@ namespace DataModel.DAL
             return false;
         }
 
+
+        public DataTable getTopTwentyUsers()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select top 20 * from [GameDataBase].[dbo].[user] order by points DESC ,idUser desc ");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        public DataTable getCountAllUsers()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select count(*) as count from [GameDataBase].[dbo].[user]");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
     }
 }
