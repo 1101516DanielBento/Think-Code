@@ -15,11 +15,11 @@ using namespace std;
 #else
 #include <GL/glut.h>
 #endif
-
+/*
 #ifdef _WIN32
 #include <GL/glaux.h>
 #endif
-
+*/
 typedef struct vecCol{
 	GLfloat x;
 	GLfloat y;
