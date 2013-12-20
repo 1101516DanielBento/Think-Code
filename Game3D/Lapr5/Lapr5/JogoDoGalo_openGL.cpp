@@ -233,12 +233,12 @@ void escreverEcra( int x, int y, char *st)
 
 
 
-void Timer(int timer)
+void TimerGalo(int timer)
 {
 	spin++; //aumenta a rotaçao do cubo em 1
 	if(spin > 360) spin = 0; // faz reset ao spin se este ultrapassar os 360;
 	glutPostRedisplay();
-	glutTimerFunc(10,Timer,1); // Reset ao timer
+	glutTimerFunc(10,TimerGalo,1); // Reset ao timer
 }
 
 //setup do mundo OpenGL, é chamado ao iniciar o jogo
@@ -300,7 +300,7 @@ void Desenha_X(int x, int y, int z, int angle)
 
 //desenhar o jogo
 
-void display()
+void displayGalo()
 {
 	char txt[30];
 	int ix, iy,i,j;

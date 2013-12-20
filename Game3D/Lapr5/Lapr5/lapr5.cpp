@@ -15,15 +15,11 @@ using namespace std;
 #else
 #include <GL/glut.h>
 #endif
-
+/*
 #ifdef _WIN32
 #include <GL/glaux.h>
-#endif
+#endif*/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 typedef struct vecCol{
 	GLfloat x;
 	GLfloat y;
@@ -40,13 +36,9 @@ using namespace std;
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_ESFERA 4.0
-
-<<<<<<< HEAD
 #define VELv 0.5
 
 //#define RAND_MAX 
-=======
->>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 
 // luzes e materiais
 
@@ -812,16 +804,9 @@ void SpecialKey(int key, int x, int y){
 	if(estado.debug)
 		printf("Carregou na tecla especial %d\n",key);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 }
-//biilboard(?) + botao + campos de texto
-bool login()
-{
 
-<<<<<<< HEAD
 void SpecialKeyUp(int key, int x, int y)
 {
 	switch (key) {
@@ -840,8 +825,12 @@ void SpecialKeyUp(int key, int x, int y)
 	}
 	if(estado.debug)
 		printf("Largou a tecla especial %d\n",key);
-	
-=======
+
+}
+	//biilboard(?) + botao + campos de texto
+bool login()
+{
+
 	char user1[10], pass[10];
 	printf("Username: ");
 	cin >> user1;
@@ -867,7 +856,7 @@ void loginWindow()
 		myInit();
 		imprime_ajuda();
 	}
->>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
+
 }
 
 void setProjection(int x, int y, GLboolean picking){
@@ -1032,7 +1021,7 @@ void mouse(int btn, int state, int x, int y){
 						estado.eixoTranslaccao=picking(x,y);
 						if(estado.eixoTranslaccao)
 							glutMotionFunc(motionDrag);
-						cout << "Right down - objecto:" << estado.eixoTranslaccao << endl;
+					cout << "Right down - objecto:" << estado.eixoTranslaccao << endl;
 					}
 					else{
 						if(estado.eixoTranslaccao!=0) {
