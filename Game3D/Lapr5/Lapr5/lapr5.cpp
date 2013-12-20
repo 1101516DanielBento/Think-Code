@@ -4,8 +4,9 @@
 #include <GL\glut.h>
 #include <iostream>
 #include "grafos.h"
+#include <vector>
+#include <ctime>
 
-<<<<<<< HEAD
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -16,12 +17,25 @@
 #include <GL/glaux.h>
 #endif
 
-=======
->>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
+typedef struct vecCol{
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+}vecCol;
+
+vecCol colisao[100];
+
+std::vector<std::vector<GLfloat>> PosTodosUsers;
+
+
+
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
+#define K_ESFERA 4.0
+
+//#define RAND_MAX 
 
 // luzes e materiais
 
@@ -388,6 +402,37 @@ void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLf
 }
 
 */
+
+void distribuicaoNos()
+{
+	srand((unsigned)time(0));
+	int random_integer, random_direcao;
+	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
+	GLfloat range=(ceiling-floor)+1.0;
+	GLfloat floor2 = 2.0,ceiling2 = 4.0;
+	GLfloat range2=(ceiling2-floor2)+5.0;
+
+	for(int i =0; i < 8/*alterar para num utilizadores*/;i++)
+	{
+		vector<GLfloat> aux3;
+
+		GLfloat random_x = floor+int(range*rand()/(RAND_MAX +1.0));
+		GLfloat random_y = floor+int(range*rand()/(RAND_MAX+1.0));
+		GLfloat random_z = floor2+int(range2*rand()/(RAND_MAX+1.0));
+
+		colisao[i].x = random_x;
+		colisao[i].y = random_y;
+		colisao[i].z = random_z;
+
+		aux3.push_back(random_x);
+		aux3.push_back(random_y);
+		aux3.push_back(random_z);
+
+		PosTodosUsers.push_back(aux3);
+		aux3.pop_back();
+	}
+}
+
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
 {
 	GLfloat vx = xf-xi;
@@ -428,7 +473,14 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 
 }
 
-void desenhaArco2(Arco arco)
+void Caminho()
+{
+	//GLUquadricObj *obj = gluNewQuadric();
+
+	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
+}
+
+void desenhaLigação(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
@@ -442,6 +494,7 @@ void desenhaArco2(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
+			material(slate);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
@@ -456,26 +509,17 @@ void desenhaArco2(Arco arco)
 			}
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		}else{
-			if(nos[arco.noi].z==nos[arco.nof].z){
-				
-				if(nos[arco.noi].x<nos[arco.nof].x){
-				noi=&nos[arco.noi];
-				nof=&nos[arco.nof];
-				//nof->z+=1;
-			}else{
-				nof=&nos[arco.noi];
-				noi=&nos[arco.nof];
-				//noi->z+=1;
-			}
+			noi=&nos[arco.noi];
+			nof=&nos[arco.nof];
+			material(red_plastic);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-			}
+
 
 		}
 	}
-	
-}
+}	
 
-#define K_ESFERA 4
+
 void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
@@ -493,8 +537,8 @@ void desenhaLabirinto(){
 		}
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
-			//desenhaArco(arcos[i]);
-			desenhaArco2(arcos[i]);
+			desenhaLigação(arcos[i]);
+			//Caminho();
 
 		}
 	glPopMatrix();
@@ -721,7 +765,7 @@ void Special(int key, int x, int y){
 				glutPostRedisplay();
 			break;
 		case GLUT_KEY_DOWN:
-<<<<<<< HEAD
+
 			estado.camera.dist+=1;
 			glutPostRedisplay();
 			break;
@@ -736,12 +780,9 @@ void Special(int key, int x, int y){
 			glutPostRedisplay();
 			break;
 	}
-=======
-				estado.camera.dist+=1;
-				glutPostRedisplay();
-			break;	}
->>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
+
 }
+
 
 
 void setProjection(int x, int y, GLboolean picking){
