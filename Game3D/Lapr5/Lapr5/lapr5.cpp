@@ -6,6 +6,9 @@
 #include "grafos.h"
 #include <vector>
 #include <ctime>
+#include <iostream>
+#include <string>
+using namespace std;
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -17,7 +20,10 @@
 #include <GL/glaux.h>
 #endif
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 typedef struct vecCol{
 	GLfloat x;
 	GLfloat y;
@@ -35,9 +41,12 @@ using namespace std;
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_ESFERA 4.0
 
+<<<<<<< HEAD
 #define VELv 0.5
 
 //#define RAND_MAX 
+=======
+>>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 
 // luzes e materiais
 
@@ -348,91 +357,10 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 		glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
-/*
-void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
-	GLdouble v1[3],v2[3],cross[3];
-	GLdouble length;
-	v1[0]=xf-xi;
-	v1[1]=0;
-	v2[0]=0;
-	v2[1]=yf-yi;
-
-	switch(orient) {
-		case NORTE_SUL :
-				v1[2]=0;
-				v2[2]=zf-zi;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zi);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zf);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zf,cross,red_plastic);
-				}
-			break;
-		case ESTE_OESTE :
-				v1[2]=zf-zi;
-				v2[2]=0;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zf,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-				}
-			break;
-		default:
-				cross[0]=0;
-				cross[1]=0;
-				cross[2]=1;
-				material(azul);
-				glBegin(GL_QUADS);
-					glNormal3f(0,0,1);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,azul);
-					desenhaNormal(xf,yi,zf,cross,azul);
-					desenhaNormal(xf,yf,zf,cross,azul);
-					desenhaNormal(xi,yi,zi,cross,azul);
-				}
-			break;
-	}
-}
-
-<<<<<<< HEAD
-=======
-*/
 
 void distribuicaoNos()
 {
 	srand((unsigned)time(0));
-	int random_integer, random_direcao;
 	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
 	GLfloat range=(ceiling-floor)+1.0;
 	GLfloat floor2 = 2.0,ceiling2 = 4.0;
@@ -495,7 +423,7 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 			}
 			glRotatef(ax, rx, ry, rz);
 			gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
-			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);
+			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal é desenhada automaticamente pela funcao
 			glPopMatrix();	
 
 }
@@ -733,6 +661,7 @@ void Timer(int value)
 }
 
 
+
 void keyboard(unsigned char key, int x, int y)
 {
 
@@ -883,8 +812,16 @@ void SpecialKey(int key, int x, int y){
 	if(estado.debug)
 		printf("Carregou na tecla especial %d\n",key);
 
-}
+<<<<<<< HEAD
+=======
 
+>>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
+}
+//biilboard(?) + botao + campos de texto
+bool login()
+{
+
+<<<<<<< HEAD
 void SpecialKeyUp(int key, int x, int y)
 {
 	switch (key) {
@@ -904,6 +841,33 @@ void SpecialKeyUp(int key, int x, int y)
 	if(estado.debug)
 		printf("Largou a tecla especial %d\n",key);
 	
+=======
+	char user1[10], pass[10];
+	printf("Username: ");
+	cin >> user1;
+	printf("Password: ");
+	cin >> pass;
+
+	//em vez do if ---> webservice para verificar o utilizador, no qual o result sera true ou false
+	if(strcmp(user1,"user1") == 0){
+		if(strcmp(pass,"qwerty")==0){
+			return true;
+		}
+	}else{
+		return false;
+	}
+}
+
+void loginWindow()
+{
+	bool checkLogin = login();
+	if(checkLogin)
+	{
+		printf("Login efectuado com Sucesso!!\n");
+		myInit();
+		imprime_ajuda();
+	}
+>>>>>>> 7e87cee5f99c75fe84a6ef1f5c1ed407d4ea74e3
 }
 
 void setProjection(int x, int y, GLboolean picking){
@@ -1111,9 +1075,12 @@ int main(int argc, char **argv)
 	
 	
 
-	myInit();
+	loginWindow();
+	//myinit + imprime ajuda dentro do login
 
-	imprime_ajuda();
+	/*myInit();
+
+	imprime_ajuda();*/
 
     glutMainLoop();
 	
