@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include "grafos.h"
+#include <vector>
+#include <ctime>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -15,10 +17,28 @@
 #include <GL/glaux.h>
 #endif
 
+<<<<<<< HEAD
+=======
+typedef struct vecCol{
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+}vecCol;
+
+vecCol colisao[100];
+
+std::vector<std::vector<GLfloat>> PosTodosUsers;
+
+
+
+>>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
+#define K_ESFERA 4.0
+
+//#define RAND_MAX 
 
 // luzes e materiais
 
@@ -316,7 +336,7 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 		glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
-
+/*
 void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
 	GLdouble v1[3],v2[3],cross[3];
 	GLdouble length;
@@ -393,6 +413,41 @@ void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLf
 	}
 }
 
+<<<<<<< HEAD
+=======
+*/
+
+void distribuicaoNos()
+{
+	srand((unsigned)time(0));
+	int random_integer, random_direcao;
+	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
+	GLfloat range=(ceiling-floor)+1.0;
+	GLfloat floor2 = 2.0,ceiling2 = 4.0;
+	GLfloat range2=(ceiling2-floor2)+5.0;
+
+	for(int i =0; i < 8/*alterar para num utilizadores*/;i++)
+	{
+		vector<GLfloat> aux3;
+
+		GLfloat random_x = floor+int(range*rand()/(RAND_MAX +1.0));
+		GLfloat random_y = floor+int(range*rand()/(RAND_MAX+1.0));
+		GLfloat random_z = floor2+int(range2*rand()/(RAND_MAX+1.0));
+
+		colisao[i].x = random_x;
+		colisao[i].y = random_y;
+		colisao[i].z = random_z;
+
+		aux3.push_back(random_x);
+		aux3.push_back(random_y);
+		aux3.push_back(random_z);
+
+		PosTodosUsers.push_back(aux3);
+		aux3.pop_back();
+	}
+}
+
+>>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
 {
 	GLfloat vx = xf-xi;
@@ -433,7 +488,14 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 
 }
 
-void desenhaArco2(Arco arco)
+void Caminho()
+{
+	//GLUquadricObj *obj = gluNewQuadric();
+
+	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
+}
+
+void desenhaLigação(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
@@ -447,6 +509,7 @@ void desenhaArco2(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
+			material(slate);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
@@ -460,11 +523,18 @@ void desenhaArco2(Arco arco)
 				noi=&nos[arco.nof];
 			}
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+		}else{
+			noi=&nos[arco.noi];
+			nof=&nos[arco.nof];
+			material(red_plastic);
+			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+
+
 		}
 	}
-}
+}	
 
-#define K_ESFERA 2.1
+
 void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
@@ -476,14 +546,14 @@ void desenhaLabirinto(){
 			material(azul);
 				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 				//glutSolidCube(0.5);
-				glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+				glutSolidSphere((K_ESFERA/2.0),20,20);
 			glPopMatrix();
 			//desenhaNo(i);
 		}
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
-			//desenhaArco(arcos[i]);
-			desenhaArco2(arcos[i]);
+			desenhaLigação(arcos[i]);
+			//Caminho();
 
 		}
 	glPopMatrix();
@@ -586,9 +656,8 @@ void display(void)
 	glLoadIdentity();
 	setCamera();
 
-	material(slate);
-	desenhaSolo();
-
+	//material(slate);
+	//desenhaSolo();
 	
 	desenhaEixos();
 	
@@ -799,8 +868,15 @@ void SpecialKey(int key, int x, int y){
 				addArco(criaArco(4,6,1,1));  // 4 - 6
 				glutPostRedisplay();
 			break;
+<<<<<<< HEAD
 		case GLUT_KEY_RIGHT :
 			estado.teclas.right=GL_TRUE;
+=======
+		case GLUT_KEY_DOWN:
+
+			estado.camera.dist+=1;
+			glutPostRedisplay();
+>>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 			break;
 		case GLUT_KEY_LEFT :
 			estado.teclas.left=GL_TRUE;
@@ -812,10 +888,15 @@ void SpecialKey(int key, int x, int y){
 			estado.teclas.down=GL_TRUE;
 			break;
 	}
+<<<<<<< HEAD
 	
 	if(estado.debug)
 		printf("Carregou na tecla especial %d\n",key);
+=======
+
+>>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 }
+
 
 
 void setProjection(int x, int y, GLboolean picking){

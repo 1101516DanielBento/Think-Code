@@ -8,12 +8,12 @@ namespace DataModel.Model
 {
     public class GameRequest : Game
     {
-        private int _dificulty;
+        private int _difficulty;
 
-        public int Dificulty
+        public int Difficulty
         {
-            get { return _dificulty; }
-            set { _dificulty = value; }
+            get { return _difficulty; }
+            set { _difficulty = value; }
         }
 
         private bool _status;

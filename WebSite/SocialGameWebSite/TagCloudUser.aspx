@@ -9,11 +9,10 @@
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
     <td valign="bottom" class="cel_botoes"><a href="LeaderBoard.aspx" onmouseover="MM_swapImage('Image1','','imgs/leaderBoard_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/leaderBoard_inactivo.png" name="Image1" width="117" height="27" border="0" id="Image1" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
-    <td valign="bottom" class="cel_botoes"><a href="UsersNetwork.aspx" onmouseover="MM_swapImage('Image5','','imgs/users_network_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/usersNetwork_inactivo.png" name="Image5" width="117" height="27" border="0" id="Image5" /></a></td>
-    <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
+    
     <td valign="bottom" class="cel_botoes"><a href="TagCloudUser.aspx" onmouseover="MM_swapImage('Image6','','imgs/tags_users_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tags_users_activo.png" name="Image6" width="117" height="27" border="0" id="Image6" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
-    <td valign="bottom" class="cel_botoes"><a href="TagsRelations.aspx" onmouseover="MM_swapImage('Image7','','imgs/tags_relations_activos.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsRelations_inactivo.png" name="Image7" width="117" height="27" border="0" id="Image7" /></a></td>
+    <td valign="bottom" class="cel_botoes"><a href="TagCloudRelations.aspx" onmouseover="MM_swapImage('Image7','','imgs/tags_relations_activos.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsRelations_inactivo.png" name="Image7" width="117" height="27" border="0" id="Image7" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
     <td valign="bottom" class="cel_botoes"><a href="Download.aspx" onmouseover="MM_swapImage('Image8','','imgs/download_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/download_inactivo.png" name="Image8" width="117" height="27" border="0" id="Image8" /></a></td>
    
@@ -36,7 +35,7 @@
                     $('#myCanvasContainer').hide();
                     $('#tags').hide();
 
-                    GetTagsList_ajax();
+                    GetUserTagsList_ajax();
                 });
 
                 function startTagCloud() {
@@ -64,12 +63,14 @@
                 }
 
 
-                function GetTagsList_ajax() {
+                function GetUserTagsList_ajax() {
 
                     var tagPageUrl = "paginaXPTO.aspx";
 
+                    //href="' + tagPageUrl + '?tag=' + tagListArray[i + 2] + '"
+
                     $.ajax({
-                        url: 'Ajax/GetTagsListForCloud.aspx',
+                        url: 'Ajax/GetUserTagsList.aspx',
                         type: 'GET',
                         success: function (data) {
 
@@ -78,7 +79,7 @@
                             var tagListArray = strTagList.split(";");
 
                             for (i = 0 ; i < tagListArray.length ; i += 3)
-                                $('#ulTags').append('<li><a href="' + tagPageUrl + '?tag=' + tagListArray[i + 2] + '" data-weight="' + tagListArray[i + 1] + '">' + tagListArray[i] + '</a></li>');
+                                $('#ulTags').append('<li><a href="#" data-weight="' + tagListArray[i + 1] + '">' + tagListArray[i] + '</a></li>');
 
                             startTagCloud();
 
