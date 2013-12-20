@@ -6,6 +6,9 @@
 #include "grafos.h"
 #include <vector>
 #include <ctime>
+#include <iostream>
+#include <string>
+using namespace std;
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -35,7 +38,6 @@ using namespace std;
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_ESFERA 4.0
 
-//#define RAND_MAX 
 
 // luzes e materiais
 
@@ -324,84 +326,7 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 		glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
-/*
-void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
-	GLdouble v1[3],v2[3],cross[3];
-	GLdouble length;
-	v1[0]=xf-xi;
-	v1[1]=0;
-	v2[0]=0;
-	v2[1]=yf-yi;
 
-	switch(orient) {
-		case NORTE_SUL :
-				v1[2]=0;
-				v2[2]=zf-zi;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zi);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zf);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zf,cross,red_plastic);
-				}
-			break;
-		case ESTE_OESTE :
-				v1[2]=zf-zi;
-				v2[2]=0;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zf,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-				}
-			break;
-		default:
-				cross[0]=0;
-				cross[1]=0;
-				cross[2]=1;
-				material(azul);
-				glBegin(GL_QUADS);
-					glNormal3f(0,0,1);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,azul);
-					desenhaNormal(xf,yi,zf,cross,azul);
-					desenhaNormal(xf,yf,zf,cross,azul);
-					desenhaNormal(xi,yi,zi,cross,azul);
-				}
-			break;
-	}
-}
-
-*/
 
 void distribuicaoNos()
 {
@@ -468,7 +393,7 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 			}
 			glRotatef(ax, rx, ry, rz);
 			gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
-			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);
+			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal é desenhada automaticamente pela funcao
 			glPopMatrix();	
 
 }
@@ -480,7 +405,7 @@ void Caminho()
 	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
 }
 
-void desenhaLigação(Arco arco)
+void desenhaLigacao(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
@@ -537,7 +462,7 @@ void desenhaLabirinto(){
 		}
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
-			desenhaLigação(arcos[i]);
+			desenhaLigacao(arcos[i]);
 			//Caminho();
 
 		}
@@ -665,6 +590,8 @@ void Timer(int value)
 	
 }
 
+
+
 void keyboard(unsigned char key, int x, int y)
 {
 
@@ -782,8 +709,36 @@ void Special(int key, int x, int y){
 	}
 
 }
+//biilboard(?) + botao + campos de texto
+bool login()
+{
 
+	char user1[10], pass[10];
+	printf("Username: ");
+	cin >> user1;
+	printf("Password: ");
+	cin >> pass;
 
+	//em vez do if ---> webservice para verificar o utilizador, no qual o result sera true ou false
+	if(strcmp(user1,"user1") == 0){
+		if(strcmp(pass,"qwerty")==0){
+			return true;
+		}
+	}else{
+		return false;
+	}
+}
+
+void loginWindow()
+{
+	bool checkLogin = login();
+	if(checkLogin)
+	{
+		printf("Login efectuado com Sucesso!!\n");
+		myInit();
+		imprime_ajuda();
+	}
+}
 
 void setProjection(int x, int y, GLboolean picking){
     glLoadIdentity();
@@ -981,9 +936,12 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouse);
 	
 
-	myInit();
+	loginWindow();
+	//myinit + imprime ajuda dentro do login
 
-	imprime_ajuda();
+	/*myInit();
+
+	imprime_ajuda();*/
 
     glutMainLoop();
 	
