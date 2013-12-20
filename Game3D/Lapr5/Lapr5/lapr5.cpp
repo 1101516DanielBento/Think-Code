@@ -17,8 +17,7 @@
 #include <GL/glaux.h>
 #endif
 
-<<<<<<< HEAD
-=======
+
 typedef struct vecCol{
 	GLfloat x;
 	GLfloat y;
@@ -30,13 +29,13 @@ vecCol colisao[100];
 std::vector<std::vector<GLfloat>> PosTodosUsers;
 
 
-
->>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_ESFERA 4.0
+
+#define VELv 0.5
 
 //#define RAND_MAX 
 
@@ -89,11 +88,20 @@ typedef struct {
 	GLboolean   q,a,up,down,left,right;
 }Teclas;
 
+typedef struct pos_t{
+    GLfloat    x,y,z;
+}pos_t;
+
+typedef struct objecto_t{
+    pos_t    pos;
+    GLfloat  dir;
+    GLfloat  vel;
+}objecto_t;
+
 typedef struct Camera{
 	GLfloat fov;
 	GLdouble dir_lat;
 	GLdouble dir_long;
-	GLfloat	velocidade;
 	GLfloat dist;
 	Vertice center;
 
@@ -113,7 +121,7 @@ typedef struct Estado{
 }Estado;
 
 typedef struct Modelo {
-	
+	objecto_t objecto;
 	#ifdef __cplusplus
 		tipo_material cor_cubo;
 	#else
@@ -145,6 +153,10 @@ void initEstado(){
 	estado.apresentaNormais=GL_FALSE;
 	estado.lightViewer=1;
 	estado.timer=20;
+	//coordenadas do objecto
+	modelo.objecto.pos.x=90;
+	modelo.objecto.pos.y=80;
+	modelo.objecto.pos.z=50;
 	
 	
 }
@@ -447,7 +459,7 @@ void distribuicaoNos()
 	}
 }
 
->>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
+
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
 {
 	GLfloat vx = xf-xi;
@@ -495,7 +507,7 @@ void Caminho()
 	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
 }
 
-void desenhaLigação(Arco arco)
+void desenhaLigacao(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
@@ -552,7 +564,7 @@ void desenhaLabirinto(){
 		}
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
-			desenhaLigação(arcos[i]);
+			desenhaLigacao(arcos[i]);
 			//Caminho();
 
 		}
@@ -634,17 +646,20 @@ void desenhaEixos(){
 }
 
 void setCamera(){
-	Vertice eye;
-	eye[0]=estado.camera.center[0]+estado.camera.dist*cos(estado.camera.dir_long)*cos(estado.camera.dir_lat);
-	eye[1]=estado.camera.center[1]+estado.camera.dist*sin(estado.camera.dir_long)*cos(estado.camera.dir_lat);
-	eye[2]=estado.camera.center[2]+estado.camera.dist*sin(estado.camera.dir_lat);
+
 
 	if(estado.light){
-		gluLookAt(eye[0],eye[1],eye[2],estado.camera.center[0],estado.camera.center[1],estado.camera.center[2],0,0,1);
+		//Posicionar a c‰mera
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
 		putLights((GLfloat*)white_light);
 	}else{
+		//Posicionar a c‰mera
 		putLights((GLfloat*)white_light);
-		gluLookAt(eye[0],eye[1],eye[2],estado.camera.center[0],estado.camera.center[1],estado.camera.center[2],0,0,1);
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
 	}
 }
 
@@ -681,34 +696,38 @@ void Timer(int value)
 	
 	if(estado.teclas.q)
 	{
-		estado.camera.center[2]+=0.2;
+		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
+		estado.teclas.q=GL_FALSE;
 	}
 	if(estado.teclas.a)
 	{
-		estado.camera.center[2]-=0.2;
+		modelo.objecto.pos.z=modelo.objecto.pos.z-VELv;
+		estado.teclas.a=GL_FALSE;
 	}
 	if(estado.teclas.left)
 	{
-		estado.camera.dir_long-=0.1;
+		modelo.objecto.dir+=0.1;
 	}
 	
 	if(estado.teclas.right)
 	{
-		estado.camera.dir_long+=0.1;
+		modelo.objecto.dir-=0.1;
 	}
 
 	if(estado.teclas.up)
 	{
-		estado.camera.dir_lat+=0.1;
+		modelo.objecto.pos.x=modelo.objecto.pos.x+VELv*cos(modelo.objecto.dir);
+		modelo.objecto.pos.y+=VELv*sin(modelo.objecto.dir);
 	}
 	
 	if(estado.teclas.down)
 	{
-		estado.camera.dir_lat-=0.1;
+		modelo.objecto.pos.x=modelo.objecto.pos.x-VELv*cos(modelo.objecto.dir);
+		modelo.objecto.pos.y-=VELv*sin(modelo.objecto.dir);
 	}
 	
 	if(estado.debug)
-		printf("Velocidade %.2f \n",estado.camera.velocidade);
+		printf("Velocidade %.2f \n",modelo.objecto.vel);
 	
 	glutPostRedisplay();
 }
@@ -781,60 +800,37 @@ void keyboard(unsigned char key, int x, int y)
 		case 'A':
 				estado.teclas.a=GL_TRUE;
 				//estado.camera.center[2]-=0.2;
-				glutPostRedisplay();
+			printf("carregou no a\n");
 			break;
 		case 'q':
 		case 'Q':
 				estado.teclas.q=GL_TRUE;
 				//estado.camera.center[2]+=0.2;
-				glutPostRedisplay();
+				
 			break;
 	}
-	
 	if(estado.debug)
 		printf("Carregou na tecla %c\n",key);
 	
 }
 
 // Callback para interaccao via teclado (largar a tecla)
-
 void KeyUp(unsigned char key, int x, int y)
 {
 	switch (key) {
 			// ... accoes sobre largar teclas ...
 			
-		case 'Q' :
+		/*case 'Q' :
 		case 'q' : estado.teclas.q=GL_FALSE;
 			break;
 		case 'A' :
 		case 'a' : estado.teclas.a=GL_FALSE;
-			break;
+			break;*/
 			
 	}
 	
 	if(estado.debug)
 		printf("Largou a tecla %c\n",key);
-}
-
-void SpecialKeyUp(int key, int x, int y)
-{
-	switch (key) {
-		case GLUT_KEY_RIGHT :
-			estado.teclas.right=GL_FALSE;
-			break;
-		case GLUT_KEY_LEFT :
-			estado.teclas.left=GL_FALSE;
-			break;
-		case GLUT_KEY_UP :
-			estado.teclas.up=GL_FALSE;
-			break;
-		case GLUT_KEY_DOWN :
-			estado.teclas.down=GL_FALSE;
-			break;
-	}
-	if(estado.debug)
-		printf("Largou a tecla especial %d\n",key);
-	
 }
 
 // Callback para interaccao via teclas especiais  (carregar na tecla)
@@ -868,15 +864,9 @@ void SpecialKey(int key, int x, int y){
 				addArco(criaArco(4,6,1,1));  // 4 - 6
 				glutPostRedisplay();
 			break;
-<<<<<<< HEAD
+
 		case GLUT_KEY_RIGHT :
 			estado.teclas.right=GL_TRUE;
-=======
-		case GLUT_KEY_DOWN:
-
-			estado.camera.dist+=1;
-			glutPostRedisplay();
->>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 			break;
 		case GLUT_KEY_LEFT :
 			estado.teclas.left=GL_TRUE;
@@ -888,16 +878,33 @@ void SpecialKey(int key, int x, int y){
 			estado.teclas.down=GL_TRUE;
 			break;
 	}
-<<<<<<< HEAD
+
 	
 	if(estado.debug)
 		printf("Carregou na tecla especial %d\n",key);
-=======
 
->>>>>>> 5e92a1bac57d9efe19fd7c165bf4b3f87edf9a87
 }
 
-
+void SpecialKeyUp(int key, int x, int y)
+{
+	switch (key) {
+		case GLUT_KEY_RIGHT :
+			estado.teclas.right=GL_FALSE;
+			break;
+		case GLUT_KEY_LEFT :
+			estado.teclas.left=GL_FALSE;
+			break;
+		case GLUT_KEY_UP :
+			estado.teclas.up=GL_FALSE;
+			break;
+		case GLUT_KEY_DOWN :
+			estado.teclas.down=GL_FALSE;
+			break;
+	}
+	if(estado.debug)
+		printf("Largou a tecla especial %d\n",key);
+	
+}
 
 void setProjection(int x, int y, GLboolean picking){
     glLoadIdentity();
@@ -1095,7 +1102,7 @@ int main(int argc, char **argv)
 	glutTimerFunc(estado.timer, Timer, 0);
 
 	glutKeyboardFunc(keyboard);
-	
+	glutKeyboardFunc(KeyUp);
 	glutSpecialFunc(SpecialKey);
 	glutSpecialUpFunc(SpecialKeyUp);
 	
