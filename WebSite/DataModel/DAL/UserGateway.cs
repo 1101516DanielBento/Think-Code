@@ -244,18 +244,17 @@ namespace DataModel.DAL
             }
         }
 
-        public DataTable getCountAllUsers()
+        public int getCountAllUsers()
         {
-            try
-            {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select count(*) as count from [GameDataBase].[dbo].[user]");
 
-                return ds.Tables[0];
-            }
-            catch (SqlException ex)
+            object obj = ExecuteScalar(GetConnection(true), new SqlCommand("select count(*) as count from [GameDataBase].[dbo].[user]"));
+
+            if (obj != null)
             {
-                throw new ApplicationException("Erro BD", ex);
+                return Convert.ToInt32(obj);
             }
+
+            return -1;
         }
     }
 }
