@@ -137,5 +137,32 @@ namespace DataModel.BLL
 
         }
 
+        public bool addTagToUser(Tag t, int idUser)
+        {
+            int v = tagGateway.addTagToUser(t, idUser);
+
+            if (v != -1)
+            {
+                t.IdTag = v;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool addTagToFriendship(Tag t, int idUserA, int idUserB)
+        {
+            int v = tagGateway.addTagToUserFriendship(t, idUserA,idUserB);
+
+            if (v != -1)
+            {
+                t.IdTag = v;
+                return true;
+            }
+
+            return false;
+        }
+
+
     }
 }

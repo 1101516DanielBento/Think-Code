@@ -218,7 +218,8 @@ namespace DataModel.DAL
 
         public bool changePassword(int idUser, string newPass)
         {
-            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [password]= '+"+SimpleEncryptor.Encrypt(newPass, PasswordEncryptionKey)+"' WHERE idUser="+idUser;
+            string pass = SimpleEncryptor.Encrypt(newPass, PasswordEncryptionKey);
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [password]= '"+pass+"' WHERE idUser="+idUser;
 
             int res = ExecuteNonQuery(GetConnection(true), cmd);
 

@@ -29,7 +29,7 @@ public partial class ChangePassword : System.Web.UI.Page
             User user = usrBll.loadUserById((int)Session["id"]);
 
             string encripted = SimpleEncryptor.Encrypt(txtPasswordAntiga.Text, UserGateway.PasswordEncryptionKey);
-            if (user.Password == txtPasswordAntiga.Text) //verifica veracidade da antiga password
+            if (user.Password == encripted) //verifica veracidade da antiga password
             {
                 user.Password = txtPassword.Text;
 
