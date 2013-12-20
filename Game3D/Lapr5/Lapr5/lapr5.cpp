@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdlib.h>     
-#include <GL\glut.h>
+#include <cmath>
 #include <iostream>
 #include "grafos.h"
 #include <vector>
@@ -29,7 +29,6 @@ typedef struct vecCol{
 vecCol colisao[100];
 
 std::vector<std::vector<GLfloat>> PosTodosUsers;
-
 
 
 using namespace std;
@@ -92,6 +91,7 @@ typedef struct Camera{
 	GLfloat fov;
 	GLdouble dir_lat;
 	GLdouble dir_long;
+	GLfloat	velocidade;
 	GLfloat dist;
 	Vertice center;
 
@@ -100,8 +100,10 @@ typedef struct Camera{
 typedef struct Estado{
 	Camera		camera;
 	GLint         timer;
+	Teclas		teclas;
 	int			xMouse,yMouse;
 	GLboolean	light;
+	GLboolean   debug;
 	GLboolean	apresentaNormais;
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
@@ -109,6 +111,7 @@ typedef struct Estado{
 }Estado;
 
 typedef struct Modelo {
+	
 	#ifdef __cplusplus
 		tipo_material cor_cubo;
 	#else
@@ -139,6 +142,9 @@ void initEstado(){
 	estado.light=GL_FALSE;
 	estado.apresentaNormais=GL_FALSE;
 	estado.lightViewer=1;
+	estado.timer=20;
+	
+	
 }
 
 void initModelo(){
@@ -179,7 +185,9 @@ void myInit()
 	modelo.quad=gluNewQuadric();
 	gluQuadricDrawStyle(modelo.quad, GLU_FILL);
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
-
+	
+	
+	
 	leGrafo();
 }
 
@@ -327,11 +335,9 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glEnable(GL_LIGHTING);
 }
 
-
 void distribuicaoNos()
 {
 	srand((unsigned)time(0));
-	int random_integer, random_direcao;
 	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
 	GLfloat range=(ceiling-floor)+1.0;
 	GLfloat floor2 = 2.0,ceiling2 = 4.0;
@@ -357,6 +363,7 @@ void distribuicaoNos()
 		aux3.pop_back();
 	}
 }
+
 
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
 {
@@ -587,7 +594,40 @@ void display(void)
 
 void Timer(int value)
 {
+	glutTimerFunc(estado.timer, Timer, 0);
 	
+	if(estado.teclas.q)
+	{
+		estado.camera.center[2]+=0.2;
+	}
+	if(estado.teclas.a)
+	{
+		estado.camera.center[2]-=0.2;
+	}
+	if(estado.teclas.left)
+	{
+		estado.camera.dir_long-=0.1;
+	}
+	
+	if(estado.teclas.right)
+	{
+		estado.camera.dir_long+=0.1;
+	}
+
+	if(estado.teclas.up)
+	{
+		estado.camera.dir_lat+=0.1;
+	}
+	
+	if(estado.teclas.down)
+	{
+		estado.camera.dir_lat-=0.1;
+	}
+	
+	if(estado.debug)
+		printf("Velocidade %.2f \n",estado.camera.velocidade);
+	
+	glutPostRedisplay();
 }
 
 
@@ -654,11 +694,70 @@ void keyboard(unsigned char key, int x, int y)
 				initEstado();
 				initModelo();
 				glutPostRedisplay();
-			break;    
+			break;
+		case 'a':
+		case 'A':
+				estado.teclas.a=GL_TRUE;
+				//estado.camera.center[2]-=0.2;
+				glutPostRedisplay();
+			break;
+		case 'q':
+		case 'Q':
+				estado.teclas.q=GL_TRUE;
+				//estado.camera.center[2]+=0.2;
+				glutPostRedisplay();
+			break;
 	}
+	
+	if(estado.debug)
+		printf("Carregou na tecla %c\n",key);
+	
 }
 
-void Special(int key, int x, int y){
+// Callback para interaccao via teclado (largar a tecla)
+
+void KeyUp(unsigned char key, int x, int y)
+{
+	switch (key) {
+			// ... accoes sobre largar teclas ...
+			
+		case 'Q' :
+		case 'q' : estado.teclas.q=GL_FALSE;
+			break;
+		case 'A' :
+		case 'a' : estado.teclas.a=GL_FALSE;
+			break;
+			
+	}
+	
+	if(estado.debug)
+		printf("Largou a tecla %c\n",key);
+}
+
+void SpecialKeyUp(int key, int x, int y)
+{
+	switch (key) {
+		case GLUT_KEY_RIGHT :
+			estado.teclas.right=GL_FALSE;
+			break;
+		case GLUT_KEY_LEFT :
+			estado.teclas.left=GL_FALSE;
+			break;
+		case GLUT_KEY_UP :
+			estado.teclas.up=GL_FALSE;
+			break;
+		case GLUT_KEY_DOWN :
+			estado.teclas.down=GL_FALSE;
+			break;
+	}
+	if(estado.debug)
+		printf("Largou a tecla especial %d\n",key);
+	
+}
+
+// Callback para interaccao via teclas especiais  (carregar na tecla)
+
+void SpecialKey(int key, int x, int y){
 
 	switch(key){
 		case GLUT_KEY_F1 :
@@ -686,27 +785,26 @@ void Special(int key, int x, int y){
 				addArco(criaArco(4,5,1,1));  // 4 - 5
 				addArco(criaArco(4,6,1,1));  // 4 - 6
 				glutPostRedisplay();
-			break;	
-		case GLUT_KEY_UP:
-				estado.camera.dist-=1;
-				glutPostRedisplay();
 			break;
-		case GLUT_KEY_DOWN:
 
-			estado.camera.dist+=1;
-			glutPostRedisplay();
+		case GLUT_KEY_RIGHT :
+			estado.teclas.right=GL_TRUE;
 			break;
-		case GLUT_KEY_LEFT:
-			estado.camera.dir_long-=0.1;
-			
-			glutPostRedisplay();
+		case GLUT_KEY_LEFT :
+			estado.teclas.left=GL_TRUE;
 			break;
-			
-		case GLUT_KEY_RIGHT:
-			estado.camera.dir_long+=0.1;
-			glutPostRedisplay();
+		case GLUT_KEY_UP :
+			estado.teclas.up=GL_TRUE;
+			break;
+		case GLUT_KEY_DOWN :
+			estado.teclas.down=GL_TRUE;
 			break;
 	}
+
+	
+	if(estado.debug)
+		printf("Carregou na tecla especial %d\n",key);
+
 
 }
 //biilboard(?) + botao + campos de texto
@@ -879,6 +977,7 @@ int picking(int x, int y){
 
 	return objid;
 }
+
 void mouse(int btn, int state, int x, int y){
 	switch(btn) {
 		case GLUT_RIGHT_BUTTON :
@@ -930,10 +1029,18 @@ int main(int argc, char **argv)
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
 	
+	
+	
 	glutTimerFunc(estado.timer, Timer, 0);
+
 	glutKeyboardFunc(keyboard);
-	glutSpecialFunc(Special);
+	
+	glutSpecialFunc(SpecialKey);
+	glutSpecialUpFunc(SpecialKeyUp);
+	
 	glutMouseFunc(mouse);
+	
+	
 	
 
 	loginWindow();
