@@ -18,12 +18,6 @@ public partial class ChangeUserInformation : System.Web.UI.Page
         if (Session["id"] == null)
             Response.Redirect("Login.aspx?RequestedPage=ChangeUserInformation.aspx");
 
-
-        //if (!Page.IsPostBack)
-        //{
-        //    txtNome.Text = user.Nome;
-        //    txtEmail.Text = user.Email;
-        //}
     }
     protected void btnGuardar_Click(object sender, EventArgs e)
     {
@@ -36,8 +30,10 @@ public partial class ChangeUserInformation : System.Web.UI.Page
             User user = usrBll.loadUserById((int)Session["id"]);
 
             
-            if (user.Username == txtNome.Text) //se for o mesmo utilizador
+            if (user.Username != txtNome.Text) //se for o mesmo utilizador
                 sucesso = true;
+            else
+
            
 
             if (sucesso)
@@ -45,7 +41,7 @@ public partial class ChangeUserInformation : System.Web.UI.Page
                 user.Username = txtNome.Text;
                 user.Email = txtEmail.Text;
 
-                sucesso = user.Save(); // FALTA IMPLEMENTAR 
+                //sucesso = user.Save(); // FALTA IMPLEMENTAR 
 
                 if (sucesso)
                 {
