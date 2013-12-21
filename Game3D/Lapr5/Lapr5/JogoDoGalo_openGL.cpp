@@ -17,22 +17,22 @@ GLfloat PosicaoLuz[] = {5.0f,25.0f,5.0f,1.0f};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 //variaveis do mouse: W = tamanho janela(windows), mouse = posicao mouse
-int mouse_x,mouse_y, W_x,W_y,obj_select;
+GLint mouse_x,mouse_y, W_x,W_y,obj_select;
 
 //variaveis de estado, state variables para Ortho/Perpective view, lighting on/off
-//static int view_state = 0, light_state = 0;
-GLboolean view_state = GL_TRUE;
-GLboolean light_state = GL_TRUE;
+static int view_state = 0, light_state = 0;
+/*GLboolean view_state = GL_TRUE;
+GLboolean light_state= GL_TRUE;*/
 
 // usar para por X's e O's a rodar
 //GLboolean spin = GL_FALSE, spinboxes = GL_FALSE;
-int spin, spinboxes;
+GLint spin, spinboxes;
 //---------logica-------------
 //win = 1 player ganha, -1 computador ganha, 2 empate
 //player ou computador; 1 = X, -1 = O
 //start_game indica quem esta em jogo
 
-int player, computer, win, start_game;
+GLint player, computer, win, start_game;
 //GLboolean start_game = GL_FALSE;
 
 // alinhamento das caixas em quais alguem pode ganhar
@@ -92,7 +92,7 @@ int verifica_movimento()
 			return(1);
 		}
 	}
-	t==0;
+	t=0;
 	//verificacao para empate
 	for(i=0; i < 8; i++)
 	{
@@ -302,10 +302,10 @@ void Desenha_X(int x, int y, int z, int angle)
 
 void displayGalo()
 {
-	char txt[30];
+	//char txt[30];
 	int ix, iy,i,j;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_TEST); //limpar ecra
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //limpar ecra
 	glMatrixMode(GL_PROJECTION); //dizer ao openGL que estamos a fazer trabalho com a matrix
 	glLoadIdentity();
 	glOrtho(-9.0,9.0,-9.0,9.0,0.0,30.0);//definir a Ortho view
@@ -330,7 +330,7 @@ void displayGalo()
 
 
 	//definir a view e imprimir a view state no ecra
-	if(!view_state)
+	if(view_state == 1)
 	{
 		glColor3f( 0.0, 0.0, 1.0);
 		escreverEcra(-3, 8, "Perspective View");
@@ -345,7 +345,7 @@ void displayGalo()
 	}
 
 	//Lighting On/Off
-	if(!light_state)
+	if(light_state == 1)
 	{
 		glDisable(GL_LIGHTING);
 		glDisable(GL_COLOR_MATERIAL);
@@ -423,3 +423,107 @@ void reshape(GLint lar, GLint alt)
 }
 
 
+//Teclado
+
+void keyboard_Galo(unsigned char key,int x, int y)
+{
+	switch(key)
+	{
+	case 'v':
+	case 'V':
+		view_state = abs(view_state -1);
+		break;
+	case 'l':
+	case 'L':
+		light_state = abs(light_state -1);
+		break;
+	case 27:
+		exit(0);//sair do jogo ao pressionar 'ESC'
+		break;
+	default:
+		break;
+	}
+}
+
+//rato
+
+void mouse_Galo(GLint button, GLint state, GLint x,GLint y)
+{
+	//converter coordenadas de um windows mouse para coordenadas openGL
+	mouse_x = (18*(GLfloat) ((GLfloat)x/(GLfloat)W_x))/6;
+	mouse_y = (18*(GLfloat)((GLfloat)y/(GLfloat)W_y))/6;
+
+	obj_select = mouse_x+mouse_y*3;
+
+	if(start_game == 0)
+	{
+		if((button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN))
+		{
+			player =1;
+			computer = -1;
+			init_game();
+			return;
+		}
+
+		if((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN))
+		{
+
+			player = -1;
+			computer = 1;
+			init_game();
+			turno_computer();
+			return;
+		}
+	}
+
+	if(start_game == 1)
+	{
+		if((button == GLUT_LEFT_BUTTON) & (state == GLUT_DOWN))
+		{
+			if(win == 0)
+			{
+				if(mapa_caixa[obj_select] == 0)
+				{
+					mapa_caixa[obj_select] = player;
+					win = verifica_movimento();
+					if(win == 1)
+					{
+						start_game = 0;
+						return;
+					}
+					turno_computer();
+					win = verifica_movimento();
+					if(win == 1)
+					{
+						win = -1;
+						start_game = 0;
+					}
+				}
+			}
+		}
+
+	}
+	if(win == 2)
+		start_game = 0;
+}
+
+//main
+/*
+int main (int argc, char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(500,500);
+	glutInitWindowPosition(10,10);
+	glutCreateWindow(argv[0]);
+	glutSetWindowTitle("JOGO DO GALO 3D");
+	init();
+	glutDisplayFunc(displayGalo);
+	glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyboard_Galo);
+	glutMouseFunc(mouse_Galo);
+	glutTimerFunc(10, TimerGalo,1);
+	glutMainLoop();
+	return 0;
+
+}*/
