@@ -741,12 +741,12 @@ void KeyUp(unsigned char key, int x, int y)
 	switch (key) {
 			// ... accoes sobre largar teclas ...
 			
-		/*case 'Q' :
+		case 'Q' :
 		case 'q' : estado.teclas.q=GL_FALSE;
 			break;
 		case 'A' :
 		case 'a' : estado.teclas.a=GL_FALSE;
-			break;*/
+			break;
 			
 	}
 	
@@ -830,7 +830,6 @@ void SpecialKeyUp(int key, int x, int y)
 	//biilboard(?) + botao + campos de texto
 bool login()
 {
-
 	char user1[10], pass[10];
 	printf("Username: ");
 	cin >> user1;
@@ -845,6 +844,7 @@ bool login()
 	}else{
 		return false;
 	}
+	return false;
 }
 
 void loginWindow()
@@ -1046,7 +1046,7 @@ int main(int argc, char **argv)
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(640, 480);
-    glutCreateWindow("OpenGL");
+    glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
 	
@@ -1055,7 +1055,7 @@ int main(int argc, char **argv)
 	glutTimerFunc(estado.timer, Timer, 0);
 
 	glutKeyboardFunc(keyboard);
-	glutKeyboardFunc(KeyUp);
+	//glutKeyboardFunc(KeyUp);
 	glutSpecialFunc(SpecialKey);
 	glutSpecialUpFunc(SpecialKeyUp);
 	
