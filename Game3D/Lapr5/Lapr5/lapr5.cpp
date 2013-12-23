@@ -1038,13 +1038,13 @@ void mouse(int btn, int state, int x, int y){
 	}
 }
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
 
 /* need both double buffering and z buffer */
 
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+ /*   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(640, 480);
     glutCreateWindow("OpenGL");
     glutReshapeFunc(myReshape);
@@ -1071,7 +1071,7 @@ int main(int argc, char **argv)
 
 	imprime_ajuda();*/
 
-    glutMainLoop();
+   /* glutMainLoop();
 	
 	return 0;
-}
+}*/
