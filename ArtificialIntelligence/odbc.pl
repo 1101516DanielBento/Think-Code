@@ -2,6 +2,7 @@
 
 :-dynamic user/1.
 :-dynamic user_tags/2.
+:-dynamic friend/2.
 
 connect:-
 	odbc_connect('wvm023', _,
@@ -22,7 +23,7 @@ usernameByID(UId,Username):-
 	string_concat('SELECT username FROM dbo.[User] WHERE idUser=', (UId), Sql),
 	findall(X, odbc_query(wvm023, Sql , row(X)), [Username|_]),
         knowUser(UId, Username),
-	knowFriends(UId).
+	knowFriends(UId,Username).
 
 
 userTagIDs(UId, TagList):-
@@ -38,20 +39,22 @@ userTags([H|T],[Tag|TagList]):-
 	userTags(T, TagList).
 
 
-knowFriends(UId):-
+knowFriends(UId,UsernameCurrentUser):-
 	string_concat('SELECT idUserB FROM dbo.[FriendShip] WHERE idUserA=', (UId), Sql1),
 	findall(X, odbc_query(wvm023, Sql1, row(X)), IDs1),
 	string_concat('SELECT idUserA FROM dbo.[FriendShip] WHERE idUserB=', (UId), Sql2),
 	findall(X, odbc_query(wvm023, Sql2, row(X)), IDs2),
 	append(IDs1,IDs2,IDs),
-	userByIdList(IDs).
+	userByIdList(IDs,UsernameCurrentUser).
+
 
 
 userByIdList([]):-!.
-userByIdList([H|T]):-
+userByIdList([H|T],UsernameCurrentUser):-
 	string_concat('SELECT username FROM dbo.[User] WHERE idUser=', (H), Sql),
 	findall(X, odbc_query(wvm023, Sql, row(X)), [User|_]),
 	knowUser(H,User),
+	knowFriend(UsernameCurrentUser, User),
 	userByIdList(T).
 
 
@@ -65,6 +68,11 @@ knowUserTags(_,[]):-!.
 knowUserTags(U, [Tag|T]):-
 	assertz(user_tags(U,Tag)),
 	knowUserTags(U,T).
+
+knowFriend(UsernameCurrentUser,Friend):-
+	assertz(friend(UsernameCurrentUser,Friend)).
+
+
 
 
 
