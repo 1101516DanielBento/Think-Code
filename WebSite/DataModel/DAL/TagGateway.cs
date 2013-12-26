@@ -265,6 +265,11 @@ namespace DataModel.DAL
 
 
 
+
+        internal bool delTagUser(int idUser, string tagName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

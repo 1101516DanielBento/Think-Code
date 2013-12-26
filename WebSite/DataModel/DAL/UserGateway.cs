@@ -256,5 +256,21 @@ namespace DataModel.DAL
 
             return -1;
         }
+
+
+
+
+
+        public bool editUser(User u)
+        {
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [username]= '" + u.Username + "' , [email]= '"+u.Email+"' WHERE idUser=" + u.IdUser;
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
     }
 }

@@ -14,6 +14,8 @@ public partial class TESTING_DM : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
+        
+
 
         User u = new User();
         u.IdUser = 4;
@@ -28,6 +30,11 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.IdTag = 5;
         tr2.TagName = "Amigo";
 
+
+        if (userBll.editUser(42, "BETA_V2", "BetaV2@web.com"))
+        {
+            Response.Write("EDITED");
+        }
         //if (tg.addTagToUser(t1, 7))
         //{
         //    Response.Write("STEP 1 COMPLETE <br>");

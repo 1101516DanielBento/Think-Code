@@ -304,5 +304,20 @@ namespace DataModel.BLL
             return userGateway.getCountAllUsers();
         }
 
+        public bool editUser(int idUser, string newName, string newEmail)
+        {
+            User u = new User();
+            u.IdUser = idUser;
+            u.Username = newName;
+            u.Email = newEmail;
+
+            if (usernameIsAlreadyInUse(newName) && emailIsAlreadyInUse(newEmail))
+                return false;
+
+            return userGateway.editUser(u);
+        }
+
+        
+
     }
 }

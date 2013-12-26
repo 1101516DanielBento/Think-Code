@@ -163,6 +163,13 @@ namespace DataModel.BLL
             return false;
         }
 
+        public bool delTagsUser(int idUser, string tagName)
+        {
+            return tagGateway.delTagUser(idUser, tagName) ;
+        }
+
+        
+
 
     }
 }
