@@ -40,6 +40,13 @@ public partial class TESTING_DM : System.Web.UI.Page
         {
             Response.Write("EDITED");
         }
+
+
+        IList<Tuple<int, DateTime>> il1 = userBll.loadFriendsRequestFromUser(4);
+        IList<Tuple<int, IList<GameRequest>>> il2 = userBll.loadFriendsRequestNegFromUser(4);
+
+        Response.Write("STOP");
+
         //if (tg.addTagToUser(t1, 7))
         //{
         //    Response.Write("STEP 1 COMPLETE <br>");

@@ -154,7 +154,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
+                DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
 
                 return ds.Tables[0];
             }

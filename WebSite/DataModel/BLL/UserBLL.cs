@@ -39,7 +39,7 @@ namespace DataModel.BLL
 
                 loadTagsFromUser(user);
 
-                user.FriendshipList=loadFriendsFromUser(user.IdUser);
+                user.FriendshipList = loadFriendsFromUser(user.IdUser);
 
                 user.FriendshipRequestList = loadFriendsRequestFromUser(user.IdUser);
 
@@ -53,14 +53,14 @@ namespace DataModel.BLL
 
         public User loadUserById(int id)
         {
-            
+
             User user = new User();
 
             DataTable dt = userGateway.getUsersByID(id);
 
             foreach (DataRow r in dt.Rows)
             {
-                
+
                 user.IdUser = (int)r["idUser"];
                 user.Username = (string)r["username"];
                 user.Password = (string)r["password"];
@@ -98,17 +98,17 @@ namespace DataModel.BLL
                 Friendship f = new Friendship();
                 if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
                 {
-                    idFriend= (int)r["idUserB"];
+                    idFriend = (int)r["idUserB"];
                 }
                 else
                 {
                     idFriend = (int)r["idUserA"];
                 }
-                
+
                 DateTime d = (DateTime)r["date"];
 
 
-                Tag tag = new Tag() ;
+                Tag tag = new Tag();
                 if (!(r["idTag"] is DBNull))
                 {
                     tag = loadTagsFromFriendship((int)r["idTag"]);
@@ -176,7 +176,10 @@ namespace DataModel.BLL
 
 
                 Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+
                 friends.Add(t);
+
+
             }
 
             return friends;
@@ -226,7 +229,7 @@ namespace DataModel.BLL
             return null;
 
         }
-        
+
 
         public void loadTagsFromUser(User u)
         {
@@ -284,9 +287,9 @@ namespace DataModel.BLL
         public IList<Tuple<int, string, int>> getTopTwentyUsersLeaderBoard()
         {
             IList<Tuple<int, string, int>> top = new List<Tuple<int, string, int>>();
-            
+
             DataTable dt = userGateway.getTopTwentyUsers();
-            int i=1;
+            int i = 1;
             foreach (DataRow r in dt.Rows)
             {
                 Tuple<int, string, int> row = new Tuple<int, string, int>(i, (string)r["username"], (int)r["points"]);
@@ -294,7 +297,7 @@ namespace DataModel.BLL
 
                 top.Add(row);
             }
-            
+
             return top;
 
         }
@@ -317,7 +320,7 @@ namespace DataModel.BLL
             return userGateway.editUser(u);
         }
 
-        
+
 
     }
 }
