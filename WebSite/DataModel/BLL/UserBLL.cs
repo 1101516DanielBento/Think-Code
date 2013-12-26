@@ -127,7 +127,7 @@ namespace DataModel.BLL
 
             IList<Tuple<int, DateTime>> friends = new List<Tuple<int, DateTime>>();
 
-            DataTable dt = userGateway.getUsersFriendsRequest(id);
+            DataTable dt = userGateway.loadUsersFriendsRequest(id);
 
             foreach (DataRow r in dt.Rows)
             {
@@ -158,7 +158,7 @@ namespace DataModel.BLL
 
             IList<Tuple<int, IList<GameRequest>>> friends = new List<Tuple<int, IList<GameRequest>>>();
 
-            DataTable dt = userGateway.getUsersFriendsRequestNeg(id);
+            DataTable dt = userGateway.loadUsersFriendsRequestNeg(id);
 
             foreach (DataRow r in dt.Rows)
             {
@@ -183,6 +183,123 @@ namespace DataModel.BLL
             }
 
             return friends;
+        }
+
+
+        public IList<Tuple<int, DateTime>> getMyFriendsRequestFromUser(int val, int id)
+        {
+            //VAL = 0 -> Request BY me
+            //VAL = 1 -> Request TO me
+
+            IList<Tuple<int, DateTime>> friends = new List<Tuple<int, DateTime>>();
+
+            DataTable dt = new DataTable() ;
+
+            if( val == 0){
+                dt =userGateway.getUsersFriendsRequest_byMe(id);
+            }
+            if(val == 1){
+                dt = userGateway.getUsersFriendsRequest(id);
+            }
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int idFriend = -1;
+                Friendship f = new Friendship();
+                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
+                {
+                    idFriend = (int)r["idUserB"];
+                }
+                else
+                {
+                    idFriend = (int)r["idUserA"];
+                }
+
+                DateTime d = (DateTime)r["date"];
+
+
+                Tuple<int, DateTime> t = new Tuple<int, DateTime>(idFriend, d);
+                friends.Add(t);
+            }
+
+            return friends;
+        }
+
+        public IList<Tuple<int, IList<GameRequest>>> getMyFriendsRequestNegFromUser(int val, int id)
+        {
+            //VAL = 0 -> Request BY me
+            //VAL = 1 -> Request TO me
+
+            IList<Tuple<int, IList<GameRequest>>> friends = new List<Tuple<int, IList<GameRequest>>>();
+
+            DataTable dt = new DataTable();
+
+            if (val == 0)
+            {
+                dt = userGateway.getUsersFriendsRequestNeg_byMe(id);
+            }
+            if (val == 1)
+            {
+                dt = userGateway.getUsersFriendsRequestNegGame(id);
+            }
+
+
+
+            foreach (DataRow r in dt.Rows)
+            {
+                int idFriend = -1;
+                Friendship f = new Friendship();
+                if (r["idUserA"] is DBNull || (int)r["idUserA"] == id)
+                {
+                    idFriend = (int)r["idUserB"];
+                }
+                else
+                {
+                    idFriend = (int)r["idUserA"];
+                }
+
+
+
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+
+                friends.Add(t);
+
+
+            }
+
+            return friends;
+        }
+
+
+
+
+        public bool verifyIfUserIsFriend(int idMyUser, int idUser)
+        {
+            IList<Tuple<int, DateTime, Tag>> l1 = loadFriendsFromUser(idMyUser);
+            IList<Tuple<int, DateTime>> l2 = loadFriendsRequestFromUser(idMyUser);
+            IList<Tuple<int, IList<GameRequest>>> l3 = loadFriendsRequestNegFromUser(idMyUser);
+
+
+            for (int i = 0; i < l1.Count; i++)
+            {
+                if (l1[i].Item1 == idUser)
+                    return true ;
+            }
+            for (int i = 0; i < l2.Count; i++)
+            {
+                if (l2[i].Item1 == idUser)
+                    return true;
+            }
+            for (int i = 0; i < l3.Count; i++)
+            {
+                if (l3[i].Item1 == idUser)
+                    return true;
+            }
+
+
+
+
+            return false;
         }
 
         public IList<GameRequest> getGameList(int idUser)
@@ -319,6 +436,33 @@ namespace DataModel.BLL
 
             return userGateway.editUser(u);
         }
+
+
+        public bool createNewFriendshipRequest(int idMyUser, int idUser)
+        {
+            if (verifyIfUserIsFriend(idMyUser, idUser))
+            {
+                return false;
+            }
+
+             return userGateway.createNewFriendshipRequest(idMyUser, idUser); 
+        }
+
+        public bool acceptFriendshipRequest(int myId, int idUser)
+        {
+            return userGateway.acceptFriendshipRequest(myId, idUser);
+        }
+
+        public bool rejectFriendshipRequest(int myId, int idUser)
+        {
+            return userGateway.rejectFriendshipRequest(myId, idUser);
+        }
+
+        public bool deleteFriendship(int myId, int idUser)
+        {
+            return userGateway.deleteFriendship(myId, idUser);
+        }
+        
 
 
 

@@ -30,20 +30,31 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.IdTag = 5;
         tr2.TagName = "Amigo";
 
-        if (tg.delTagsUser(4, "Isep"))
-        {
-            Response.Write("DELETED");
-        }
+        //if (tg.delTagsUser(4, "Isep"))
+        //{
+        //    Response.Write("DELETED");
+        //}
 
 
-        if (userBll.editUser(42, "BETA_V2", "BetaV2@web.com"))
-        {
-            Response.Write("EDITED");
-        }
+        //if (userBll.editUser(42, "BETA_V2", "BetaV2@web.com"))
+        //{
+        //    Response.Write("EDITED");
+        //}
 
 
         IList<Tuple<int, DateTime>> il1 = userBll.loadFriendsRequestFromUser(4);
         IList<Tuple<int, IList<GameRequest>>> il2 = userBll.loadFriendsRequestNegFromUser(4);
+
+
+        //if (userBll.createNewFriendshipRequest(47, 51))
+        //{
+        //    Response.Write("OK");
+        //}
+
+        if (userBll.acceptFriendshipRequest(8, 4))
+        {
+            Response.Write("OK");
+        }
 
         Response.Write("STOP");
 

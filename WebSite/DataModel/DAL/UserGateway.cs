@@ -136,7 +136,9 @@ namespace DataModel.DAL
             }
         }
 
-        public DataTable getUsersFriendsRequest(int id)
+        //OLD BACKUP
+        //LOAD FRIENDS != GET FRIENDS -> get only pendent request or negociations To User Accept
+        public DataTable loadUsersFriendsRequest(int id)
         {
             try
             {
@@ -150,11 +152,71 @@ namespace DataModel.DAL
             }
         }
 
-        public DataTable getUsersFriendsRequestNeg(int id)
+        public DataTable loadUsersFriendsRequestNeg(int id)
         {
             try
             {
                 DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        //request TO ME
+        public DataTable getUsersFriendsRequest(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserB=" + id );
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        //request TO ME
+        public DataTable getUsersFriendsRequestNeg(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB=" + id);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        //request By ME
+        public DataTable getUsersFriendsRequest_byMe(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserA=" + id);
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+
+        //request By Me
+        public DataTable getUsersFriendsRequestNeg_byMe(int id)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA=" + id);
 
                 return ds.Tables[0];
             }
@@ -269,6 +331,70 @@ namespace DataModel.DAL
 
             if (res != 0)
                 return true;
+
+            return false;
+        }
+
+        public bool createNewFriendshipRequest(int idMyUser, int idUser)
+        {
+
+            string query = "INSERT INTO [GameDataBase].[dbo].[Request]([idUserA],[idUserB],[date]) VALUES (" + idMyUser + "," + idUser + ", SYSDATETIME());SELECT SYSDATETIME() as dataTime, SCOPE_IDENTITY() as ident";
+
+            object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+
+            if (obj != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool acceptFriendshipRequest(int myId, int idUser)
+        {
+            if (!rejectFriendshipRequest(myId, idUser))
+            {
+                return false;
+            }
+
+            string query = "INSERT INTO [GameDataBase].[dbo].[Friendship]([idUserA],[idUserB],[date]) VALUES (" + myId + "," + idUser + ", SYSDATETIME())";
+
+            int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
+
+            if (obj == 1)
+            {
+                return true;
+            }
+            
+            createNewFriendshipRequest(idUser, myId);
+            return false;
+
+        }
+
+        public bool rejectFriendshipRequest(int myId, int idUser)
+        {
+            string query = "DELETE FROM [GameDataBase].[dbo].[Request] where idUserA ="+idUser+" and idUserB="+myId;
+
+            int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
+
+            if (obj == 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool deleteFriendship(int myId, int idUser)
+        {
+            string query = "DELETE INTO [GameDataBase].[dbo].[Request] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
+
+            object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+
+            if (obj != null)
+            {
+                return true;
+            }
 
             return false;
         }
