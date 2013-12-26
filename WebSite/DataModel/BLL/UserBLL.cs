@@ -463,6 +463,9 @@ namespace DataModel.BLL
             return userGateway.deleteFriendship(myId, idUser);
         }
         
+        public bool negociateFriendshipRequest(int myId, int idUser, IList<Tuple<int, int>> gameList){
+            return userGateway.negociateFriendshipRequest(myId, idUser, gameList);
+        }
 
 
 

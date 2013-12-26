@@ -52,7 +52,7 @@ namespace DataModel.DAL
         {
             try
             {
-                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where email='"+email+"'";
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where email='" + email + "'";
 
                 var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
 
@@ -73,7 +73,7 @@ namespace DataModel.DAL
         {
             try
             {
-                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where username='"+username+"'";
+                string query = "SELECT * FROM [GameDataBase].[dbo].[User] where username='" + username + "'";
 
                 var obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
 
@@ -171,7 +171,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserB=" + id );
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserB=" + id);
 
                 return ds.Tables[0];
             }
@@ -281,7 +281,7 @@ namespace DataModel.DAL
         public bool changePassword(int idUser, string newPass)
         {
             string pass = SimpleEncryptor.Encrypt(newPass, PasswordEncryptionKey);
-            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [password]= '"+pass+"' WHERE idUser="+idUser;
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [password]= '" + pass + "' WHERE idUser=" + idUser;
 
             int res = ExecuteNonQuery(GetConnection(true), cmd);
 
@@ -325,7 +325,7 @@ namespace DataModel.DAL
 
         public bool editUser(User u)
         {
-            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [username]= '" + u.Username + "' , [email]= '"+u.Email+"' WHERE idUser=" + u.IdUser;
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [username]= '" + u.Username + "' , [email]= '" + u.Email + "' WHERE idUser=" + u.IdUser;
 
             int res = ExecuteNonQuery(GetConnection(true), cmd);
 
@@ -365,7 +365,7 @@ namespace DataModel.DAL
             {
                 return true;
             }
-            
+
             createNewFriendshipRequest(idUser, myId);
             return false;
 
@@ -373,7 +373,7 @@ namespace DataModel.DAL
 
         public bool rejectFriendshipRequest(int myId, int idUser)
         {
-            string query = "DELETE FROM [GameDataBase].[dbo].[Request] where idUserA ="+idUser+" and idUserB="+myId;
+            string query = "DELETE FROM [GameDataBase].[dbo].[Request] where idUserA =" + idUser + " and idUserB=" + myId;
 
             int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
 
@@ -387,7 +387,7 @@ namespace DataModel.DAL
 
         public bool deleteFriendship(int myId, int idUser)
         {
-            string query = "DELETE INTO [GameDataBase].[dbo].[Request] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
+            string query = "DELETE FROM [GameDataBase].[dbo].[Request] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
 
             object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
 
@@ -398,5 +398,39 @@ namespace DataModel.DAL
 
             return false;
         }
+
+        public bool negociateFriendshipRequest(int myId, int idUser, IList<Tuple<int, int>> gameList)
+        {
+            if (!rejectFriendshipRequest(myId, idUser))
+            {
+                return false;
+            }
+
+            int obj = 0;
+
+            for (int i = 0; i < gameList.Count; i++)
+            {
+
+                string query = "INSERT INTO [GameDataBase].[dbo].[RequestNegociation]([idUserA],[idUserB],[idGame],[difficulty],[status]) VALUES (" + myId + "," + idUser + "," + gameList[i].Item1 + " , " + gameList[i].Item2 + ",0)";
+
+                obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
+
+                if (obj == 0)
+                {
+                    return false;
+                }
+            }
+            if (obj == 1)
+            {
+                return true;
+            }
+
+            createNewFriendshipRequest(idUser, myId);
+            return false;
+
+        }
+
+
+
     }
 }
