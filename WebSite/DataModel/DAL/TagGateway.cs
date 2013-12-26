@@ -266,9 +266,16 @@ namespace DataModel.DAL
 
 
 
-        internal bool delTagUser(int idUser, string tagName)
+        public bool delTagUser(int idUser, string tagName)
         {
-            throw new NotImplementedException();
+            string cmd = " DELETE FROM [GameDataBase].[dbo].[UserTags] WHERE idUser=" + idUser + " and idTag=(select idTag from [GameDataBase].[dbo].[TagList] where tagName = '" + tagName + "')";
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
         }
     }
 }

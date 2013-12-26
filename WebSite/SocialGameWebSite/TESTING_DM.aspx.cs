@@ -30,6 +30,11 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.IdTag = 5;
         tr2.TagName = "Amigo";
 
+        if (tg.delTagsUser(4, "Isep"))
+        {
+            Response.Write("DELETED");
+        }
+
 
         if (userBll.editUser(42, "BETA_V2", "BetaV2@web.com"))
         {
