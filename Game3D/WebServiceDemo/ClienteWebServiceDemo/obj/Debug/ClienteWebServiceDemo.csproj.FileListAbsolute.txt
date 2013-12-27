@@ -1,0 +1,6 @@
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\bin\Debug\ClienteWebServiceDemo.exe.config
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\bin\Debug\ClienteWebServiceDemo.exe
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\bin\Debug\ClienteWebServiceDemo.pdb
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\obj\Debug\ClienteWebServiceDemo.exe
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\obj\Debug\ClienteWebServiceDemo.pdb
+C:\Users\root\Documents\Visual Studio 2013\Projects\WebServiceDemo\ClienteWebServiceDemo\obj\Debug\ClienteWebServiceDemo.csprojResolveAssemblyReference.cache

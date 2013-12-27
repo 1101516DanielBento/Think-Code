@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <vector>
 
 
 #ifdef __APPLE__
@@ -19,7 +20,9 @@
 
 using namespace std;
 
-/*void drawMaze(vector<vector<Cell> > maze);
+
+
+void drawMaze(vector<vector<Cell>>  maze)
 {
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
@@ -76,8 +79,8 @@ void PrintMaze(){
         cout << endl;
     }
 }
-*/
-int main()
+
+/*int main()
 {
 	return 0;
-}
+}*/
