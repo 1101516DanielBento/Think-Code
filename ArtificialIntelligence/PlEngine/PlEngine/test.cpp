@@ -7,55 +7,55 @@ using namespace std;
 //Degug->Project Proprieties->Linker->Aditional library directories: .../swipl/lib
 //Degug->Project Proprieties->Linker->Input->Aditional Dependencies: libswipl.dll.a
 //Add ambient variable(PATH): .../swipl/bin
-
-//example for adding numbers
-void sum(int x, int y)
+class test
 {
-	char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\Functions.pl",NULL};
+public:
+	void user();
+	void friends();
+};
 
-	PlEngine e(3,argv); 
- 
-	PlTermv av(3);
+void test::user()
+{
+    char* userName; 
+	PlTermv user(1);
+	PlQuery getCurrentUser("user",user);
 
-	av[0] = PlCompound((char*)x); 
-	av[1] = PlCompound((char*)y); 
-
-	PlQuery q("sum", av); 
-  
-	while(q.next_solution()){
-	
-		cout<<(char*)av[2]<<endl;
-	}
+	while(getCurrentUser.next_solution()){//gets current user	
+		cout<<(char*)user[0]<<endl;
+		userName=(char*)user[0];
+		}
 }
 
-//example for getting fact solutions(1 argument)
-void fact(char* factname){
+void test::friends()
+{
+	PlTermv friends(2);
+	friends[0]=PlCompound("Matt");
+	PlQuery userFriends("friends",friends);
+	int i=0;
 
-	char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\Functions.pl",NULL};
-	
-	PlEngine e(3,argv);
-
-	PlTermv av(1);
-
-	PlQuery q(factname,av);
-
-	while(q.next_solution()){
-	
-		cout<<(char*)av[0]<<endl;
+	while(userFriends.next_solution()){//gets friends	
+		cout<<(char*)friends[1]<<endl;
+		//relationships[i]=(char*)friends[1];
+		i++;
 	}
-
 }
-
 
 int main(){
 
-	//sum(1,2);
-	
-	//fact("man");
+	char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\write\\test.pl",NULL};
 
+	PlEngine e(3,argv);
+
+	test t;
+
+	t.user();
+	t.friends();
+	
 	cin.get();
 	return 1;	
 }
+
+
 
 
 	/*PlEngine e(3,argv); 

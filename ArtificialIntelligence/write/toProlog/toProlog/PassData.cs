@@ -56,40 +56,71 @@ namespace toProlog
         }
 
 
-        public void test()
+        public void writeIntoProlog()
         {
             IList<string> lines = new List<string>();
+            User user = Bootstrap();       
 
-            User user = Bootstrap();
-         
+            lines.Add(currentUser(user));//write current user  
+            lines = lines.Concat(relationships(user)).ToList();//write relationships
+            lines = lines.Concat(tags(user)).ToList();//write tags
+            lines = lines.Concat(friendsTags(user)).ToList();//write friends tags
+
+            System.IO.File.WriteAllLines(@"C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\test.pl", lines);
+        }
+
+
+        private string currentUser(User user)//write current user  
+        {
             string uname = user.Username;
+            string userFact = "user('" + uname + "').";
 
-            string userFact = "user(" + uname + ").";
+            return userFact;
+        }
 
-            lines.Add(userFact);
+        private IList<string> tags(User user)
+        {
+            string uname = user.Username;
+            IList<string> lines = new List<string>();
 
             for (int i = 0; i < user.UserTags.Count; i++)//write tags
             {
-                string tag = "user_tags(" + uname + ",'" + user.UserTags[i].TagName + "').";
+                string tag = "user_tags('" + uname + "','" + user.UserTags[i].TagName + "').";
                 lines.Add(tag);
             }
-       
+
+            return lines;
+        }
+
+        private IList<string> relationships(User user)
+        {
+            string uname = user.Username;
+            IList<string> lines = new List<string>();
+
             for (int i = 0; i < user.Friends.Count; i++)//write relationships
             {
-                string relationship = "friends(" + uname + "," + user.Friends[i].Username + ").";
+                string relationship = "friends('" + uname + "','" + user.Friends[i].Username + "').";
                 lines.Add(relationship);
             }
 
-            for(int i = 0; i <user.Friends.Count ; i++){
-                for (int j = 0; j < user.Friends[i].UserTags.Count; j++)//write friends tags
+            return lines;
+        }
+
+        private IList<string> friendsTags(User user)
+        {
+            string uname = user.Username;
+            IList<string> lines = new List<string>();
+
+            for (int i = 0; i < user.Friends.Count; i++)//write friends tags
+            {
+                for (int j = 0; j < user.Friends[i].UserTags.Count; j++)
                 {
-                    string friendTag = "user_tags(" + user.Friends[i].Username + ",'" + user.Friends[i].UserTags[j].TagName + "').";
+                    string friendTag = "user_tags('" + user.Friends[i].Username + "','" + user.Friends[i].UserTags[j].TagName + "').";
                     lines.Add(friendTag);
                 }
             }
 
-
-            System.IO.File.WriteAllLines(@"C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\test.pl", lines);
+            return lines;
         }
 
     }
