@@ -24,6 +24,14 @@ namespace toProlog
                 set { _username = value; }
             }
 
+            private IList<User> _friends;
+
+            public IList<User> Friends
+            {
+                get { return _friends; }
+                set { _friends = value; }
+            }
+
             private string _password;
 
             public string Password

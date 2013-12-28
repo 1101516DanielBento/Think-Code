@@ -20,6 +20,38 @@ namespace toProlog
             user.UserTags.Add(tag1);
             user.UserTags.Add(tag2);
 
+            IList<User> friends = new List<User>();
+            
+            User friend1 = new User();
+            friend1.Username = "Albert";
+            Tag tag1friend1 = new Tag();
+            tag1friend1.TagName = "FCP";
+            Tag tag2friend1 = new Tag();
+            tag2friend1.TagName = "ISEP";
+            friend1.UserTags.Add(tag1friend1);
+            friend1.UserTags.Add(tag2friend1);
+
+            User friend2 = new User();
+            friend2.Username = "Joe";
+            Tag tag1friend2 = new Tag();
+            tag1friend2.TagName = "SLB";
+            Tag tag2friend2 = new Tag();
+            tag2friend2.TagName = "FEUP";
+            friend2.UserTags.Add(tag1friend2);
+            friend2.UserTags.Add(tag2friend2);
+
+            User friend3 = new User();
+            friend3.Username = "Alex";
+            Tag tag1friend3 = new Tag();
+            tag1friend3.TagName = "Youtube";
+            friend3.UserTags.Add(tag1friend3);
+            
+            friends.Add(friend1);
+            friends.Add(friend2);
+            friends.Add(friend3);
+
+            user.Friends = friends;
+
             return user;
         }
 
@@ -36,11 +68,26 @@ namespace toProlog
 
             lines.Add(userFact);
 
-            for (int i = 0; i < user.UserTags.Count; i++)
+            for (int i = 0; i < user.UserTags.Count; i++)//write tags
             {
                 string tag = "user_tags(" + uname + ",'" + user.UserTags[i].TagName + "').";
                 lines.Add(tag);
             }
+       
+            for (int i = 0; i < user.Friends.Count; i++)//write relationships
+            {
+                string relationship = "friends(" + uname + "," + user.Friends[i].Username + ").";
+                lines.Add(relationship);
+            }
+
+            for(int i = 0; i <user.Friends.Count ; i++){
+                for (int j = 0; j < user.Friends[i].UserTags.Count; j++)//write friends tags
+                {
+                    string friendTag = "user_tags(" + user.Friends[i].Username + ",'" + user.Friends[i].UserTags[j].TagName + "').";
+                    lines.Add(friendTag);
+                }
+            }
+
 
             System.IO.File.WriteAllLines(@"C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\test.pl", lines);
         }
