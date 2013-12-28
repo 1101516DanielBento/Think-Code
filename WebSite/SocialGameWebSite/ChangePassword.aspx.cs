@@ -15,7 +15,7 @@ public partial class ChangePassword : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Session["id"] = 47;
+
         if (Session["id"] == null)
             Response.Redirect("Login.aspx?RequestedPage=ChangePassword.aspx");
 
