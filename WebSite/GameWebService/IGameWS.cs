@@ -10,11 +10,11 @@ namespace GameWebService
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
-    public interface IService1
+    public interface IGameWS
     {
 
         [OperationContract]
-        bool login(string username, string password, string securityPass);
+        int login(string username, string password, string securityPass);
 
 
         [OperationContract]

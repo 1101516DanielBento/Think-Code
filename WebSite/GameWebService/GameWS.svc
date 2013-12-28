@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="GameWebService.Service1" CodeBehind="GameWS.svc.cs" %>
