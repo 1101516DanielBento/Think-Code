@@ -17,6 +17,10 @@ namespace DataModel.BLL
         TagGateway tagGateway = new TagGateway();
         public UserBLL() { }
 
+        /// <summary>
+        /// Load all information of all users from database
+        /// </summary>
+        /// <returns>List all users from database</returns>
         public IList<User> loadAllUsers()
         {
             IList<User> userList = new List<User>();
@@ -51,6 +55,11 @@ namespace DataModel.BLL
             return userList;
         }
 
+        /// <summary>
+        /// Get User information from Database using his ID
+        /// </summary>
+        /// <param name="id">User Id</param>
+        /// <returns>User with this ID</returns>
         public User loadUserById(int id)
         {
 
@@ -84,6 +93,11 @@ namespace DataModel.BLL
             return user;
         }
 
+        /// <summary>
+        /// Get a new list with friends of an user. It returns an tuple with <int,datetime,tag> where item1 are a id of Friend, dateTime are date of relationship and tag are the relationship.
+        /// </summary>
+        /// <param name="id">Id User to search</param>
+        /// <returns>List of friends (idFriend, dateRelationship, relationshipTag)</returns>
         public IList<Tuple<int, DateTime, Tag>> loadFriendsFromUser(int id)
         {
 
@@ -121,6 +135,11 @@ namespace DataModel.BLL
             return friends;
         }
 
+        /// <summary>
+        /// Get a new list with friends REQUESTS of an user. It returns an tuple with <int,datetime> where item1 are a id of Friend, dateTime are ask date of relationship.
+        /// </summary>
+        /// <param name="id">Id User to search</param>
+        /// <returns>List of Pending Request (idFriend, askDate)</returns>
         public IList<Tuple<int, DateTime>> loadFriendsRequestFromUser(int id)
         {
 
@@ -152,6 +171,11 @@ namespace DataModel.BLL
             return friends;
         }
 
+        /// <summary>
+        ///  Get a new list with friends ACCEPT PENDING BY NEGOCIATION of an user. It returns an tuple with <int,ILIST<GameList>> where item1 are a id of Friend, and the list are all games of this negociation.
+        ///  </summary>
+        /// <param name="id">Id User to search </param>
+        /// <returns>List of Pending Negociation (idFriend, List of games)</returns>
         public IList<Tuple<int, IList<GameRequest>>> loadFriendsRequestNegFromUser(int id)
         {
 
@@ -185,7 +209,15 @@ namespace DataModel.BLL
             return friends;
         }
 
-
+        /// <summary>
+        /// Get new list with friends request.
+        /// This option has on 1º param an VAL, 
+        /// VAL = 0 ->this val determines if you want get Requests made by User
+        /// VAL = 1 ->This val determines if you want get requests made by others to an specific User
+        /// </summary>
+        /// <param name="val">val = 0 (made by user) ; val = 1 (to user)</param>
+        /// <param name="id">id of specific user</param>
+        /// <returns>List of Request result by your search</returns>
         public IList<Tuple<int, DateTime>> getMyFriendsRequestFromUser(int val, int id)
         {
             //VAL = 0 -> Request BY me
@@ -225,6 +257,15 @@ namespace DataModel.BLL
             return friends;
         }
 
+        /// <summary>
+        /// Get new list with friends request Negociation.
+        /// This option has on 1º param an VAL, 
+        /// VAL = 0 ->this val determines if you want get Requests made by User
+        /// VAL = 1 ->This val determines if you want get requests made by others to an specific User
+        /// </summary>
+        /// <param name="val">val = 0 (made by user) ; val = 1 (to user)</param>
+        /// <param name="id">id of specific user</param>
+        /// <returns>List of Negociations by your search</returns>
         public IList<Tuple<int, IList<GameRequest>>> getMyFriendsRequestNegFromUser(int val, int id)
         {
             //VAL = 0 -> Request BY me
@@ -270,9 +311,12 @@ namespace DataModel.BLL
             return friends;
         }
 
-
-
-
+        /// <summary>
+        /// Verify if an user are friend of another
+        /// </summary>
+        /// <param name="idMyUser">User A</param>
+        /// <param name="idUser">User B</param>
+        /// <returns>Result</returns>
         public bool verifyIfUserIsFriend(int idMyUser, int idUser)
         {
             IList<Tuple<int, DateTime, Tag>> l1 = loadFriendsFromUser(idMyUser);
@@ -302,6 +346,11 @@ namespace DataModel.BLL
             return false;
         }
 
+        /// <summary>
+        /// Get gameList of Pending Negociation TESTAR SE FUNCIONA BEM
+        /// </summary>
+        /// <param name="idUser">id user to search</param>
+        /// <returns>List of games</returns>
         public IList<GameRequest> getGameList(int idUser)
         {
             IList<GameRequest> games = new List<GameRequest>();
@@ -321,7 +370,13 @@ namespace DataModel.BLL
             return games;
         }
 
-
+        /// <summary>
+        /// Verify match of username and password of users
+        /// AUTENTICATION MODE
+        /// </summary>
+        /// <param name="userName">Username</param>
+        /// <param name="pass">Password (not encrypted)</param>
+        /// <returns>id of user (if not sucess -1) </returns>
         public int verifyAutenticationUser(string userName, string pass)
         {
             DataTable dt = userGateway.getIdUserByUsernameAndPassword(userName, pass);
@@ -334,6 +389,12 @@ namespace DataModel.BLL
         }
 
 
+        /// <summary>
+        /// Get User object(info) from DB with Username and password
+        /// </summary>
+        /// <param name="userName">username</param>
+        /// <param name="pass">password</param>
+        /// <returns>New User with details</returns>
         public User getUserByUsernameAndPassword(string userName, string pass)
         {
             int id = verifyAutenticationUser(userName, pass);
@@ -347,7 +408,10 @@ namespace DataModel.BLL
 
         }
 
-
+        /// <summary>
+        /// load tagList of specific User, Your User need idUser correct
+        /// </summary>
+        /// <param name="u">User</param>
         public void loadTagsFromUser(User u)
         {
 
@@ -363,6 +427,11 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// load tagList of relationship
+        /// </summary>
+        /// <param name="idTag">id tag</param>
+        /// <returns>Tag info</returns>
         public Tag loadTagsFromFriendship(int idTag)
         {
 
@@ -380,27 +449,52 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Register new user on System
+        /// </summary>
+        /// <param name="u">User information</param>
+        /// <returns>correct id after insert on DB</returns>
         public int registerUser(User u)
         {
             return userGateway.registerUser(u);
         }
 
+        /// <summary>
+        /// Verify if username as already on system
+        /// </summary>
+        /// <param name="username">new username</param>
+        /// <returns>result</returns>
         public bool usernameIsAlreadyInUse(string username)
         {
             return userGateway.usernameIsUsed(username);
 
         }
 
+        /// <summary>
+        /// Verify if email as already on system
+        /// </summary>
+        /// <param name="email">new email</param>
+        /// <returns>result</returns>
         public bool emailIsAlreadyInUse(string email)
         {
             return userGateway.emailIsUsed(email);
         }
 
+        /// <summary>
+        /// Change password method
+        /// </summary>
+        /// <param name="idUser">id user</param>
+        /// <param name="newPass">new password</param>
+        /// <returns>result of change</returns>
         public bool changePassword(int idUser, string newPass)
         {
             return userGateway.changePassword(idUser, newPass);
         }
 
+        /// <summary>
+        /// get top twenty users order by points to leaderboard
+        /// </summary>
+        /// <returns>List of results(tuple<position, username, poins>)</returns>
         public IList<Tuple<int, string, int>> getTopTwentyUsersLeaderBoard()
         {
             IList<Tuple<int, string, int>> top = new List<Tuple<int, string, int>>();
@@ -419,11 +513,22 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Count users registed on DB
+        /// </summary>
+        /// <returns>number of registed users</returns>
         public int countAllUsersInSystem()
         {
             return userGateway.getCountAllUsers();
         }
 
+        /// <summary>
+        /// Edit user information, we consider only can be changer email and username
+        /// </summary>
+        /// <param name="idUser">id user to change</param>
+        /// <param name="newName">new name</param>
+        /// <param name="newEmail">new email</param>
+        /// <returns>result of operation</returns>
         public bool editUser(int idUser, string newName, string newEmail)
         {
             User u = new User();
@@ -437,7 +542,12 @@ namespace DataModel.BLL
             return userGateway.editUser(u);
         }
 
-
+        /// <summary>
+        /// Create new request to friendship
+        /// </summary>
+        /// <param name="idMyUser">id user (origin)</param>
+        /// <param name="idUser">id user (destination)</param>
+        /// <returns>result</returns>
         public bool createNewFriendshipRequest(int idMyUser, int idUser)
         {
             if (verifyIfUserIsFriend(idMyUser, idUser))
@@ -448,21 +558,46 @@ namespace DataModel.BLL
              return userGateway.createNewFriendshipRequest(idMyUser, idUser); 
         }
 
+        /// <summary>
+        /// Accept request
+        /// </summary>
+        /// <param name="myId">id user who accept</param>
+        /// <param name="idUser"> id user accepted</param>
+        /// <returns>result</returns>
         public bool acceptFriendshipRequest(int myId, int idUser)
         {
             return userGateway.acceptFriendshipRequest(myId, idUser);
         }
 
+        /// <summary>
+        /// Reject friendship Request
+        /// </summary>
+        /// <param name="myId"> id user who reject</param>
+        /// <param name="idUser">id user rejected</param>
+        /// <returns>result</returns>
         public bool rejectFriendshipRequest(int myId, int idUser)
         {
             return userGateway.rejectFriendshipRequest(myId, idUser);
         }
 
+        /// <summary>
+        /// Delete friendship
+        /// </summary>
+        /// <param name="myId">id user A</param>
+        /// <param name="idUser">id User B</param>
+        /// <returns>result</returns>
         public bool deleteFriendship(int myId, int idUser)
         {
             return userGateway.deleteFriendship(myId, idUser);
         }
         
+        /// <summary>
+        /// Negociate a friendship Request
+        /// </summary>
+        /// <param name="myId">id user who negociate</param>
+        /// <param name="idUser">id user who ask</param>
+        /// <param name="gameList">list of games to complete</param>
+        /// <returns>result</returns>
         public bool negociateFriendshipRequest(int myId, int idUser, IList<Tuple<int, int>> gameList){
             return userGateway.negociateFriendshipRequest(myId, idUser, gameList);
         }
