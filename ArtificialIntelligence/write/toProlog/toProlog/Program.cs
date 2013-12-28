@@ -11,7 +11,7 @@ namespace toProlog
         static void Main(string[] args)
         {
             PassData p = new PassData();
-            p.test();
+            p.writeIntoProlog();
             
         }
     }
