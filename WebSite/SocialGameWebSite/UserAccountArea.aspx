@@ -33,7 +33,7 @@
             <p class="p_texto_campo_formulario_geral">
                 <a href="ShowFriendsList.aspx" class="link_normal_formularios"> Show friends list</a></p>
 
-            <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriends.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Send friend requests</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show backorder</a></p>
