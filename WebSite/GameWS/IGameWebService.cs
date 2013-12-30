@@ -73,7 +73,7 @@ namespace GameWS
             get { return _userTags; }
             set { _userTags = value; }
         }
-
+        //Name List
         
         public void addTagToUser(string tag){
             _userTags.Add(tag);
@@ -83,9 +83,10 @@ namespace GameWS
         public void remTagFromUser(string tag) {
             _userTags.Remove(tag);
         }
+
         
         private IList<Tuple<int, string>> _friendshipList;
-
+        //idUserFriend, tagname
         [DataMember]
         public IList<Tuple<int, string>> FriendshipList
         {
@@ -105,9 +106,9 @@ namespace GameWS
             _friendshipList.Remove(user);
         }
 
-        
+        [DataMember]
         private IList<int> _friendshipRequestList;
-        
+        //idFriend
         [DataMember]
         public IList<int> FriendshipRequestList
         {
@@ -128,7 +129,7 @@ namespace GameWS
         }
 
         private IList<Tuple<int, int, int, bool>> _relationshipRequestNegociation;
-
+        //idUser, idgame, difficulty, status
         [DataMember]
         public IList<Tuple<int, int, int, bool>> RelationshipRequestNegociation
         {
