@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "User.h"
+
 using namespace std;
 
 class ReadProlog{
@@ -11,8 +12,6 @@ private:
 	int nTags;
 	string currentUser; 
     User* cUser;
-	User* uFriends[200];
-	User* uFriendsOfFriends[200];
 
 public:
 	ReadProlog();
@@ -22,14 +21,12 @@ public:
 	void friendsOfFriends(User* user);
 	void tags(User* user);
 	void showUser(User* user);
-	void showFriends();
-	void initialize();
+	void showNetwork();
 };
 
-ReadProlog::ReadProlog()
-{
-	initialize();
-}
+ReadProlog::ReadProlog(){}
+
+ReadProlog::~ReadProlog(){}
 
 void ReadProlog::user()//gets current user	
 {
@@ -44,7 +41,7 @@ void ReadProlog::user()//gets current user
 		//cout<<"Current User: "<<currentUser<<endl;
 		tags(cUser);
 		}
-	showUser(cUser);
+	//cUser->toString();
 }
 
 void ReadProlog::friends()//gets friends
@@ -58,14 +55,13 @@ void ReadProlog::friends()//gets friends
 		cUserFriend->setUsername("'" + (string)friends[1] + "'");
 		//cout<<"Direct friend: "<<cUserFriend->getUsername()<<endl;
 		tags(cUserFriend);
-		friendsOfFriends(cUserFriend);	
-		uFriends[nFriends]=cUserFriend;
-		nFriends++;
+		cUser->setFriend(cUserFriend);
+		friendsOfFriends(cUserFriend);
 	}
-	showFriends();
+	//cUser->showFriends();
 }
 
-void ReadProlog::friendsOfFriends(User* user)
+void ReadProlog::friendsOfFriends(User* user)//gets friends of friends
 {
 	PlTermv friends(2);
 	friends[0]=PlCompound(user->getUsername().c_str());
@@ -76,11 +72,13 @@ void ReadProlog::friendsOfFriends(User* user)
 		cUserFriend->setUsername("'" + (string)friends[1] + "'");
 		//cout<<"Friend of "<<user->getUsername().c_str()<<endl<<thisFriendOfFriend<<endl;
 		tags(cUserFriend);
+		user->setFriend(cUserFriend);
 	}
+	//user->showFriends();
 	
 }
 
-void ReadProlog::tags(User* user)//gets a user tags
+void ReadProlog::tags(User* user)//gets user tags
 {
 	PlTermv tag(2);
 	tag[0]=PlCompound(user->getUsername().c_str());
@@ -92,23 +90,11 @@ void ReadProlog::tags(User* user)//gets a user tags
 		}
 }
 
-
-void ReadProlog::showUser(User* user)
+void ReadProlog::showNetwork()
 {
-	cout<<user->toString();
-}
-
-void ReadProlog::showFriends()
-{
-	for(int i=0;i<nFriends;i++)
-	{
-		cout<<uFriends[i]->toString();
-	}
-}
-
-void ReadProlog::initialize()
-{
-	nFriends=0;
+	this->user();
+	this->friends();
+	cUser->showNetwork();
 }
 
 //lucky7elemental
