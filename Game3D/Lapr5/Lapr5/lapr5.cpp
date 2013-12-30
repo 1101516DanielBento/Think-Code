@@ -460,8 +460,6 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.nof];
 			material(red_plastic);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-
-
 		}
 	}
 }	
@@ -720,13 +718,12 @@ void keyboard(unsigned char key, int x, int y)
 		case 'a':
 		case 'A':
 				estado.teclas.a=GL_TRUE;
-				//estado.camera.center[2]-=0.2;
-			printf("carregou no a\n");
+				estado.camera.center[2]-=0.2;
 			break;
 		case 'q':
 		case 'Q':
 				estado.teclas.q=GL_TRUE;
-				//estado.camera.center[2]+=0.2;
+				estado.camera.center[2]+=0.2;
 				
 			break;
 	}
@@ -803,7 +800,6 @@ void SpecialKey(int key, int x, int y){
 	
 	if(estado.debug)
 		printf("Carregou na tecla especial %d\n",key);
-
 
 }
 
@@ -1044,7 +1040,11 @@ int main(int argc, char **argv)
 
 /* need both double buffering and z buffer */
 
+<<<<<<< HEAD
+  /*  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+=======
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+>>>>>>> cca8916dca7a75f6f85c9e9c5583f6fd47a341fe
     glutInitWindowSize(640, 480);
     glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
@@ -1055,8 +1055,9 @@ int main(int argc, char **argv)
 	glutTimerFunc(estado.timer, Timer, 0);
 
 	glutKeyboardFunc(keyboard);
-	//glutKeyboardFunc(KeyUp);
+	
 	glutSpecialFunc(SpecialKey);
+	//glutKeyboardFunc(KeyUp);
 	glutSpecialUpFunc(SpecialKeyUp);
 	
 	glutMouseFunc(mouse);
@@ -1067,9 +1068,9 @@ int main(int argc, char **argv)
 	loginWindow();
 	//myinit + imprime ajuda dentro do login
 
-	/*myInit();
+	//myInit();
 
-	imprime_ajuda();*/
+	//imprime_ajuda();
 
     glutMainLoop();
 	
