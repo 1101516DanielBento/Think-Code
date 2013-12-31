@@ -389,9 +389,9 @@ namespace DataModel.DAL
         {
             string query = "DELETE FROM [GameDataBase].[dbo].[Friendship] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
 
-            object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+            int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
 
-            if (obj != null)
+            if (obj == 1)
             {
                 return true;
             }
