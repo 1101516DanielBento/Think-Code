@@ -44,7 +44,7 @@ namespace GameWS
 
         }
 
-        private bool checkUserIsInList(int idUser, List<IUser> ul)
+        private bool checkUserIsInList(int idUser, List<User> ul)
         {
             for (int i = 0; i < ul.Count; i++)
             {
@@ -57,48 +57,79 @@ namespace GameWS
             return false;
         }
 
-        private void addUserToReturnList(User u, List<IUser> ul)
+        private void addUserToReturnList(User u, List<User> ul)
         {
             if(!(checkUserIsInList(u.IdUser, ul))){
-                IUser tmp = new IUser();
-                tmp.IdUser= u.IdUser;
-                tmp.Username = u.Username;
-                tmp.Name = u.Name;
-                tmp.Points = u.Points;
-                
-                for(int i=0; i<u.UserTags.Count; i++){
-                    tmp.UserTags.Add(u.UserTags[i].TagName);
-                }
-
-                for(int i=0; i<u.FriendshipList.Count; i++){
-                    Tuple<int,string> t = new Tuple<int,string> ((int) u.FriendshipList[i].Item1, (string) u.FriendshipList[i].Item3.TagName);      
-                    tmp.FriendshipList.Add(t);
-                }
-
-                for(int i=0; i<u.FriendshipRequestList.Count; i++){
-                    tmp.FriendshipRequestList.Add(u.FriendshipRequestList[i].Item1);
-                }
-
-                for(int i=0; i<u.RelationshipRequestNegociation.Count; i++){
-                    for(int j=0; j<u.RelationshipRequestNegociation[i].Item2.Count; j++){
-                        Tuple<int,int,int,bool> t = new Tuple<int,int,int,bool> ((int)u.RelationshipRequestNegociation[i].Item1,(int)u.RelationshipRequestNegociation[i].Item2[j].IdGame,(int)u.RelationshipRequestNegociation[i].Item2[j].Difficulty,(bool) u.RelationshipRequestNegociation[i].Item2[j].Status);
-                        tmp.RelationshipRequestNegociation.Add(t);
-                    }                                       
-                }
+                u.Password = "";
+                ul.Add(u);
 
             }
         }
 
-        public List<IUser> loadUserNetwork(int idUser)
+        public User test(int id)
         {
-            List<IUser> userList = new List<IUser>();
+            UserBLL bll = new UserBLL();
+            User u = bll.loadUserById(id);
+
+            return u;
+        }
+
+        public List<User> loadUserNetwork(int idUser)
+        {
+            List<User> userList = new List<User>();
 
             UserBLL bll = new UserBLL();
 
+            //Main user
             User u = bll.loadUserById(idUser);
+            addUserToReturnList(u, userList);
 
+            //Frends
+            loadFriendsRelationships(userList[0].FriendshipList, userList);
 
+            
             return userList;
+        }
+
+        private void loadFriendsRelationships(IList<Tuple<int, DateTime, Tag>> mainUserFriends, List<User> userList)
+        {
+            UserBLL bll = new UserBLL();
+            IList<int> friendsOfFriends = new List<int>();
+            int lim = mainUserFriends.Count;
+            for (int i = 0; i < lim; i++)
+            {
+                User uTmp = bll.loadUserById(mainUserFriends[i].Item1);
+                addNewFriendsOfFriends(friendsOfFriends, uTmp, mainUserFriends);
+                addUserToReturnList(uTmp, userList);
+            }
+            for (int i = 0; i < friendsOfFriends.Count; i++)
+            {
+                User uTmp = bll.loadUserById(friendsOfFriends[i]);
+                addUserToReturnList(uTmp, userList);
+            }
+        }
+
+        private void addNewFriendsOfFriends(IList<int> friendsOfFriends, User uTmp, IList<Tuple<int, DateTime, Tag>> mainUserFriends)
+        {
+            for(int i=0; i<uTmp.FriendshipList.Count; i++){
+                if(!(checkUserIsInListFriends(uTmp.FriendshipList[i].Item1, friendsOfFriends))){
+                    friendsOfFriends.Add(uTmp.FriendshipList[i].Item1);
+                }
+            }
+            
+        }
+
+        private bool checkUserIsInListFriends(int idUser, IList<int> ul)
+        {
+            for (int i = 0; i < ul.Count; i++)
+            {
+                if (ul[i] == idUser)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
        
