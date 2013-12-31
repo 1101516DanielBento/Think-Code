@@ -432,5 +432,19 @@ namespace DataModel.DAL
 
 
 
+
+        public DataTable getGames()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select* from [GameDataBase].[dbo].[GameList]");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
     }
 }

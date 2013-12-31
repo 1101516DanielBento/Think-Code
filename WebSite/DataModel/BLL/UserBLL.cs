@@ -602,7 +602,26 @@ namespace DataModel.BLL
             return userGateway.negociateFriendshipRequest(myId, idUser, gameList);
         }
 
+        /// <summary>
+        /// Get Games list from DB
+        /// </summary>
+        /// <returns>List of games</returns>
+        public IList<Game> getGames()
+        {
+            IList<Game> games = new List<Game>();
+            DataTable dt = userGateway.getGames();
 
+            foreach (DataRow r in dt.Rows)
+            {
+                Game g = new Game();
+                g.IdGame = (int)r["idGame"];
+                g.GameName = (string)r["gameName"];
+
+                games.Add(g);
+            }
+
+            return games;
+        }
 
     }
 }
