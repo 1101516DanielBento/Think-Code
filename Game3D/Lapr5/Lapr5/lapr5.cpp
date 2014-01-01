@@ -8,6 +8,8 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+
+
 using namespace std;
 
 #ifdef __APPLE__
@@ -30,6 +32,11 @@ vecCol colisao[100];
 
 std::vector<std::vector<GLfloat>> PosTodosUsers;
 
+std::vector<std::wstring> nomesUtilizadores;//vector que contem todos os utilizadores
+std::vector<std::vector<std::wstring>> relacoesUtilizadores;//vector que contem as ligacoes entre utilizadores
+
+
+
 
 using namespace std;
 
@@ -37,6 +44,9 @@ using namespace std;
 #define rad(X)   (double)((X)*M_PI/180)
 #define K_ESFERA 4.0
 #define VELv 0.5
+#define DIMENSAO_CAMARA 4
+#define DISTANCIA_SOLO 2
+
 
 //#define RAND_MAX 
 
@@ -105,7 +115,9 @@ typedef struct Camera{
 	GLdouble dir_long;
 	GLfloat dist;
 	Vertice center;
-
+	GLfloat velh;
+	GLfloat velv;
+	GLfloat velTotal;
 }Camera;
 
 typedef struct Estado{
@@ -144,6 +156,9 @@ void initEstado(){
 	estado.camera.dir_long=-M_PI/4;
 	estado.camera.fov=60;
 	estado.camera.dist=100;
+	estado.camera.velh = 1.0;
+	estado.camera.velv = 1.0;
+	estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
 	estado.eixo[0]=0;
 	estado.eixo[1]=0;
 	estado.eixo[2]=0;
@@ -350,8 +365,14 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glEnable(GL_LIGHTING);
 }
 
+
+
 void distribuicaoNos()
 {
+
+
+
+
 	srand((unsigned)time(0));
 	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
 	GLfloat range=(ceiling-floor)+1.0;
@@ -614,6 +635,20 @@ void Timer(int value)
 {
 	glutTimerFunc(estado.timer, Timer, 0);
 	
+	
+
+	GLfloat	x1 = modelo.objecto.pos.x;
+	GLfloat y1 = modelo.objecto.pos.y;
+	GLfloat z1 = modelo.objecto.pos.z;
+
+	GLfloat	x2 = modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
+	GLfloat y2 = modelo.objecto.pos.y+estado.camera.velv*sin(modelo.objecto.dir);
+	GLfloat z2 = modelo.objecto.pos.z+estado.camera.velv; 
+
+	GLfloat d = sqrt(pow((x2-x1),2)+pow((y2-y1),2)+pow((z2-z1),2)); //distancia ao ponto de colisao
+
+	GLfloat k = (d - DIMENSAO_CAMARA/2.0)/estado.camera.velTotal;
+
 	if(estado.teclas.q)
 	{
 		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
@@ -636,8 +671,9 @@ void Timer(int value)
 
 	if(estado.teclas.up)
 	{
-		modelo.objecto.pos.x=modelo.objecto.pos.x+VELv*cos(modelo.objecto.dir);
-		modelo.objecto.pos.y+=VELv*sin(modelo.objecto.dir);
+		modelo.objecto.pos.x=modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
+		modelo.objecto.pos.y+=estado.camera.velv*sin(modelo.objecto.dir);
+		//modelo.objecto.pos.z = modelo.objecto.pos.z + estado.camera.velv;
 	}
 	
 	if(estado.teclas.down)
@@ -645,6 +681,9 @@ void Timer(int value)
 		modelo.objecto.pos.x=modelo.objecto.pos.x-VELv*cos(modelo.objecto.dir);
 		modelo.objecto.pos.y-=VELv*sin(modelo.objecto.dir);
 	}
+
+	
+
 	
 	if(estado.debug)
 		printf("Velocidade %.2f \n",modelo.objecto.vel);
@@ -727,7 +766,6 @@ void keyboard(unsigned char key, int x, int y)
 		case 'Q':
 				estado.teclas.q=GL_TRUE;
 				//estado.camera.center[2]+=0.2;
-				
 			break;
 	}
 	if(estado.debug)
@@ -844,7 +882,7 @@ bool login()
 	}else{
 		return false;
 	}
-	return false;
+	//return false;
 }
 
 void loginWindow()
@@ -855,6 +893,8 @@ void loginWindow()
 		printf("Login efectuado com Sucesso!!\n");
 		myInit();
 		imprime_ajuda();
+	}else{
+		printf("Username ou Password Errados!!");
 	}
 
 }
@@ -870,6 +910,17 @@ void setProjection(int x, int y, GLboolean picking){
 	gluPerspective(estado.camera.fov,(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
 
 }
+/*
+void setProjection(int x, int y, GLboolean picking){
+	glLoadIdentity();
+	if(picking)
+	{
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			0.0,DIMENSAO_CAMARA/2.0+VELv);//VELv é temporario
+	}
+}
+*/
 
 void myReshape(int w, int h){	
 	glViewport(0, 0, w, h);
@@ -1064,12 +1115,12 @@ int main(int argc, char **argv)
 	
 	
 
-	loginWindow();
+	//loginWindow();
 	//myinit + imprime ajuda dentro do login
 
-	/*myInit();
+	myInit();
 
-	imprime_ajuda();*/
+	imprime_ajuda();
 
     glutMainLoop();
 	
