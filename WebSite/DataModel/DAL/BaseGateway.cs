@@ -49,6 +49,7 @@ namespace DataModel.DAL
             }
             catch (SqlException ex)
             {
+                
                 throw new ApplicationException("Erro BD", ex);
             }
         }

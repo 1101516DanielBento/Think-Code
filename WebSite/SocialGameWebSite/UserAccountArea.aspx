@@ -14,8 +14,8 @@
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
     <td valign="bottom" class="cel_botoes"><a href="TagCloudRelations.aspx" onmouseover="MM_swapImage('Image7','','imgs/tags_relations_activos.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsRelations_inactivo.png" name="Image7" width="117" height="27" border="0" id="Image7" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
-    <td valign="bottom" class="cel_botoes"><a href="Download.aspx" onmouseover="MM_swapImage('Image8','','imgs/download_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/download_inactivo.png" name="Image8" width="117" height="27" border="0" id="Image8" /></a></td>
-   
+    <td valign="bottom" class="cel_botoes"><a href="ShowAllUsers.aspx" onmouseover="MM_swapImage('Image8','','imgs/allUsers_inativo.png',1)" onmouseout="MM_swapImgRestore()">
+        <img src="imgs/allUsers_inativo.png" name="Image8" width="117" height="27" border="0" id="Image8" /></a></td>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
     <table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -33,10 +33,11 @@
             <p class="p_texto_campo_formulario_geral">
                 <a href="ShowFriendsList.aspx" class="link_normal_formularios"> Show friends list</a></p>
 
-            <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
-            <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriends.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriendRelations.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Send friend requests</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Show backorder</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Game download</a></p>
             <p class="p_texto_campo_formulario_geral">&nbsp;</p>
             <p class="p_texto_campo_formulario_geral">&nbsp;</p></td>
       </tr>
