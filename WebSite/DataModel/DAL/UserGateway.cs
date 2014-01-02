@@ -109,7 +109,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = " + idUser + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB =" + idUser + ")");
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Friendship] where (idUserB in (select idUserB from [GameDataBase].[dbo].[Friendship] where idUserA = " + idUser + ")and idUserA=" + idUser + ") or  (idUserA in (select idUserA from [GameDataBase].[dbo].[Friendship] where idUserB =" + idUser + ")and idUserB=" + idUser + ")");
 
                 return ds.Tables[0];
             }
@@ -142,7 +142,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where idUserB in (select idUserB from [GameDataBase].[dbo].[Request] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[Request] where idUserB =" + id + ")");
+                DataSet ds = ExecuteQuery(GetConnection(false), "select * from [GameDataBase].[dbo].[Request] where (idUserB in (select idUserB from [GameDataBase].[dbo].[Request] where idUserA = " + id + ")and idUserA=" + id + ") or  (idUserA in (select idUserA from [GameDataBase].[dbo].[Request] where idUserB =" + id + ")and idUserB=" + id + ")");
 
                 return ds.Tables[0];
             }
@@ -156,7 +156,7 @@ namespace DataModel.DAL
         {
             try
             {
-                DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
+                DataSet ds = ExecuteQuery(GetConnection(false), "select distinct idUserA, idUserB from [GameDataBase].[dbo].[RequestNegociation] where (idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ")and idUserA=" + id + ") or  (idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")and idUserB=" + id + ")");
 
                 return ds.Tables[0];
             }
@@ -387,11 +387,11 @@ namespace DataModel.DAL
 
         public bool deleteFriendship(int myId, int idUser)
         {
-            string query = "DELETE FROM [GameDataBase].[dbo].[Request] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
+            string query = "DELETE FROM [GameDataBase].[dbo].[Friendship] where (idUserA =" + idUser + " and idUserB=" + myId + ") or (idUserA =" + myId + " and idUserB=" + idUser + ")";
 
-            object obj = ExecuteScalar(GetConnection(true), new SqlCommand(query));
+            int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
 
-            if (obj != null)
+            if (obj == 1)
             {
                 return true;
             }
@@ -432,5 +432,19 @@ namespace DataModel.DAL
 
 
 
+
+        public DataTable getGames()
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select* from [GameDataBase].[dbo].[GameList]");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
     }
 }

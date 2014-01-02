@@ -17,8 +17,7 @@ int main(){
 
 	ReadProlog* reader = new ReadProlog();
 
-	reader->user();
-	reader->friends();
+	reader->showNetwork();
 
 	cin.get();
 	return 1;	

@@ -13,3 +13,15 @@ public partial class UserAccountArea : System.Web.UI.Page
             Response.Redirect("Login.aspx");
     }
 }
+
+//tags management
+
+//ver tags que tenho
+//adicionar tags que quero
+//remover tags
+
+
+//ver amigos
+
+//adicionar coluna tags de amizade 
+//adicionar tags de relação

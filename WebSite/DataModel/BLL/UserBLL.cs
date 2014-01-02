@@ -84,9 +84,9 @@ namespace DataModel.BLL
 
                 user.FriendshipList = loadFriendsFromUser(user.IdUser);
 
-                user.FriendshipRequestList = loadFriendsRequestFromUser(user.IdUser);
+                user.FriendshipRequestList = getMyFriendsRequestFromUser(1,user.IdUser);
 
-                user.RelationshipRequestNegociation = loadFriendsRequestNegFromUser(user.IdUser);
+                user.RelationshipRequestNegociation = getMyFriendsRequestNegFromUser(1,user.IdUser);
 
             }
 
@@ -142,7 +142,7 @@ namespace DataModel.BLL
         /// <returns>List of Pending Request (idFriend, askDate)</returns>
         public IList<Tuple<int, DateTime>> loadFriendsRequestFromUser(int id)
         {
-
+            /////HEREHERE
 
             IList<Tuple<int, DateTime>> friends = new List<Tuple<int, DateTime>>();
 
@@ -281,7 +281,7 @@ namespace DataModel.BLL
             }
             if (val == 1)
             {
-                dt = userGateway.getUsersFriendsRequestNegGame(id);
+                dt = userGateway.getUsersFriendsRequestNeg(id);
             }
 
 
@@ -602,7 +602,26 @@ namespace DataModel.BLL
             return userGateway.negociateFriendshipRequest(myId, idUser, gameList);
         }
 
+        /// <summary>
+        /// Get Games list from DB
+        /// </summary>
+        /// <returns>List of games</returns>
+        public IList<Game> getGames()
+        {
+            IList<Game> games = new List<Game>();
+            DataTable dt = userGateway.getGames();
 
+            foreach (DataRow r in dt.Rows)
+            {
+                Game g = new Game();
+                g.IdGame = (int)r["idGame"];
+                g.GameName = (string)r["gameName"];
+
+                games.Add(g);
+            }
+
+            return games;
+        }
 
     }
 }

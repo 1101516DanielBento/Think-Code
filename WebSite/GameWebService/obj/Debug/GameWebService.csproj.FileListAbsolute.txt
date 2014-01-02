@@ -1,5 +1,0 @@
-C:\Users\Daniel\Documents\Think-Code\WebSite\GameWebService\bin\GameWebService.dll
-C:\Users\Daniel\Documents\Think-Code\WebSite\GameWebService\bin\GameWebService.pdb
-C:\Users\Daniel\Documents\Think-Code\WebSite\GameWebService\obj\Debug\GameWebService.csprojResolveAssemblyReference.cache
-C:\Users\Daniel\Documents\Think-Code\WebSite\GameWebService\obj\Debug\GameWebService.dll
-C:\Users\Daniel\Documents\Think-Code\WebSite\GameWebService\obj\Debug\GameWebService.pdb

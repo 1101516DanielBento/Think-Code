@@ -1,0 +1,5 @@
+C:\Users\Daniel\Documents\Think-Code\WebSite\DataModel\bin\Release\DataModel.dll
+C:\Users\Daniel\Documents\Think-Code\WebSite\DataModel\bin\Release\DataModel.pdb
+C:\Users\Daniel\Documents\Think-Code\WebSite\DataModel\obj\Release\DataModel.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\Think-Code\WebSite\DataModel\obj\Release\DataModel.dll
+C:\Users\Daniel\Documents\Think-Code\WebSite\DataModel\obj\Release\DataModel.pdb
