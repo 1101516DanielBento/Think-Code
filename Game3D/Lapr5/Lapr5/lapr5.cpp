@@ -1034,17 +1034,16 @@ void mouse(int btn, int state, int x, int y){
 	}
 }
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
 
 /* need both double buffering and z buffer */
 
-<<<<<<< HEAD
-  /*  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-=======
+
+  /*glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
->>>>>>> cca8916dca7a75f6f85c9e9c5583f6fd47a341fe
+
     glutInitWindowSize(640, 480);
     glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
@@ -1073,6 +1072,6 @@ int main(int argc, char **argv)
 	//imprime_ajuda();
 
     glutMainLoop();
-	
-	return 0;
-}
+	*/
+	/*return 0;
+}*/

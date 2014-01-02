@@ -13,7 +13,7 @@
 #include <GL/glut.h>
 #endif
 
-#include <unistd.h>     // Header file for sleeping.
+#include <unistd.h>     // Header file for sleeping.me
 
 /* ascii code for the escape key */
 #define ESCAPE 27
@@ -81,6 +81,7 @@ void keyPressed(unsigned char key, int x, int y)
     }
 }
 
+
 int main(int argc, char **argv)
 {
 	/* Initialize GLUT state - glut will take any command line arguments that pertain to it or
@@ -102,13 +103,13 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(0, 0);
 	
 	/* Open a window */
-	window = glutCreateWindow("Jeff Molofee's GL Code Tutorial ... NeHe '99");
+	window = glutCreateWindow("Think&Code | MENU |");
 	
 	/* Register the function to do all our OpenGL drawing. */
 	glutDisplayFunc(&DrawGLScene);
 	
 	/* Go fullscreen.  This is as soon as possible. */
-	glutFullScreen();
+	//    glutFullScreen();
 	
 	/* Even if there are no events, redraw our gl scene. */
 	glutIdleFunc(&DrawGLScene);
