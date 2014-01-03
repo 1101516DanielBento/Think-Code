@@ -1,17 +1,11 @@
 user('Matt').
-friends('Matt','Albert').
-friends('Matt','Joe').
-friends('Matt','Alex').
-friends('Joe','Norm').
-friends('Joe','Homer').
-friends('Alex','John').
 user_tags('Matt','C#').
 user_tags('Matt','Tecnology').
+friend('Matt','Albert').
 user_tags('Albert','FCP').
 user_tags('Albert','ISEP').
+friend('Matt','Joe').
 user_tags('Joe','SLB').
 user_tags('Joe','FEUP').
+friend('Matt','Alex').
 user_tags('Alex','Youtube').
-user_tags('Norm','NBA').
-user_tags('Norm','LSD').
-user_tags('Homer','The Simpsons').

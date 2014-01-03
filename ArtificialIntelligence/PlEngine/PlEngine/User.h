@@ -2,15 +2,12 @@
 
 using namespace std;
 
-//User has an array of users representing his friends;
-//This array has users so it can be lodged intp a new user array(friends of friends); 
-
 class User{
 
 private:
 	string username;
 	string taglist[100];
-	User* friends[100];
+	User* friends[200];
 	int currentTagNumber;
 	int nFriends;
 
@@ -40,19 +37,18 @@ User& User::operator=(const User& user)
 {
 	username = user.username;
 	taglist[100] = user.taglist[100];
-	friends[100] = user.friends[100];
+	friends[200] = user.friends[200];
 	currentTagNumber = user.currentTagNumber;
 	nFriends = user.nFriends;
+
 	return *this;
 }
-
 
 void User::initialize()
 {
 	this->nFriends=0;
 	this->currentTagNumber=0;
 }
-
 
 string User::getUsername()
 {
@@ -64,7 +60,8 @@ void User::setUsername(string username)
 	this->username=username;
 }
 
-void User::setTag(string tag){
+void User::setTag(string tag)
+{
 	this->taglist[currentTagNumber]=tag;
 	currentTagNumber++;
 }
@@ -73,14 +70,6 @@ void User::setFriend(User* user)
 {
 	this->friends[nFriends]=user;
 	nFriends++;
-}
-
-void User::showFriends()
-{
-	for(int i=0;i<nFriends;i++)
-	{
-		this->friends[i]->toString();
-	}
 }
 
 string User::getTags()
