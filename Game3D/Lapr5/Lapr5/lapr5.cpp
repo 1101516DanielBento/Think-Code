@@ -217,8 +217,16 @@ void myInit()
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
 	
 	
-	
+	//le o grafodo fich
 	leGrafo();
+
+
+	//atribuir a posicao do objecto/user que faz login no jogo
+	modelo.objecto.pos.x = nos[0].x;
+	modelo.objecto.pos.y = nos[0].y;
+	modelo.objecto.pos.z = nos[0].z;
+
+
 }
 
 void imprime_ajuda(void)
@@ -490,7 +498,7 @@ void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
 		glTranslatef(0,0,0.05);
-		glScalef(5,5,5);
+		//glScalef(5,5,5);
 	
 		for(int i=0; i<numNos; i++){
 			glPushMatrix();
@@ -591,14 +599,14 @@ void setCamera(){
 		//Posicionar a c‰mera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-K_ESFERA-DISTANCIA_SOLO);
 		putLights((GLfloat*)white_light);
 	}else{
 		//Posicionar a c‰mera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-K_ESFERA-DISTANCIA_SOLO);
 	}
 }
 
