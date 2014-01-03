@@ -16,13 +16,14 @@ allUsers(L):-
 
 
 toBaseKnowledge(UId):-
-	usernameByID(UId,_).
+	usernameByID(UId,_),
+	!.
 
 
 usernameByID(UId,Username):-
 	string_concat('SELECT username FROM dbo.[User] WHERE idUser=', (UId), Sql),
 	findall(X, odbc_query(wvm023, Sql , row(X)), [Username|_]),
-        knowUser(UId, Username),
+	knowUser(UId, Username),
 	knowFriends(UId,Username).
 
 
@@ -53,8 +54,8 @@ userByIdList([]):-!.
 userByIdList([H|T],UsernameCurrentUser):-
 	string_concat('SELECT username FROM dbo.[User] WHERE idUser=', (H), Sql),
 	findall(X, odbc_query(wvm023, Sql, row(X)), [User|_]),
-	knowUser(H,User),
-	knowFriend(UsernameCurrentUser, User),
+	%knowUser(H,User),
+	knowFriend(H, UsernameCurrentUser, User),
 	userByIdList(T).
 
 
@@ -69,10 +70,10 @@ knowUserTags(U, [Tag|T]):-
 	assertz(user_tags(U,Tag)),
 	knowUserTags(U,T).
 
-knowFriend(UsernameCurrentUser,Friend):-
-	assertz(friend(UsernameCurrentUser,Friend)).
-
-
+knowFriend(UId, UsernameCurrentUser,Friend):-
+	assertz(friend(UsernameCurrentUser,Friend)),
+	userTagIDs(UId,TagList),
+	knowUserTags(Friend, TagList).
 
 
 
