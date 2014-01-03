@@ -1,6 +1,7 @@
 #include <SWI-cpp.h>
 #include <iostream>
 #include "ReadProlog.h"
+#include "Writer.h"
 
 using namespace std;
 
@@ -11,13 +12,16 @@ using namespace std;
 
 int main(){
 
-	char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\write\\test.pl",NULL};
+	//char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\write\\test.pl",NULL};
 
-	PlEngine e(3,argv);
+	//PlEngine e(3,argv);
 
-	ReadProlog* reader = new ReadProlog();
+	//ReadProlog* reader = new ReadProlog();
 
-	reader->showNetwork();
+	//reader->showNetwork();
+
+	Writer* w = new Writer();
+	w->getFromService("1,Father;2,Friend;3,Mother;5,Uncle", ';');
 
 	cin.get();
 	return 1;	
