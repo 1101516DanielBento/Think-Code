@@ -30,12 +30,18 @@ typedef struct vecCol{
 
 vecCol colisao[100];
 
+typedef struct TextBox{
+	string user;
+	string pw;
+	int idSeleccionada;
+}TextBox;
+
+TextBox txtBox;
+
 std::vector<std::vector<GLfloat>> PosTodosUsers;
 
 std::vector<std::wstring> nomesUtilizadores;//vector que contem todos os utilizadores
 std::vector<std::vector<std::wstring>> relacoesUtilizadores;//vector que contem as ligacoes entre utilizadores
-
-
 
 
 using namespace std;
@@ -47,8 +53,10 @@ using namespace std;
 #define DIMENSAO_CAMARA 4
 #define DISTANCIA_SOLO 2
 
+//TEXTURAS
 
-//#define RAND_MAX 
+//#define RAND_MAX
+
 
 // luzes e materiais
 
@@ -131,6 +139,7 @@ typedef struct Estado{
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
 	GLdouble	eixo[3];
+    GLboolean   VLivre;     //bool para verificar voo livre/rasante
 }Estado;
 
 typedef struct Modelo {
@@ -365,14 +374,20 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glEnable(GL_LIGHTING);
 }
 
+GLboolean detectaColisao(GLfloat nx,GLfloat ny,GLfloat nz)
+{/*
+    GLuint i=(nx+MAZE_HEIGHT*0.5+0.5),j=(int)(nz+MAZE_WIDTH*0.5+0.5);
+    if(mazedata[i][j]=='*')
+    {
+        return GL_TRUE;
+    }*/
+    return(GL_FALSE);
+}
+
 
 
 void distribuicaoNos()
 {
-
-
-
-
 	srand((unsigned)time(0));
 	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
 	GLfloat range=(ceiling-floor)+1.0;
@@ -878,8 +893,66 @@ bool login()
 	}else{
 		return false;
 	}
-	//return false;
+	return false;
 }
+/*void desenhaMenuLogin()
+{
+    
+	float width  = glutGet(GLUT_WINDOW_WIDTH);
+	float height = glutGet(GLUT_INIT_WINDOW_HEIGHT);
+	
+	
+    
+	glViewport(0,0,width,height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	gluOrtho2D(0,100,0,100);
+    
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+    
+	glColor3f(1.0, 1.0, 1.0);
+    
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+    
+    
+	glBindTexture(GL_TEXTURE_2D, txtLogin.TextureID);
+	
+	
+	glPushMatrix();
+	glTranslatef(0,-10,0);
+    glBegin(GL_QUADS);
+    
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0,0,-0.5);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(100,0,-0.5);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(100,100,-0.5);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0,100,-0.5);
+    
+    glEnd();
+    
+    glPopMatrix();
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_TEXTURE_2D);
+    
+	bitmapCenterStringLogin(txtBox.user.c_str(),35,60,0);
+	
+	bitmapCenterStringLogin(c.c_str(),35,54,0);
+    
+}
+
+void setProjectionLogin(int x, int y, GLboolean picking)
+{
+    glLoadIdentity();
+	if (picking) { // se está no modo picking, lê viewport e define zona de picking
+		GLint vport[4];
+		glGetIntegerv(GL_VIEWPORT, vport);
+		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder à jana
+	}
+	
+    gluOrtho2D(0,100,0,100);
+}*/
 
 void loginWindow()
 {
@@ -906,8 +979,8 @@ void setProjection(int x, int y, GLboolean picking){
 	gluPerspective(estado.camera.fov,(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
 
 }
-/*
-void setProjection(int x, int y, GLboolean picking){
+
+/*void setProjection(int x, int y, GLboolean picking){
 	glLoadIdentity();
 	if(picking)
 	{
@@ -915,8 +988,8 @@ void setProjection(int x, int y, GLboolean picking){
 			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
 			0.0,DIMENSAO_CAMARA/2.0+VELv);//VELv È temporario
 	}
-}
-*/
+}*/
+
 
 void myReshape(int w, int h){	
 	glViewport(0, 0, w, h);
@@ -1085,22 +1158,20 @@ void mouse(int btn, int state, int x, int y){
 	}
 }
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
 
 /* need both double buffering and z buffer */
 
 
-<<<<<<< HEAD
-  /*glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
-=======
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
   
->>>>>>> 9ead999b9827b9df124b5c2804bc96b5029a770c
+
     glutInitWindowSize(640, 480);
     glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
@@ -1121,7 +1192,7 @@ void mouse(int btn, int state, int x, int y){
 	
 	
 
-	//loginWindow();
+	loginWindow();
 	//myinit + imprime ajuda dentro do login
 
 	myInit();
@@ -1130,6 +1201,6 @@ void mouse(int btn, int state, int x, int y){
 
 
     glutMainLoop();
-	*/
-	/*return 0;
-}*/
+	
+	return 0;
+}

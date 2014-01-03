@@ -3,7 +3,7 @@
 #include <fstream>
 
 #ifdef __APPLE__
-#define __GRAFO__FILE__ "/Users/utilizador/Documents/Bitbucket/LAPRV/Game3D/Lapr5/Lapr5/exemplo.grafo"
+#define __GRAFO__FILE__ "/Users/pedrosimoes/Think-Code/Game3D/Lapr5/Lapr5/exemplo.grafo"
 #else
 #define __GRAFO__FILE__ "exemplo.grafo"
 #endif
@@ -59,7 +59,7 @@ void addArco(Arco arco){
 		arcos[numArcos]=arco;
 		numArcos++;
 	}else{
-		cout << "Número de arcos chegou ao limite" << endl;
+		cout << "Nœmero de arcos chegou ao limite" << endl;
 	}
 }
 
@@ -68,12 +68,12 @@ void deleteArco(int indArco){
 		for(int i=indArco; i<numArcos; arcos[i++]=arcos[i+i]);
 		numArcos--;
 	}else{
-		cout << "Indíce de arco inválido" << endl;
+		cout << "Ind’ce de arco inv‡lido" << endl;
 	}
 }
 
 void imprimeArco(Arco arco){
-	cout << "No início:" << arco.noi << "Nó final:" << arco.nof << "Peso:" << arco.peso << "Largura:" << arco.largura << endl;
+	cout << "No in’cio:" << arco.noi << "N— final:" << arco.nof << "Peso:" << arco.peso << "Largura:" << arco.largura << endl;
 }
 
 void listArcos(){
