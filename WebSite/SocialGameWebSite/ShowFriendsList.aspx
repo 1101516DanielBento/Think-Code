@@ -41,7 +41,7 @@
                         <asp:Label ID="lblMensagem" runat="server" Font-Bold="True" CssClass="p_sucesso"></asp:Label>
                         <br />
                         <br />
-                        <asp:GridView ID="grdRanking" runat="server" AllowPaging="True"
+                        <asp:GridView ID="grdRanking" cellpadding="20" cellspacing="5" runat="server" AllowPaging="True" 
                             AutoGenerateColumns="False"
                             OnPageIndexChanging="grdRanking_PageIndexChanging" Width="300px">
                             <Columns>
@@ -53,6 +53,7 @@
                                     ReadOnly="True">
                                     <ItemStyle Width="50px" />
                                 </asp:BoundField>
+                                <asp:BoundField DataField="mostraTagsRel" DataFormatString="{0}" HeaderText="Relation Tag" ItemStyle-Width="195%" ReadOnly="True" />
                                 <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="removeFriendship.aspx?usr={0}" DataTextField="texto" DataTextFormatString="{0}">
                                 <ItemStyle Width="200px" />
                                 </asp:HyperLinkField>

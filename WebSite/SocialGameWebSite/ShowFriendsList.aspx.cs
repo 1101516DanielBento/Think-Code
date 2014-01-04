@@ -15,6 +15,10 @@ public partial class ShowFriendsList : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["id"] == null)
+            Response.Redirect("Login.aspx");
+
+
         if (!Page.IsPostBack)
         {
             BindGridView();
@@ -46,13 +50,20 @@ public partial class ShowFriendsList : System.Web.UI.Page
         UserBLL usrBll = new UserBLL();
         IList<Tuple<int, DateTime, Tag>> friends = new List<Tuple<int, DateTime, Tag>>();
 
+        Tag relationTag = new Tag();
+
+
         friends = usrBll.loadFriendsFromUser((int)Session["id"]);
+
+        relationTag = usrBll.loadTagsFromFriendship((int)Session["id"]);
 
         DataTable dataTable = new DataTable();
         dataTable.Columns.Add("Username");
         dataTable.Columns.Add("Pontuacao");
         dataTable.Columns.Add("idUser");
-        dataTable.Columns.Add("texto");
+        dataTable.Columns.Add("mostraTagsRel"); 
+        dataTable.Columns.Add("texto"); //remover amizade
+        //dataTable.Columns.Add("texto"); 
 
         foreach (Tuple<int,DateTime,Tag> frnd in friends)
         {
@@ -63,7 +74,8 @@ public partial class ShowFriendsList : System.Web.UI.Page
             dr["Username"] = user.Username;
             dr["Pontuacao"] = user.Points;
             dr["idUser"] = user.IdUser;
-            dr["texto"] = "Remover amizade";
+            dr["mostraTagsRel"] = relationTag.TagName;
+            dr["texto"] = "Remove Friendship";
                 
             dataTable.Rows.Add(dr);
         }
