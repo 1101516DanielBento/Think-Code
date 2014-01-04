@@ -24,20 +24,38 @@
       </tr>
       <tr>
         <td class="cel_conteudos">
+            <br />
+            <asp:Label ID="lblMensagem" runat="server" Font-Bold="True" CssClass="p_sucesso"> Edit personal information :</asp:Label>
+            <br />
             <p class="p_texto_campo_formulario_geral">
                 <a href="ChangePassword.aspx" class="link_normal_formularios"> Change password</a></p>
+            
             <p class="p_texto_campo_formulario_geral">
                 <a href="ChangeUserInformation.aspx" class="link_normal_formularios"> Change user settings</a></p>
+            <br />
+            <br />
+            <asp:Label ID="Label1" runat="server" Font-Bold="True" CssClass="p_sucesso"> Tags management :</asp:Label>
             <p class="p_texto_campo_formulario_geral">
-                <a href="TagsManagement.aspx" class="link_normal_formularios"> Tags Management</a></p>
+                
+                <a href="TagsManagement.aspx" class="link_normal_formularios"> Edit my user tags</a></p>
             <p class="p_texto_campo_formulario_geral">
+                <br />
+            <br />
+            <asp:Label ID="Label2" runat="server" Font-Bold="True" CssClass="p_sucesso"> Friends management :</asp:Label>
+                <br />
+                <br />
                 <a href="ShowFriendsList.aspx" class="link_normal_formularios"> Show friends list</a></p>
 
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriends.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriendRelations.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Send friend requests</a></p>
-            <p class="p_texto_campo_formulario_geral"><a href="PendingRequest.aspx" class="link_normal_formularios">Show backorder</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="PendingRequest.aspx" class="link_normal_formularios">Show pending friend requests</a></p>
+            <br />
+            <br />
+            <asp:Label ID="Label3" runat="server" Font-Bold="True" CssClass="p_sucesso"> Game :</asp:Label>
+                <br />
             <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Game download</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="UserAccountArea.aspx" class="link_normal_formularios">Viewing the graph (available soon)</a></p>
             <p class="p_texto_campo_formulario_geral">&nbsp;</p>
             <p class="p_texto_campo_formulario_geral">&nbsp;</p></td>
       </tr>
