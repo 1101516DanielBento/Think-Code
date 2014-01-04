@@ -35,7 +35,7 @@ public partial class PendingRequest : System.Web.UI.Page
 
             if (requestOk == 1) //Accept
             {
-                lblMensagem.Text = "The user " + user.Name+ " is now your friend !";
+                lblMensagem.Text = "The user " + user.Username+ " is now your friend !";
             }
             if (requestOk == 2) //Reject
             {
