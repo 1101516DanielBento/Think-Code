@@ -392,6 +392,73 @@ GLboolean detectaColisao(GLfloat nx,GLfloat ny,GLfloat nz)
     return(GL_FALSE);
 }
 
+//detecta colisao esfera
+bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	int compUsers = numNos;
+	int compLigacoes = numArcos;
+
+	GLfloat raio = K_ESFERA/2.0;
+	GLfloat d;
+
+	for(int i = 1; i < compUsers; i++)
+	{
+		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
+		
+		if(d <= (raio+3))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+//detecta colisao ligacao
+
+bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	bool flag = true;
+	int noi, nof;
+	int compLigacoes = numArcos;
+	int compUsers = numNos;
+	glLoadIdentity();
+	for(int i = 1; i <= compLigacoes; i++)
+	{
+		//exemplo adaptar para Arcos e Nos
+		//encontra o arco
+		//encontra o no
+		noi = arcos[i].noi;
+		nof = arcos[i].nof;
+
+		//encontra noi e nof para fazer a ponte entre os dois
+		//lista de utilizadores
+		//convem fazer uma classe Utilizador
+		
+
+		//nao tenho a certeza
+		GLdouble larg = arcos[i].largura+0.4;
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(modelo.objecto.pos.x,modelo.objecto.pos.y,modelo.objecto.pos.z);
+		GLdouble angOrientacao = graus(atan2(ny-modelo.objecto.pos.y,nx-modelo.objecto.pos.x));
+		GLdouble catetoOposto = nz - modelo.objecto.pos.z;
+		GLdouble tamanho = sqrt(pow((nx-modelo.objecto.pos.x),2)+pow((ny-modelo.objecto.pos.y),2));
+		GLdouble angInclinacao = graus(atan2(catetoOposto,tamanho));
+		glRotated(angOrientacao,0,0,1);
+		GLdouble nx2 = (nx - modelo.objecto.pos.x)*cos(rad(angOrientacao)) + (nz - modelo.objecto.pos.z)*sin(rad(angOrientacao));
+		GLdouble ny2 = (nz - modelo.objecto.pos.z)*cos(rad(angOrientacao)) - (nx - modelo.objecto.pos.x)*sin(rad(angOrientacao));
+		GLdouble dist = sqrt(pow(nx -modelo.objecto.pos.x,2) + pow(ny - modelo.objecto.pos.y,2) + pow(nz - modelo.objecto.pos.z,2));
+		GLdouble nz2 = modelo.objecto.pos.z + nx2/tamanho*catetoOposto;
+
+		if((0 <= nx2 && nx2 <= tamanho) && (-larg/2.0 <= ny2 && ny2 <= larg/2.0) && (nz2 - (larg/2.0+0.1) <= ny && ny <= ny2 + (larg/2.0+0.1)))
+		{
+			flag = false;
+		}
+		glPopMatrix();
+	}
+	return flag;
+}
+
 
 
 void distribuicaoNos()
@@ -652,6 +719,8 @@ void display(void)
 
 }
 
+
+
 void Timer(int value)
 {
 	glutTimerFunc(estado.timer, Timer, 0);
@@ -669,7 +738,7 @@ void Timer(int value)
 	GLfloat d = sqrt(pow((x2-x1),2)+pow((y2-y1),2)+pow((z2-z1),2)); //distancia ao ponto de colisao
 
 	GLfloat k = (d - DIMENSAO_CAMARA/2.0)/estado.camera.velTotal;
-
+	GLfloat raio = K_ESFERA/2.0;
 	if(estado.teclas.q)
 	{
 		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
