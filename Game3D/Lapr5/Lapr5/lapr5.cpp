@@ -160,13 +160,16 @@ typedef struct Modelo {
 Estado estado;
 Modelo modelo;
 
+//guarda numero do no
+int indice;
+
 void initEstado(){
 	estado.camera.dir_lat=M_PI/4;
 	estado.camera.dir_long=-M_PI/4;
 	estado.camera.fov=60;
 	estado.camera.dist=100;
-	estado.camera.velh = 1.0;
-	estado.camera.velv = 1.0;
+	estado.camera.velh = 0.5;
+	estado.camera.velv = 0.5;
 	estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
 	estado.eixo[0]=0;
 	estado.eixo[1]=0;
@@ -226,7 +229,7 @@ void myInit()
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
 	
 	
-	//le o grafodo fich
+	//le o grafo do fich
 	leGrafo();
 
 
@@ -234,7 +237,8 @@ void myInit()
 	modelo.objecto.pos.x = nos[0].x;
 	modelo.objecto.pos.y = nos[0].y;
 	modelo.objecto.pos.z = nos[0].z;
-
+	//testar
+	indice = 0;
 
 }
 
@@ -392,6 +396,9 @@ GLboolean detectaColisao(GLfloat nx,GLfloat ny,GLfloat nz)
     return(GL_FALSE);
 }
 
+
+
+//incompleto requer Lista<User*> lu +/- isto
 //detecta colisao esfera
 bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 {
@@ -399,9 +406,45 @@ bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 	int compLigacoes = numArcos;
 
 	GLfloat raio = K_ESFERA/2.0;
-	GLfloat d;
+	GLfloat d ,a , a2, b,b2 ;
+	//No* noTemp;
+	// a altura a camara sera feito em separado
+	d = sqrt(((nx - nos[indice].x)*(nx - nos[indice].x))+((ny - nos[indice].y)*(ny - nos[indice].y)));
+	if(indice >= 0)
+	{
+		if(d <= raio)
+		{
+			return true;
+		}else{
+			for(int i = 1; i < numArcos; i++)
+			{
+				if(arcos[i].noi == indice || arcos[i].nof == indice)
+				{
 
-	for(int i = 1; i < compUsers; i++)
+				}
+			}
+		}
+	}
+	
+	
+	
+	a = (nos[arcos[indice].nof].y-nos[arcos[indice].noi].y)/(nos[arcos[indice].nof].x-nos[arcos[indice].noi].x);//inclinacao
+	a2=-1/a; //inversa
+	
+	//y=a2x+b //substituir o y e x pelo ponto	
+	b = nos[indice].y - (a*nos[indice].x);
+	b2 = ny - (a2*nx); 
+
+	//a2*x+b2=a*x+b;
+	//y=a2((y-b)/a)+b2;
+	//(a2-a)x=b-b2
+	//y=ax+b
+	//y=a2x+b2
+	/*x=(b-b2)/(a2-a);
+
+	y = a2((b-b2)/(a2-a))+b2;
+	*/
+	/*for(int i = 1; i < compUsers; i++)
 	{
 		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
 		
@@ -410,8 +453,10 @@ bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 			return false;
 		}
 	}
-	return true;
+	return true;*/
 }
+
+
 
 //detecta colisao ligacao
 
@@ -437,6 +482,7 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 
 		//nao tenho a certeza
 		GLdouble larg = arcos[i].largura+0.4;
+		
 		glPushMatrix();
 		glLoadIdentity();
 		glTranslatef(modelo.objecto.pos.x,modelo.objecto.pos.y,modelo.objecto.pos.z);
@@ -457,7 +503,8 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 		glPopMatrix();
 	}
 	return flag;
-}
+}
+
 
 
 
@@ -586,7 +633,6 @@ void desenhaLabirinto(){
 			glPushMatrix();
 			material(azul);
 				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
-				//glutSolidCube(0.5);
 				glutSolidSphere((K_ESFERA/2.0),20,20);
 			glPopMatrix();
 			//desenhaNo(i);
@@ -594,8 +640,6 @@ void desenhaLabirinto(){
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
 			desenhaLigacao(arcos[i]);
-			//Caminho();
-
 		}
 	glPopMatrix();
 }
@@ -757,13 +801,15 @@ void Timer(int value)
 	if(estado.teclas.right)
 	{
 		modelo.objecto.dir-=0.1;
-	}
+	}		
 
 	if(estado.teclas.up)
 	{
-		modelo.objecto.pos.x=modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
-		modelo.objecto.pos.y+=estado.camera.velv*sin(modelo.objecto.dir);
-		//modelo.objecto.pos.z = modelo.objecto.pos.z + estado.camera.velv;
+		if(detectaColisoes(x1,z1,y1)/* && detectaColisoesLigacoes(x1,z1,y1)*/){
+				modelo.objecto.pos.x=modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
+				modelo.objecto.pos.y+=estado.camera.velv*sin(modelo.objecto.dir);
+				//modelo.objecto.pos.z = modelo.objecto.pos.z + estado.camera.velv;
+		}
 	}
 	
 	if(estado.teclas.down)
@@ -1269,7 +1315,7 @@ int main(int argc, char **argv)
 	
 	
 
-	loginWindow();
+	//loginWindow();
 	//myinit + imprime ajuda dentro do login
 
 	myInit();
