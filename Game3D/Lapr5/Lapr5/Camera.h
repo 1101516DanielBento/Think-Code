@@ -13,7 +13,7 @@
 #else
 #include <GL/glut.h>
 #endif
-//#include "Point.h"
+#include "Ponto.h"
 #include <math.h>
 
 #include <iostream>

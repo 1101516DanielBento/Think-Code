@@ -13,14 +13,13 @@ Camera::Camera(GLfloat x, GLfloat y, GLfloat z)
 	this->eyeX=x;
 	this->eyeY=y;
 	this->eyeZ=z;
-	
 }
 
 Camera::Camera()
 {
 
-	setDirLat(0);
-	setDirLong(0);
+	setDirLat(10);
+	setDirLong(10);
 	setFov(30);
 	setDistance(100);
 	setEyeX(40);
