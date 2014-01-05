@@ -60,6 +60,7 @@ relacao(tiago,fred).
 relacao(tiago,pedro).
 relacao(tiago,daniel).
 relacao(tiago,luis).
+relacao(tiago,daniela).
 relacao(fred,jose).
 relacao(fred,neves).
 relacao(luis,daniela).
@@ -85,6 +86,7 @@ tags_1_utilizador( Utilizador,L):-
 encontra_tags_sub(H,LR):-
 	findall(Tag,(tags_sub(H,Tag);tags_sub(Tag,H)),L), append([H],L,LR).
 
+
 %Lista de utilizadores e as suas tags
 utilizadores_tags([],[]).
 utilizadores_tags([H|T],[[H|LTags]|LF]):-
@@ -92,8 +94,6 @@ utilizadores_tags([H|T],[[H|LTags]|LF]):-
 
 % Dado as tags do amigo com os seus significados verifica se esta na
 % lista das tags do Utilizador
-
-
 
 verificaTagComum([H|_],LTagsUtilizador,Valor):-
 	member(H,LTagsUtilizador),Valor is 0+1.
@@ -109,22 +109,26 @@ verificaTagComum([],_,_).
 
 %tamanho da rede
 
-tamanho_rede_Utilizador(Utilizador):-
-	user(Utilizador),!,
+tamanho_rede_utilizador(Utilizador,LF):-
+	user(Utilizador),
 	amigos_diretos(Utilizador,L),
-	tamanho_rede(L,L,_,Utilizador).
+	tamanho_rede(L,L,Utilizador,LF).
 
-tamanho_rede([],_,LF,UtilizadorCentral):-
+tamanho_rede([H|T],L,UtilizadorCentral,LTot):-
+	findall(Y,amigo_Do_Amigo(H,Y,L,UtilizadorCentral),LR),
+	append(L,LR,LF),
+	tamanho_rede(T,LF,UtilizadorCentral,LTot).
+
+
+tamanho_rede([],LF,UtilizadorCentral,LF):-!,
 	length(LF,N), write('O Tamanho da rede do utilizador '),write(UtilizadorCentral),write(' é de '), write(N), write(' elementos.'), nl.
 
-tamanho_rede([H|T],L,_,UtilizadorCentral):-
-	findall(Y,amigo_Do_Amigo(H,Y,L,UtilizadorCentral),LR),append(L,LR,LX),
-	tamanho_rede(T,LX,LX,UtilizadorCentral).
 
 
 %encontra amigos que tenham em comum X tags
 
 obter_amigos_X_tags_comuns(Utilizador,X,ListaAmigos):-
+	user(Utilizador),
 	amigos_diretos(Utilizador,LAmigosDirectos),
 	utilizadores_tags(LAmigosDirectos,LTagsAmigos),
 	obter_tags_comuns(LTagsAmigos,X,ListaAmigos,Utilizador,0).
@@ -144,13 +148,41 @@ obter_tags_comuns([[_|[]]|T],X,ListaAmigos,Utilizador,0):-
 obter_tags_comuns([],_,_,_,_).
 
 
+% --------surgerir ligações ate ao terceiro nivel com tags comuns ------
+
+sugerir_amigos(Utilizador,LA):-
+	user(Utilizador),!,
+	amigos_diretos(Utilizador,LAmigos),
+	amigos_amigos(LAmigos,LAmigos,Utilizador,LF),
+	sugestaoTags(LAmigos,LF,_).
+
+amigos_amigos([],L,_,L).
+amigos_amigos([H|T],LAmigos,Utilizador,LTo):-!,
+	findall(Y,amigo_Do_Amigo(H,Y,LAmigos,Utilizador),LR),
+	append(LAmigos,LR,LA),
+	amigos_amigos(T,LA,Utilizador,LTo).
 
 
 
+%---------------------Caminho mais curto-----------------------
 
+caminho_mais_curto(UtilizadorOrigem,UtilizadorDestino,LR):-
+	findall(Y,relacao(UtilizadorOrigem,Y),L),
+	cria_caminho([UtilizadorOrigem],L,LC),
+	determina_caminho_curto(UtilizadorDestino,LC,LR).
 
+determina_caminho_curto(UtilizadorDestino,[[UtilizadorDestino|L]|_],R):-
+	reverse([UtilizadorDestino|L],R).
 
+determina_caminho_curto(UtilizadorDestino,[[Destino|Destinos]|LR],L):-
+	findall(X,relacao(Destino,X),LL),
+	cria_caminho([Destino|Destinos],LL,Lcaminho),
+	append(LR,Lcaminho,Lappend),
+	determina_caminho_curto(UtilizadorDestino,Lappend,L).
 
-
-
-
+cria_caminho(_,[],[]).
+cria_caminho(Utilizadores,[Destino|Destinos],LR):-
+	member(Destino,Utilizadores),
+	cria_caminho(Utilizadores,Destinos,LR).
+cria_caminho(Utilizadores,[Destino|Destinos],[[Destino|Utilizadores]|LR]):-
+	cria_caminho(Utilizadores,Destinos,LR).
