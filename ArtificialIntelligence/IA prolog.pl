@@ -85,6 +85,11 @@ tags_1_utilizador( Utilizador,L):-
 %todos os nomes dessa tag
 encontra_tags_sub(H,LR):-
 	findall(Tag,(tags_sub(H,Tag);tags_sub(Tag,H)),L), append([H],L,LR).
+%por lista
+encontra_Ltags_sub([],L,L).
+encontra_Ltags_sub([H|T],L,Lto):-
+	encontra_tags_sub(H,LR), append(L,LR,La),
+	encontra_Ltags_sub(T,La,Lto).
 
 
 %Lista de utilizadores e as suas tags
@@ -136,7 +141,7 @@ obter_amigos_X_tags_comuns(Utilizador,X,ListaAmigos):-
 obter_tags_comuns([[Huser,Htag|TL]|T],X,ListaAmigos,Utilizador,N):-
 	encontra_tags_sub(Htag,LSignificadosTags),
 	tags_1_utilizador(Utilizador,LTagsUtilizador),
-	verificaTagComum(LSignificadosTags,LTagsUtilizador,Valor),Valor == 1, N1 is N + 1,
+	verificaTagComum(LSignificadosTags,LTagsUtilizador,Valor),Valor == 1, N1 is N + 1,!,
 	obter_tags_comuns([[Huser|TL]|T],X,ListaAmigos,Utilizador,N1);obter_tags_comuns([[Huser|TL]|T],X,ListaAmigos,Utilizador,N).
 
 obter_tags_comuns([[H|[]]|T],X,[H|ListaAmigos],Utilizador,N):-
@@ -145,28 +150,46 @@ obter_tags_comuns([[H|[]]|T],X,[H|ListaAmigos],Utilizador,N):-
 obter_tags_comuns([[_|[]]|T],X,ListaAmigos,Utilizador,0):-
 	obter_tags_comuns(T,X,ListaAmigos,Utilizador,0).
 
-obter_tags_comuns([],_,_,_,_).
+obter_tags_comuns([],_,[],_,_).
 
 
 % --------surgerir ligações ate ao terceiro nivel com tags comuns ------
 
-sugerir_amigos(Utilizador,LA):-
+sugerir_amigos(Utilizador,LF):-
 	user(Utilizador),!,
 	amigos_diretos(Utilizador,LAmigos),
-	amigos_amigos(LAmigos,LAmigos,Utilizador,LF),
-	sugestaoTags(LAmigos,LF,_).
-
-amigos_amigos([],L,_,L).
-amigos_amigos([H|T],LAmigos,Utilizador,LTo):-!,
-	findall(Y,amigo_Do_Amigo(H,Y,LAmigos,Utilizador),LR),
-	append(LAmigos,LR,LA),
-	amigos_amigos(T,LA,Utilizador,LTo).
+	tamanho_rede(LAmigos,LAmigos,Utilizador,LRede),
+	elimina_diretos(LAmigos,LRede,Llimpa),
+	sugestao(Llimpa,Utilizador,LF).
 
 
+elimina_diretos(_,[],[]).
+elimina_diretos(LA,[H|T],LP):-
+	member(H,LA),!,
+	elimina_diretos(LA,T,LP).
+elimina_diretos(LA,[H|T],[H|LP]):-
+	elimina_diretos(LA,T,LP).
+
+sugestao([],_,[]).
+sugestao([H|T],Utilizador,[H|LF]):-
+	tags_1_utilizador(Utilizador,LtagsUtilizador),
+	compara_tags(H,LtagsUtilizador,Valor),
+	Valor == 1,!,
+	sugestao(T,Utilizador,LF).
+sugestao([_|T],Utilizador,LF):-
+	sugestao(T,Utilizador,LF).
+
+
+compara_tags(H,LTagsU,Valor):-
+	tags_1_utilizador(H,LTagsA),
+	encontra_Ltags_sub(LTagsA,LTagsA,LtodasTags),
+	verificaTagComum(LtodasTags,LTagsU,Valor).
 
 %---------------------Caminho mais curto-----------------------
 
 caminho_mais_curto(UtilizadorOrigem,UtilizadorDestino,LR):-
+	user(UtilizadorOrigem),!,
+	user(UtilizadorDestino),!,
 	findall(Y,relacao(UtilizadorOrigem,Y),L),
 	cria_caminho([UtilizadorOrigem],L,LC),
 	determina_caminho_curto(UtilizadorDestino,LC,LR).
