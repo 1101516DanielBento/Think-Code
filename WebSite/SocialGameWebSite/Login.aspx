@@ -13,10 +13,10 @@
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
     <td valign="bottom" class="cel_botoes"><a href="TagCloudUser.aspx" onmouseover="MM_swapImage('Image6','','imgs/tags_users_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsUsers_inactivo.png" name="Image6" width="117" height="27" border="0" id="Image6" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
-    <td valign="bottom" class="cel_botoes"><a href="TagsRelations.aspx" onmouseover="MM_swapImage('Image7','','imgs/tags_relations_activos.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsRelations_inactivo.png" name="Image7" width="117" height="27" border="0" id="Image7" /></a></td>
+    <td valign="bottom" class="cel_botoes"><a href="TagCloudRelations.aspx" onmouseover="MM_swapImage('Image7','','imgs/tags_relations_activos.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/tagsRelations_inactivo.png" name="Image7" width="117" height="27" border="0" id="Image7" /></a></td>
     <td valign="bottom" class="cel_espaco_botoes">&nbsp;</td>
-    <td valign="bottom" class="cel_botoes"><a href="Download.aspx" onmouseover="MM_swapImage('Image8','','imgs/download_activo.png',1)" onmouseout="MM_swapImgRestore()"><img src="imgs/download_inactivo.png" name="Image8" width="117" height="27" border="0" id="Image8" /></a></td>
-   
+    <td valign="bottom" class="cel_botoes"><a href="ShowAllUsers.aspx" onmouseover="MM_swapImage('Image8','','imgs/allUsers_inativo.png',1)" onmouseout="MM_swapImgRestore()">
+        <img src="imgs/allUsers_inativo.png" name="Image8" width="117" height="27" border="0" id="Image8" /></a></td>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" Runat="Server">
     <center><p>
@@ -40,7 +40,7 @@
                         Display="Dynamic" ForeColor="Red"></asp:RequiredFieldValidator></td>
               </tr>
               <tr>
-                <td class="cel_password_login" align="left">Password:
+                <td class="cel_password_login" align="left">Password:&nbsp;
                     <asp:TextBox ID="txtPassword" runat="server" MaxLength="10" TextMode="Password" Width="70px"></asp:TextBox>
                     <asp:Button ID="btnEntrar" runat="server" Text="Entrar" 
                         onclick="btnEntrar_Click" />

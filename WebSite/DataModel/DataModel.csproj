@@ -40,15 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\ConfigurationBLL.cs" />
+    <Compile Include="BLL\TagBLL.cs" />
     <Compile Include="BLL\UserBLL.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="DAL\BaseGateway.cs" />
     <Compile Include="DAL\ConfigurationGateway.cs" />
     <Compile Include="DAL\TagGateway.cs" />
     <Compile Include="DAL\UserGateway.cs" />
-    <Compile Include="Model\FriendshipRequestNeg.cs" />
-    <Compile Include="Model\FriendshipRequest.cs" />
-    <Compile Include="Model\Friendship.cs" />
+    <Compile Include="Model\OLD\FriendshipRequestNeg.cs" />
+    <Compile Include="Model\OLD\FriendshipRequest.cs" />
+    <Compile Include="Model\OLD\Friendship.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\GameRequest.cs" />
     <Compile Include="Model\Tag.cs" />

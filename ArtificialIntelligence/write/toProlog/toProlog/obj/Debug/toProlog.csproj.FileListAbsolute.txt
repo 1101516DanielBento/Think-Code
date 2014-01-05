@@ -1,0 +1,12 @@
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\bin\Debug\toProlog.exe.config
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\bin\Debug\toProlog.exe
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\bin\Debug\toProlog.pdb
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\obj\Debug\toProlog.csprojResolveAssemblyReference.cache
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\obj\Debug\toProlog.exe
+C:\Users\W370ET\Desktop\ISEP\LAPR5\write\toProlog\toProlog\obj\Debug\toProlog.pdb
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\bin\Debug\toProlog.exe.config
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\obj\Debug\toProlog.exe
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\obj\Debug\toProlog.pdb
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\bin\Debug\toProlog.exe
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\bin\Debug\toProlog.pdb
+C:\Users\W370ET\Desktop\ISEP\LAPR5\Lapr5Project\ArtificialIntelligence\write\toProlog\toProlog\obj\Debug\toProlog.csprojResolveAssemblyReference.cache

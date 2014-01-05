@@ -11,7 +11,7 @@ public partial class FrontOffice : System.Web.UI.MasterPage
 {
     private bool UserIsLogged()
     {
-        if (Session["user"] != null)
+        if (Session["id"] != null)
             return true;
 
         return false;

@@ -1,27 +1,62 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdlib.h>     
-#include <GL\glut.h>
+#include <cmath>
 #include <iostream>
 #include "grafos.h"
+#include <vector>
+#include <ctime>
+#include <iostream>
+#include <string>
 
-<<<<<<< HEAD
+
+using namespace std;
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
-
+/*
 #ifdef _WIN32
 #include <GL/glaux.h>
-#endif
+#endif*/
 
-=======
->>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
+typedef struct vecCol{
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+}vecCol;
+
+vecCol colisao[100];
+
+typedef struct TextBox{
+	string user;
+	string pw;
+	int idSeleccionada;
+}TextBox;
+
+TextBox txtBox;
+
+std::vector<std::vector<GLfloat>> PosTodosUsers;
+
+std::vector<std::wstring> nomesUtilizadores;//vector que contem todos os utilizadores
+std::vector<std::vector<std::wstring>> relacoesUtilizadores;//vector que contem as ligacoes entre utilizadores
+
+
 using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
+#define K_ESFERA 4.0
+#define VELv 0.5
+#define DIMENSAO_CAMARA 4
+#define DISTANCIA_SOLO 2
+
+//TEXTURAS
+
+//#define RAND_MAX
+
 
 // luzes e materiais
 
@@ -72,27 +107,43 @@ typedef struct {
 	GLboolean   q,a,up,down,left,right;
 }Teclas;
 
+typedef struct pos_t{
+    GLfloat    x,y,z;
+}pos_t;
+
+typedef struct objecto_t{
+    pos_t    pos;
+    GLfloat  dir;
+    GLfloat  vel;
+}objecto_t;
+
 typedef struct Camera{
 	GLfloat fov;
 	GLdouble dir_lat;
 	GLdouble dir_long;
 	GLfloat dist;
 	Vertice center;
-
+	GLfloat velh;
+	GLfloat velv;
+	GLfloat velTotal;
 }Camera;
 
 typedef struct Estado{
 	Camera		camera;
 	GLint         timer;
+	Teclas		teclas;
 	int			xMouse,yMouse;
 	GLboolean	light;
+	GLboolean   debug;
 	GLboolean	apresentaNormais;
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
 	GLdouble	eixo[3];
+    GLboolean   VLivre;     //bool para verificar voo livre/rasante
 }Estado;
 
 typedef struct Modelo {
+	objecto_t objecto;
 	#ifdef __cplusplus
 		tipo_material cor_cubo;
 	#else
@@ -114,6 +165,9 @@ void initEstado(){
 	estado.camera.dir_long=-M_PI/4;
 	estado.camera.fov=60;
 	estado.camera.dist=100;
+	estado.camera.velh = 1.0;
+	estado.camera.velv = 1.0;
+	estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
 	estado.eixo[0]=0;
 	estado.eixo[1]=0;
 	estado.eixo[2]=0;
@@ -123,6 +177,13 @@ void initEstado(){
 	estado.light=GL_FALSE;
 	estado.apresentaNormais=GL_FALSE;
 	estado.lightViewer=1;
+	estado.timer=20;
+	//coordenadas do objecto
+	modelo.objecto.pos.x=90;
+	modelo.objecto.pos.y=80;
+	modelo.objecto.pos.z=50;
+	
+	
 }
 
 void initModelo(){
@@ -163,8 +224,18 @@ void myInit()
 	modelo.quad=gluNewQuadric();
 	gluQuadricDrawStyle(modelo.quad, GLU_FILL);
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
-
+	
+	
+	//le o grafodo fich
 	leGrafo();
+
+
+	//atribuir a posicao do objecto/user que faz login no jogo
+	modelo.objecto.pos.x = nos[0].x;
+	modelo.objecto.pos.y = nos[0].y;
+	modelo.objecto.pos.z = nos[0].z;
+
+
 }
 
 void imprime_ajuda(void)
@@ -311,79 +382,111 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glEnable(GL_LIGHTING);
 }
 
-void desenhaChao(GLfloat xi, GLfloat yi, GLfloat zi, GLfloat xf, GLfloat yf, GLfloat zf, int orient){
-	GLdouble v1[3],v2[3],cross[3];
-	GLdouble length;
-	v1[0]=xf-xi;
-	v1[1]=0;
-	v2[0]=0;
-	v2[1]=yf-yi;
+GLboolean detectaColisao(GLfloat nx,GLfloat ny,GLfloat nz)
+{/*
+    GLuint i=(nx+MAZE_HEIGHT*0.5+0.5),j=(int)(nz+MAZE_WIDTH*0.5+0.5);
+    if(mazedata[i][j]=='*')
+    {
+        return GL_TRUE;
+    }*/
+    return(GL_FALSE);
+}
 
-	switch(orient) {
-		case NORTE_SUL :
-				v1[2]=0;
-				v2[2]=zf-zi;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
+//detecta colisao esfera
+bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	int compUsers = numNos;
+	int compLigacoes = numArcos;
 
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zi);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zf);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zf,cross,red_plastic);
-				}
-			break;
-		case ESTE_OESTE :
-				v1[2]=zf-zi;
-				v2[2]=0;
-				CrossProduct(v1,v2,cross);
-				//printf("cross x=%lf y=%lf z=%lf",cross[0],cross[1],cross[2]);
-				length=VectorNormalize(cross);
-				//printf("Normal x=%lf y=%lf z=%lf length=%lf\n",cross[0],cross[1],cross[2]);
-				material(red_plastic);
-				glBegin(GL_QUADS);
-					glNormal3dv(cross);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-					desenhaNormal(xf,yi,zf,cross,red_plastic);
-					desenhaNormal(xf,yf,zf,cross,red_plastic);
-					desenhaNormal(xi,yi,zi,cross,red_plastic);
-				}
-			break;
-		default:
-				cross[0]=0;
-				cross[1]=0;
-				cross[2]=1;
-				material(azul);
-				glBegin(GL_QUADS);
-					glNormal3f(0,0,1);
-					glVertex3f(xi,yi,zi);
-					glVertex3f(xf,yi,zf);
-					glVertex3f(xf,yf,zf);
-					glVertex3f(xi,yf,zi);
-				glEnd();
-				if(estado.apresentaNormais) {
-					desenhaNormal(xi,yi,zi,cross,azul);
-					desenhaNormal(xf,yi,zf,cross,azul);
-					desenhaNormal(xf,yf,zf,cross,azul);
-					desenhaNormal(xi,yi,zi,cross,azul);
-				}
-			break;
+	GLfloat raio = K_ESFERA/2.0;
+	GLfloat d;
+
+	for(int i = 1; i < compUsers; i++)
+	{
+		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
+		
+		if(d <= (raio+3))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+//detecta colisao ligacao
+
+bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	bool flag = true;
+	int noi, nof;
+	int compLigacoes = numArcos;
+	int compUsers = numNos;
+	glLoadIdentity();
+	for(int i = 1; i <= compLigacoes; i++)
+	{
+		//exemplo adaptar para Arcos e Nos
+		//encontra o arco
+		//encontra o no
+		noi = arcos[i].noi;
+		nof = arcos[i].nof;
+
+		//encontra noi e nof para fazer a ponte entre os dois
+		//lista de utilizadores
+		//convem fazer uma classe Utilizador
+		
+
+		//nao tenho a certeza
+		GLdouble larg = arcos[i].largura+0.4;
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(modelo.objecto.pos.x,modelo.objecto.pos.y,modelo.objecto.pos.z);
+		GLdouble angOrientacao = graus(atan2(ny-modelo.objecto.pos.y,nx-modelo.objecto.pos.x));
+		GLdouble catetoOposto = nz - modelo.objecto.pos.z;
+		GLdouble tamanho = sqrt(pow((nx-modelo.objecto.pos.x),2)+pow((ny-modelo.objecto.pos.y),2));
+		GLdouble angInclinacao = graus(atan2(catetoOposto,tamanho));
+		glRotated(angOrientacao,0,0,1);
+		GLdouble nx2 = (nx - modelo.objecto.pos.x)*cos(rad(angOrientacao)) + (nz - modelo.objecto.pos.z)*sin(rad(angOrientacao));
+		GLdouble ny2 = (nz - modelo.objecto.pos.z)*cos(rad(angOrientacao)) - (nx - modelo.objecto.pos.x)*sin(rad(angOrientacao));
+		GLdouble dist = sqrt(pow(nx -modelo.objecto.pos.x,2) + pow(ny - modelo.objecto.pos.y,2) + pow(nz - modelo.objecto.pos.z,2));
+		GLdouble nz2 = modelo.objecto.pos.z + nx2/tamanho*catetoOposto;
+
+		if((0 <= nx2 && nx2 <= tamanho) && (-larg/2.0 <= ny2 && ny2 <= larg/2.0) && (nz2 - (larg/2.0+0.1) <= ny && ny <= ny2 + (larg/2.0+0.1)))
+		{
+			flag = false;
+		}
+		glPopMatrix();
+	}
+	return flag;
+}
+
+
+
+void distribuicaoNos()
+{
+	srand((unsigned)time(0));
+	GLfloat floor=-30.0, ceiling=30.0;//mais alto e mais baixo
+	GLfloat range=(ceiling-floor)+1.0;
+	GLfloat floor2 = 2.0,ceiling2 = 4.0;
+	GLfloat range2=(ceiling2-floor2)+5.0;
+
+	for(int i =0; i < 8/*alterar para num utilizadores*/;i++)
+	{
+		vector<GLfloat> aux3;
+
+		GLfloat random_x = floor+int(range*rand()/(RAND_MAX +1.0));
+		GLfloat random_y = floor+int(range*rand()/(RAND_MAX+1.0));
+		GLfloat random_z = floor2+int(range2*rand()/(RAND_MAX+1.0));
+
+		colisao[i].x = random_x;
+		colisao[i].y = random_y;
+		colisao[i].z = random_z;
+
+		aux3.push_back(random_x);
+		aux3.push_back(random_y);
+		aux3.push_back(random_z);
+
+		PosTodosUsers.push_back(aux3);
+		aux3.pop_back();
 	}
 }
 
@@ -423,12 +526,19 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 			}
 			glRotatef(ax, rx, ry, rz);
 			gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
-			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);
+			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal È desenhada automaticamente pela funcao
 			glPopMatrix();	
 
 }
 
-void desenhaArco2(Arco arco)
+void Caminho()
+{
+	//GLUquadricObj *obj = gluNewQuadric();
+
+	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
+}
+
+void desenhaLigacao(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
@@ -442,6 +552,7 @@ void desenhaArco2(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
+			material(slate);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
@@ -455,30 +566,35 @@ void desenhaArco2(Arco arco)
 				noi=&nos[arco.nof];
 			}
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+		}else{
+			noi=&nos[arco.noi];
+			nof=&nos[arco.nof];
+			material(red_plastic);
+			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		}
 	}
-}
+}	
 
-#define K_ESFERA 2.1
+
 void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
 		glTranslatef(0,0,0.05);
-		glScalef(5,5,5);
+		//glScalef(5,5,5);
 	
 		for(int i=0; i<numNos; i++){
 			glPushMatrix();
 			material(azul);
 				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 				//glutSolidCube(0.5);
-				glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+				glutSolidSphere((K_ESFERA/2.0),20,20);
 			glPopMatrix();
 			//desenhaNo(i);
 		}
 		material(emerald);
 		for(int i=0; i<numArcos; i++){
-			//desenhaArco(arcos[i]);
-			desenhaArco2(arcos[i]);
+			desenhaLigacao(arcos[i]);
+			//Caminho();
 
 		}
 	glPopMatrix();
@@ -559,17 +675,20 @@ void desenhaEixos(){
 }
 
 void setCamera(){
-	Vertice eye;
-	eye[0]=estado.camera.center[0]+estado.camera.dist*cos(estado.camera.dir_long)*cos(estado.camera.dir_lat);
-	eye[1]=estado.camera.center[1]+estado.camera.dist*sin(estado.camera.dir_long)*cos(estado.camera.dir_lat);
-	eye[2]=estado.camera.center[2]+estado.camera.dist*sin(estado.camera.dir_lat);
+
 
 	if(estado.light){
-		gluLookAt(eye[0],eye[1],eye[2],estado.camera.center[0],estado.camera.center[1],estado.camera.center[2],0,0,1);
+		//Posicionar a câmera
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-K_ESFERA-DISTANCIA_SOLO);
 		putLights((GLfloat*)white_light);
 	}else{
+		//Posicionar a câmera
 		putLights((GLfloat*)white_light);
-		gluLookAt(eye[0],eye[1],eye[2],estado.camera.center[0],estado.camera.center[1],estado.camera.center[2],0,0,1);
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-K_ESFERA-DISTANCIA_SOLO);
 	}
 }
 
@@ -581,9 +700,8 @@ void display(void)
 	glLoadIdentity();
 	setCamera();
 
-	material(slate);
-	desenhaSolo();
-
+	//material(slate);
+	//desenhaSolo();
 	
 	desenhaEixos();
 	
@@ -601,10 +719,69 @@ void display(void)
 
 }
 
+
+
 void Timer(int value)
 {
+	glutTimerFunc(estado.timer, Timer, 0);
 	
+	
+
+	GLfloat	x1 = modelo.objecto.pos.x;
+	GLfloat y1 = modelo.objecto.pos.y;
+	GLfloat z1 = modelo.objecto.pos.z;
+
+	GLfloat	x2 = modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
+	GLfloat y2 = modelo.objecto.pos.y+estado.camera.velv*sin(modelo.objecto.dir);
+	GLfloat z2 = modelo.objecto.pos.z+estado.camera.velv; 
+
+	GLfloat d = sqrt(pow((x2-x1),2)+pow((y2-y1),2)+pow((z2-z1),2)); //distancia ao ponto de colisao
+
+	GLfloat k = (d - DIMENSAO_CAMARA/2.0)/estado.camera.velTotal;
+	GLfloat raio = K_ESFERA/2.0;
+	if(estado.teclas.q)
+	{
+		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
+		estado.teclas.q=GL_FALSE;
+	}
+	if(estado.teclas.a)
+	{
+		modelo.objecto.pos.z=modelo.objecto.pos.z-VELv;
+		estado.teclas.a=GL_FALSE;
+	}
+	if(estado.teclas.left)
+	{
+		modelo.objecto.dir+=0.1;
+	}
+	
+	if(estado.teclas.right)
+	{
+		modelo.objecto.dir-=0.1;
+	}
+
+	if(estado.teclas.up)
+	{
+		modelo.objecto.pos.x=modelo.objecto.pos.x+estado.camera.velh*cos(modelo.objecto.dir);
+		modelo.objecto.pos.y+=estado.camera.velv*sin(modelo.objecto.dir);
+		//modelo.objecto.pos.z = modelo.objecto.pos.z + estado.camera.velv;
+	}
+	
+	if(estado.teclas.down)
+	{
+		modelo.objecto.pos.x=modelo.objecto.pos.x-VELv*cos(modelo.objecto.dir);
+		modelo.objecto.pos.y-=VELv*sin(modelo.objecto.dir);
+	}
+
+	
+
+	
+	if(estado.debug)
+		printf("Velocidade %.2f \n",modelo.objecto.vel);
+	
+	glutPostRedisplay();
 }
+
+
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -668,11 +845,45 @@ void keyboard(unsigned char key, int x, int y)
 				initEstado();
 				initModelo();
 				glutPostRedisplay();
-			break;    
+			break;
+		case 'a':
+		case 'A':
+				estado.teclas.a=GL_TRUE;
+				//estado.camera.center[2]-=0.2;
+			break;
+		case 'q':
+		case 'Q':
+				estado.teclas.q=GL_TRUE;
+				//estado.camera.center[2]+=0.2;
+			break;
 	}
+	if(estado.debug)
+		printf("Carregou na tecla %c\n",key);
+	
 }
 
-void Special(int key, int x, int y){
+// Callback para interaccao via teclado (largar a tecla)
+void KeyUp(unsigned char key, int x, int y)
+{
+	switch (key) {
+			// ... accoes sobre largar teclas ...
+			
+		case 'Q' :
+		case 'q' : estado.teclas.q=GL_FALSE;
+			break;
+		case 'A' :
+		case 'a' : estado.teclas.a=GL_FALSE;
+			break;
+			
+	}
+	
+	if(estado.debug)
+		printf("Largou a tecla %c\n",key);
+}
+
+// Callback para interaccao via teclas especiais  (carregar na tecla)
+
+void SpecialKey(int key, int x, int y){
 
 	switch(key){
 		case GLUT_KEY_F1 :
@@ -700,34 +911,139 @@ void Special(int key, int x, int y){
 				addArco(criaArco(4,5,1,1));  // 4 - 5
 				addArco(criaArco(4,6,1,1));  // 4 - 6
 				glutPostRedisplay();
-			break;	
-		case GLUT_KEY_UP:
-				estado.camera.dist-=1;
-				glutPostRedisplay();
 			break;
-		case GLUT_KEY_DOWN:
-<<<<<<< HEAD
-			estado.camera.dist+=1;
-			glutPostRedisplay();
+
+		case GLUT_KEY_RIGHT :
+			estado.teclas.right=GL_TRUE;
 			break;
-		case GLUT_KEY_LEFT:
-			estado.camera.dir_long-=0.1;
-			
-			glutPostRedisplay();
+		case GLUT_KEY_LEFT :
+			estado.teclas.left=GL_TRUE;
 			break;
-			
-		case GLUT_KEY_RIGHT:
-			estado.camera.dir_long+=0.1;
-			glutPostRedisplay();
+		case GLUT_KEY_UP :
+			estado.teclas.up=GL_TRUE;
+			break;
+		case GLUT_KEY_DOWN :
+			estado.teclas.down=GL_TRUE;
 			break;
 	}
-=======
-				estado.camera.dist+=1;
-				glutPostRedisplay();
-			break;	}
->>>>>>> 97e147521570ff21f67c0d4a005a1e556387a18b
+
+	
+	if(estado.debug)
+		printf("Carregou na tecla especial %d\n",key);
+
 }
 
+void SpecialKeyUp(int key, int x, int y)
+{
+	switch (key) {
+		case GLUT_KEY_RIGHT :
+			estado.teclas.right=GL_FALSE;
+			break;
+		case GLUT_KEY_LEFT :
+			estado.teclas.left=GL_FALSE;
+			break;
+		case GLUT_KEY_UP :
+			estado.teclas.up=GL_FALSE;
+			break;
+		case GLUT_KEY_DOWN :
+			estado.teclas.down=GL_FALSE;
+			break;
+	}
+	if(estado.debug)
+		printf("Largou a tecla especial %d\n",key);
+
+}
+	//biilboard(?) + botao + campos de texto
+bool login()
+{
+	char user1[10], pass[10];
+	printf("Username: ");
+	cin >> user1;
+	printf("Password: ");
+	cin >> pass;
+
+	//em vez do if ---> webservice para verificar o utilizador, no qual o result sera true ou false
+	if(strcmp(user1,"user1") == 0){
+		if(strcmp(pass,"qwerty")==0){
+			return true;
+		}
+	}else{
+		return false;
+	}
+	return false;
+}
+/*void desenhaMenuLogin()
+{
+    
+	float width  = glutGet(GLUT_WINDOW_WIDTH);
+	float height = glutGet(GLUT_INIT_WINDOW_HEIGHT);
+	
+	
+    
+	glViewport(0,0,width,height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	gluOrtho2D(0,100,0,100);
+    
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+    
+	glColor3f(1.0, 1.0, 1.0);
+    
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+    
+    
+	glBindTexture(GL_TEXTURE_2D, txtLogin.TextureID);
+	
+	
+	glPushMatrix();
+	glTranslatef(0,-10,0);
+    glBegin(GL_QUADS);
+    
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0,0,-0.5);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(100,0,-0.5);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(100,100,-0.5);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0,100,-0.5);
+    
+    glEnd();
+    
+    glPopMatrix();
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_TEXTURE_2D);
+    
+	bitmapCenterStringLogin(txtBox.user.c_str(),35,60,0);
+	
+	bitmapCenterStringLogin(c.c_str(),35,54,0);
+    
+}
+
+void setProjectionLogin(int x, int y, GLboolean picking)
+{
+    glLoadIdentity();
+	if (picking) { // se está no modo picking, lê viewport e define zona de picking
+		GLint vport[4];
+		glGetIntegerv(GL_VIEWPORT, vport);
+		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder à jana
+	}
+	
+    gluOrtho2D(0,100,0,100);
+}*/
+
+void loginWindow()
+{
+	bool checkLogin = login();
+	if(checkLogin)
+	{
+		printf("Login efectuado com Sucesso!!\n");
+		myInit();
+		imprime_ajuda();
+	}else{
+		printf("Username ou Password Errados!!");
+	}
+
+}
 
 void setProjection(int x, int y, GLboolean picking){
     glLoadIdentity();
@@ -740,6 +1056,17 @@ void setProjection(int x, int y, GLboolean picking){
 	gluPerspective(estado.camera.fov,(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
 
 }
+
+/*void setProjection(int x, int y, GLboolean picking){
+	glLoadIdentity();
+	if(picking)
+	{
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			0.0,DIMENSAO_CAMARA/2.0+VELv);//VELv È temporario
+	}
+}*/
+
 
 void myReshape(int w, int h){	
 	glViewport(0, 0, w, h);
@@ -868,6 +1195,7 @@ int picking(int x, int y){
 
 	return objid;
 }
+
 void mouse(int btn, int state, int x, int y){
 	switch(btn) {
 		case GLUT_RIGHT_BUTTON :
@@ -890,7 +1218,7 @@ void mouse(int btn, int state, int x, int y){
 						estado.eixoTranslaccao=picking(x,y);
 						if(estado.eixoTranslaccao)
 							glutMotionFunc(motionDrag);
-						cout << "Right down - objecto:" << estado.eixoTranslaccao << endl;
+					cout << "Right down - objecto:" << estado.eixoTranslaccao << endl;
 					}
 					else{
 						if(estado.eixoTranslaccao!=0) {
@@ -913,21 +1241,41 @@ int main(int argc, char **argv)
 
 /* need both double buffering and z buffer */
 
+
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
+   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
+  
+
     glutInitWindowSize(640, 480);
-    glutCreateWindow("OpenGL");
+    glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
 	
+	
+	
 	glutTimerFunc(estado.timer, Timer, 0);
+
 	glutKeyboardFunc(keyboard);
-	glutSpecialFunc(Special);
+	
+	glutSpecialFunc(SpecialKey);
+	//glutKeyboardFunc(KeyUp);
+	glutSpecialUpFunc(SpecialKeyUp);
+	
 	glutMouseFunc(mouse);
 	
+	
+	
+
+	loginWindow();
+	//myinit + imprime ajuda dentro do login
 
 	myInit();
 
 	imprime_ajuda();
+
 
     glutMainLoop();
 	
