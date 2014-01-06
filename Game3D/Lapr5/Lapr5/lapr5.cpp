@@ -112,7 +112,7 @@ typedef struct objecto_t{
  Vertice center;
  
  }Camera;*/
-
+/*
 typedef struct Estado{
 	Camera		*camera;
 	GLint         timer;
@@ -124,7 +124,7 @@ typedef struct Estado{
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
 	GLdouble	eixo[3];
-}Estado;
+}Estado;*/
 
 typedef struct Modelo {
 	objecto_t objecto;
