@@ -52,6 +52,6 @@ void Relacao::escreve(ostream &out)const
 
 ostream & operator <<(ostream &out, const Relacao &r)
 {
-	l.escreve(out);
+	r.escreve(out);
 	return(out);
 }
