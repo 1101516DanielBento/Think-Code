@@ -32,8 +32,8 @@ private:
 	GLdouble	eixoY;
 	GLdouble	eixoZ;
 	GLint       timer;
-	int locating;
 	GLboolean	debug;
+	int locating;
 	
 public:
 	
@@ -47,9 +47,11 @@ public:
 	void setLightViewer(GLint lv);
 	void setEixoTrans(GLint eixoTranslaccao);
 	void setEixo(GLdouble x,GLdouble y,GLdouble z);
+	void setEixoX(GLfloat x);
+	void setEixoY(GLfloat y);
+	void setEixoZ(GLfloat z);
 	void setTimer(GLint timer);
 	void setLocating(int loc);
-	void setDebug(GLboolean d);
 	
 	
 	Camera* getCamera() const;
@@ -63,9 +65,9 @@ public:
 	GLdouble getEixoX() const;
 	GLdouble getEixoY() const;
 	GLdouble getEixoZ() const;
-	GLint getTimer()	const;
-	int getLocating()	const;
-	GLboolean getDebug() const;
+	GLint getTimer() const;
+	GLboolean getDebug();
+	int getLocating()const;
 	
 };
 
