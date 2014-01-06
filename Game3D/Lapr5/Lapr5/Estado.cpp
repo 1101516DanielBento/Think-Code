@@ -11,7 +11,6 @@
 Estado::Estado()
 {
 	camera = new Camera();
-	eixo = new GLdouble[3];
 	eixoX = 0;
 	eixoY = 0;
 	eixoZ = 0;
@@ -73,6 +72,11 @@ void Estado::setEixo(GLdouble x,GLdouble y,GLdouble z)
 void Estado::setTimer(GLint timer)
 {
 	this->timer = timer;
+}
+
+void Estado::setDebug(GLboolean d)
+{
+	debug=d;
 }
 
 Camera* Estado::getCamera() const
@@ -143,4 +147,9 @@ void Estado :: setLocating(int loc)
 int Estado :: getLocating()const
 {
 	return locating;
+}
+
+GLboolean Estado::getDebug() const
+{
+	return d;
 }

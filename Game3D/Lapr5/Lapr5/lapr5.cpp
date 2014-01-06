@@ -6,6 +6,8 @@
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
+#include "Modelo.h"
+#include "Teclas.h"
 #include <vector>
 #include <ctime>
 #include <iostream>
@@ -90,9 +92,9 @@ typedef	GLdouble Vector[4];
 
 //Vertice center[];
 
-typedef struct {
+/*typedef struct {
 	GLboolean   q,a,up,down,left,right;
-}Teclas;
+}Teclas;*/
 
 typedef struct pos_t{
     GLfloat    x,y,z;
@@ -126,23 +128,19 @@ typedef struct objecto_t{
 	GLdouble	eixo[3];
 }Estado;*/
 
-typedef struct Modelo {
+/*typedef struct Modelo {
 	objecto_t objecto;
-#ifdef __cplusplus
-	tipo_material cor_cubo;
-#else
-	enum tipo_material cor_cubo;
-#endif
 	
 	GLfloat g_pos_luz1[4];
 	GLfloat g_pos_luz2[4];
 	
 	GLfloat escala;
 	GLUquadric *quad;
-}Modelo;
+}Modelo;*/
 
 Estado *estado = new Estado();
-Modelo modelo;
+Modelo *modelo;
+Teclas *teclas = new Teclas();
 
 void initEstado(){
 	estado->getCamera()->setDirLat(graus(M_PI/4));
@@ -169,24 +167,31 @@ void initEstado(){
 	 modelo.objecto.pos.y=80;
 	 modelo.objecto.pos.z=50;*/
 	
-	modelo.objecto.pos.x = nos[0].x;
-	modelo.objecto.pos.y = nos[0].y;
-	modelo.objecto.pos.z = nos[0].z;
+	modelo->getObjecto()->setX(nos[0].x);
+	modelo->getObjecto()->setY(nos[0].y);
+	modelo->getObjecto()->setZ(nos[0].z);
 	
 }
 
-void initModelo(){
-	modelo.escala=0.2;
+void initModelo()
+{
+	GLfloat *l1 = new GLfloat[4];
+	l1[0] = -5.0;
+	l1[1] = 5.0;
+	l1[2] = 5.0;
+	l1[3] = 0.0;
 	
-	modelo.cor_cubo = brass;
-	modelo.g_pos_luz1[0]=-5.0;
-	modelo.g_pos_luz1[1]= 5.0;
-	modelo.g_pos_luz1[2]= 5.0;
-	modelo.g_pos_luz1[3]= 0.0;
-	modelo.g_pos_luz2[0]= 5.0;
-	modelo.g_pos_luz2[1]= -15.0;
-	modelo.g_pos_luz2[2]= 5.0;
-	modelo.g_pos_luz2[3]= 0.0;
+	GLfloat *l2 = new GLfloat[4];
+	l2[0] = 5.0;
+	l2[1] = -15.0;
+	l2[2] = 5.0;
+	l2[3] = 0.0;
+	
+	modelo->setEscala(0.2);
+	modelo->setGPosLuz1(l1);
+	modelo->setGPosLuz2(l2);
+	modelo->setCameraMode(1);
+	
 }
 
 
@@ -209,19 +214,19 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	initModelo();
-	initEstado();
+	//initEstado();
 	
-	modelo.quad=gluNewQuadric();
-	gluQuadricDrawStyle(modelo.quad, GLU_FILL);
-	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
+	modelo->setQuad(gluNewQuadric());
+	gluQuadricDrawStyle(modelo->getQuad(), GLU_FILL);
+	gluQuadricNormals(modelo->getQuad(), GLU_OUTSIDE);
 	
 	
 	//le o grafo exemplo
 	leGrafo();
 	
-	modelo.objecto.pos.x = nos[0].x;
-	modelo.objecto.pos.y = nos[0].y;
-	modelo.objecto.pos.z = nos[0].z;
+	modelo->getObjecto()->setX(nos[0].x);
+	modelo->getObjecto()->setY(nos[0].y);
+	modelo->getObjecto()->setZ(nos[0].z);
 	//por varaiaveis de teste
 }
 
@@ -272,12 +277,12 @@ void putLights(GLfloat* diffuse)
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white_amb);
-	glLightfv(GL_LIGHT0, GL_POSITION, modelo.g_pos_luz1);
+	glLightfv(GL_LIGHT0, GL_POSITION, modelo->getGPosLuz1());
 	
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, white_light);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, white_amb);
-	glLightfv(GL_LIGHT1, GL_POSITION, modelo.g_pos_luz2);
+	glLightfv(GL_LIGHT1, GL_POSITION, modelo->getGPosLuz2());
 	
 	/* desenhar luz */
 	//material(red_plastic);
@@ -433,8 +438,8 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 		rz = 0;
 	}
 	glRotatef(ax, rx, ry, rz);
-	gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
-	gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal é desenhada automaticamente pela funcao
+	gluQuadricOrientation(modelo->getQuad(),GLU_OUTSIDE);
+	gluCylinder(modelo->getQuad(), raio_c, raio_c, comp, 20, 1);//normal é desenhada automaticamente pela funcao
 	glPopMatrix();
 	
 }
@@ -511,14 +516,14 @@ void desenhaLabirinto(){
 }
 
 void desenhaEixo(){
-	gluCylinder(modelo.quad,0.5,0.5,20,16,15);
+	gluCylinder(modelo->getQuad(),0.5,0.5,20,16,15);
 	glPushMatrix();
 	glTranslatef(0,0,20);
 	glPushMatrix();
 	glRotatef(180,0,1,0);
-	gluDisk(modelo.quad,0.5,2,16,6);
+	gluDisk(modelo->getQuad(),0.5,2,16,6);
 	glPopMatrix();
-	gluCylinder(modelo.quad,2,0,5,16,15);
+	gluCylinder(modelo->getQuad(),2,0,5,16,15);
 	glPopMatrix();
 }
 
@@ -590,8 +595,8 @@ void setCamera(){
 	if(estado->getLight()){
 		//Posicionar a cmera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-5);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
 		putLights((GLfloat*)white_light);
@@ -599,8 +604,8 @@ void setCamera(){
 		//Posicionar a cmera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-5);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
 	}
@@ -649,7 +654,7 @@ bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 	
 	for(int i = 1; i < compUsers; i++)
 	{
-		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
+		d = sqrt(((nx - modelo->getObjecto()->getX())*(nx - modelo->getObjecto()->getX()))+((ny - modelo->getObjecto()->getY())*(ny - modelo->getObjecto()->getY()))+((nz - modelo->getObjecto()->getZ())*(nz - modelo->getObjecto()->getZ())));
 		
 		if(d <= (raio+3))
 		{
@@ -685,16 +690,16 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 		GLdouble larg = arcos[i].largura+0.4;
 		glPushMatrix();
 		glLoadIdentity();
-		glTranslatef(modelo.objecto.pos.x,modelo.objecto.pos.y,modelo.objecto.pos.z);
-		GLdouble angOrientacao = graus(atan2(ny-modelo.objecto.pos.y,nx-modelo.objecto.pos.x));
-		GLdouble catetoOposto = nz - modelo.objecto.pos.z;
-		GLdouble tamanho = sqrt(pow((nx-modelo.objecto.pos.x),2)+pow((ny-modelo.objecto.pos.y),2));
+		glTranslatef(modelo->getObjecto()->getX(),modelo->getObjecto()->getY(),modelo->getObjecto()->getZ());
+		GLdouble angOrientacao = graus(atan2(ny-modelo->getObjecto()->getY(),nx-modelo->getObjecto()->getX()));
+		GLdouble catetoOposto = nz - modelo->getObjecto()->getZ();
+		GLdouble tamanho = sqrt(pow((nx-modelo->getObjecto()->getZ()),2)+pow((ny-modelo->getObjecto()->getZ()),2));
 		GLdouble angInclinacao = graus(atan2(catetoOposto,tamanho));
 		glRotated(angOrientacao,0,0,1);
-		GLdouble nx2 = (nx - modelo.objecto.pos.x)*cos(rad(angOrientacao)) + (nz - modelo.objecto.pos.z)*sin(rad(angOrientacao));
-		GLdouble ny2 = (nz - modelo.objecto.pos.z)*cos(rad(angOrientacao)) - (nx - modelo.objecto.pos.x)*sin(rad(angOrientacao));
-		GLdouble dist = sqrt(pow(nx -modelo.objecto.pos.x,2) + pow(ny - modelo.objecto.pos.y,2) + pow(nz - modelo.objecto.pos.z,2));
-		GLdouble nz2 = modelo.objecto.pos.z + nx2/tamanho*catetoOposto;
+		GLdouble nx2 = (nx - modelo->getObjecto()->getX())*cos(rad(angOrientacao)) + (nz - modelo->getObjecto()->getZ())*sin(rad(angOrientacao));
+		GLdouble ny2 = (nz - modelo->getObjecto()->getZ())*cos(rad(angOrientacao)) - (nx - modelo->getObjecto()->getX())*sin(rad(angOrientacao));
+		GLdouble dist = sqrt(pow(nx -modelo->getObjecto()->getX(),2) + pow(ny - modelo->getObjecto()->getY(),2) + pow(nz - modelo->getObjecto()->getZ(),2));
+		GLdouble nz2 = modelo->getObjecto()->getZ() + nx2/tamanho*catetoOposto;
 		
 		if((0 <= nx2 && nx2 <= tamanho) && (-larg/2.0 <= ny2 && ny2 <= larg/2.0) && (nz2 - (larg/2.0+0.1) <= ny && ny <= ny2 + (larg/2.0+0.1)))
 		{
@@ -713,49 +718,50 @@ void Timer(int value)
 	
 	GLfloat x1,y1,z1,x2,y2,z2;
 	
-	x2 = modelo.objecto.pos.x + VELv*cos(modelo.objecto.dir);
-	y2 = modelo.objecto.pos.y + VELv*sin(modelo.objecto.dir);
-	x1 = modelo.objecto.pos.x;
-	y1 = modelo.objecto.pos.y;
+	x2 = modelo->getObjecto()->getX() + VELv*cos(modelo->getObjecto()->getDir());
+	y2 = modelo->getObjecto()->getY() + VELv*sin(modelo->getObjecto()->getDir());
+	x1 = modelo->getObjecto()->getX();
+	y1 = modelo->getObjecto()->getY();
 	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
 	GLfloat raio = pow((K_ESFERA/2.0),2);
 	
-	if(estado->teclas.q)
+	if(teclas->getQ())
 	{
-		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
-		estado->teclas.q=GL_FALSE;
+		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ()+VELv);
+		teclas->setQ(GL_FALSE);
 	}
-	if(estado->teclas.a)
+	if(teclas->getA())
 	{
-		modelo.objecto.pos.z=modelo.objecto.pos.z-VELv;
-		estado->teclas.a=GL_FALSE;
+		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ()-VELv);
+		teclas->setA(GL_FALSE);
 	}
-	if(estado->teclas.left)
+	if(teclas->getLEFT())
 	{
-		modelo.objecto.dir+=0.1;
-	}
-	
-	if(estado->teclas.right)
-	{
-		modelo.objecto.dir-=0.1;
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
 	}
 	
-	if(estado->teclas.up)
+	if(teclas->getRIGHT())
 	{
-		if(dist <= raio){
-			modelo.objecto.pos.x=modelo.objecto.pos.x+VELv*cos(modelo.objecto.dir);
-			modelo.objecto.pos.y+=VELv*sin(modelo.objecto.dir);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+	}
+	
+	if(teclas->getUP())
+	{
+		if(dist <= raio)
+		{
+			modelo->getObjecto()->setX(modelo->getObjecto()->getX()+VELv*cos(modelo->getObjecto()->getDir()));
+			modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv*sin(modelo->getObjecto()->getDir()));
 		}
 	}
 	
-	if(estado->teclas.down)
+	if(teclas->getDOWN())
 	{
-		modelo.objecto.pos.x=modelo.objecto.pos.x-VELv*cos(modelo.objecto.dir);
-		modelo.objecto.pos.y-=VELv*sin(modelo.objecto.dir);
+		modelo->getObjecto()->setX(modelo->getObjecto()->getX()-VELv*cos(modelo->getObjecto()->getDir()));
+		modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv*sin(modelo->getObjecto()->getDir()));
 	}
 	
-	if(estado->debug)
-		printf("Velocidade %.2f \n",modelo.objecto.vel);
+	if(estado->getDebug())
+		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
 	
 	glutPostRedisplay();
 }
@@ -776,16 +782,16 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'l':
 		case 'L':
-			if(estado->lightViewer)
-				estado->lightViewer=0;
+			if(estado->getLightViewer())
+				estado->setLightViewer(0);
 			else
-				estado->lightViewer=1;
-			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
+				estado->setLightViewer(1);
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
 			glutPostRedisplay();
 			break;
 		case 'k':
 		case 'K':
-			estado->light=!estado->light;
+			estado->setLight(!estado->getLight());
 			glutPostRedisplay();
 			break;
 		case 'w':
@@ -816,7 +822,7 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'n':
 		case 'N':
-			estado->apresentaNormais=!estado->apresentaNormais;
+			estado->setApresentaNormais(!estado->getApresentaNormais());
 			glutPostRedisplay();
 			break;
 		case 'i':
@@ -827,18 +833,18 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'a':
 		case 'A':
-			estado->teclas.a=GL_TRUE;
+			teclas->setA(GL_TRUE);
 			//estado.camera.center[2]-=0.2;
 			printf("carregou no a\n");
 			break;
 		case 'q':
 		case 'Q':
-			estado->teclas.q=GL_TRUE;
+			teclas->setQ(GL_TRUE);
 			//estado.camera.center[2]+=0.2;
 			
 			break;
 	}
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Carregou na tecla %c\n",key);
 	
 }
@@ -850,15 +856,15 @@ void KeyUp(unsigned char key, int x, int y)
 			// ... accoes sobre largar teclas ...
 			
 		case 'Q' :
-		case 'q' : estado->teclas.q=GL_FALSE;
+		case 'q' : teclas->setQ(GL_FALSE);
 			break;
 		case 'A' :
-		case 'a' : estado->teclas.a=GL_FALSE;
+		case 'a' : teclas->setA(GL_FALSE);
 			break;
 			
 	}
 	
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Largou a tecla %c\n",key);
 }
 
@@ -895,21 +901,21 @@ void SpecialKey(int key, int x, int y){
 			break;
 			
 		case GLUT_KEY_RIGHT :
-			estado->teclas.right=GL_TRUE;
+			teclas->setRIGHT(GL_TRUE);
 			break;
 		case GLUT_KEY_LEFT :
-			estado->teclas.left=GL_TRUE;
+			teclas->setLEFT(GL_TRUE);
 			break;
 		case GLUT_KEY_UP :
-			estado->teclas.up=GL_TRUE;
+			teclas->setUP(GL_TRUE);
 			break;
 		case GLUT_KEY_DOWN :
-			estado->teclas.down=GL_TRUE;
+			teclas->setDOWN(GL_TRUE);
 			break;
 	}
 	
 	
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Carregou na tecla especial %d\n",key);
 	
 	
@@ -919,19 +925,19 @@ void SpecialKeyUp(int key, int x, int y)
 {
 	switch (key) {
 		case GLUT_KEY_RIGHT :
-			estado->teclas.right=GL_FALSE;
+			teclas->setRIGHT(GL_FALSE);
 			break;
 		case GLUT_KEY_LEFT :
-			estado->teclas.left=GL_FALSE;
+			teclas->setLEFT(GL_FALSE);
 			break;
 		case GLUT_KEY_UP :
-			estado->teclas.up=GL_FALSE;
+			teclas->setUP(GL_FALSE);
 			break;
 		case GLUT_KEY_DOWN :
-			estado->teclas.down=GL_FALSE;
+			teclas->setDOWN(GL_FALSE);
 			break;
 	}
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Largou a tecla especial %d\n",key);
 	
 }

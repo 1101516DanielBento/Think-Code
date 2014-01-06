@@ -10,17 +10,17 @@
 
 Modelo::Modelo(int numUsers)
 {
-	/*g_pos_luz1 = new GLfloat[4];
+	g_pos_luz1 = new GLfloat[4];
 	g_pos_luz2 = new GLfloat[4];
 	quad = gluNewQuadric();
 	
-	mdls = new StudioModel*[numUsers];
+	/*mdls = new StudioModel*[numUsers];
 	for(int i=0;i<numUsers;i++)
-		mdls[i] = new StudioModel();
+		mdls[i] = new StudioModel();*/
 	
 	mod = new Objecto();
 	
-	texID = new GLuint[NUM_TEXTURAS];*/
+	texID = new GLuint[NUM_TEXTURAS];
 }
 
 Modelo::~Modelo()
@@ -66,7 +66,6 @@ void Modelo::setObjecto(Objecto* obj)
 {
 	mod = obj;
 }
-
 
 GLuint* Modelo::getTexID() const
 {
