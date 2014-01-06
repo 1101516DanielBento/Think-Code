@@ -508,8 +508,8 @@ void mouse_Galo(GLint button, GLint state, GLint x,GLint y)
 }
 
 //main
-/*
-int main (int argc, char** argv)
+
+/*int main (int argc, char** argv)
 {
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

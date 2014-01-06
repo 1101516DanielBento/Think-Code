@@ -16,7 +16,10 @@ namespace DataModel.BLL
         public TagBLL() { }
 
 
-
+        /// <summary>
+        /// Get all tags from DB
+        /// </summary>
+        /// <returns>List of Tags</returns>
         public IList<Tag> getAllTags()
         {
             IList<Tag> tagList = new List<Tag>();
@@ -32,6 +35,10 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Get all tags from DB of USERS ONLY
+        /// </summary>
+        /// <returns>List of Tags</returns>
         public IList<Tag> getAllUserTags()
         {
             IList<Tag> tagList = new List<Tag>();
@@ -48,6 +55,10 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Get all tags from DB of RELATIONSHIP ONLY
+        /// </summary>
+        /// <returns>List of Tags</returns>
         public IList<Tag> getAllRelTags()
         {
             IList<Tag> tagList = new List<Tag>();
@@ -64,6 +75,10 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Get list of tuples<tagname,nrUsed,idTag> of Relationship tags only, ALL TAGS 
+        /// </summary>
+        /// <returns>list of tuples</returns>
         public IList<Tuple<string, int, int>> getRelTagTupple()
         {
             IList<Tag> tags = getAllRelTags();
@@ -82,6 +97,10 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Get list of tuples<tagname,nrUsed,idTag> of User tags only, ALL TAGS 
+        /// </summary>
+        /// <returns>list of tuples</returns>
         public IList<Tuple<string, int, int>> getUserTagTupple()
         {
             IList<Tag> tags = getAllUserTags();
@@ -99,8 +118,12 @@ namespace DataModel.BLL
             return tuple;
 
         }
-
-
+        
+        /// <summary>
+        ///  Get list of tuples<tagname,nrUsed,idTag> of Relationship tags only, ONLY PRIVATE NETWORK OF USER
+        /// </summary>
+        /// <param name="idUser">id user</param>
+        /// <returns>list of tuples</returns>
         public IList<Tuple<string, int, int>> getNetworkRelTagTupple(int idUser)
         {
             IList<Tag> tags = getAllRelTags();
@@ -119,6 +142,11 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Get list of tuples<tagname,nrUsed,idTag> of USER tags only, ONLY PRIVATE NETWORK OF USER
+        /// </summary>
+        /// <param name="idUser">id user</param>
+        /// <returns>list of tuples</returns>
         public IList<Tuple<string, int, int>> getNetworkUserTagTupple(int idUser)
         {
             IList<Tag> tags = getAllUserTags();
@@ -137,6 +165,12 @@ namespace DataModel.BLL
 
         }
 
+        /// <summary>
+        /// Add tag to user
+        /// </summary>
+        /// <param name="t">Tag</param>
+        /// <param name="idUser">id user</param>
+        /// <returns>result</returns>
         public bool addTagToUser(Tag t, int idUser)
         {
             int v = tagGateway.addTagToUser(t, idUser);
@@ -150,6 +184,13 @@ namespace DataModel.BLL
             return false;
         }
 
+        /// <summary>
+        /// Add tag to friendship
+        /// </summary>
+        /// <param name="t">Tag</param>
+        /// <param name="idUserA">User A</param>
+        /// <param name="idUserB">User B</param>
+        /// <returns>result</returns>
         public bool addTagToFriendship(Tag t, int idUserA, int idUserB)
         {
             int v = tagGateway.addTagToUserFriendship(t, idUserA,idUserB);
@@ -163,15 +204,16 @@ namespace DataModel.BLL
             return false;
         }
 
+        /// <summary>
+        /// Delete tags from user
+        /// </summary>
+        /// <param name="idUser">id user</param>
+        /// <param name="tagName">tag name</param>
+        /// <returns>result</returns>
         public bool delTagsUser(int idUser, string tagName)
         {
             return tagGateway.delTagUser(idUser, tagName) ;
         }
-
-        
-
-        
-
 
     }
 }

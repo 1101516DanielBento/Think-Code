@@ -1,0 +1,7 @@
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\bin\GameWS.dll
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\bin\GameWS.pdb
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\bin\DataModel.dll
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\bin\DataModel.pdb
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\obj\Release\GameWS.csprojResolveAssemblyReference.cache
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\obj\Release\GameWS.dll
+C:\Users\Daniel\Documents\Think-Code\WebSite\GameWS\obj\Release\GameWS.pdb
