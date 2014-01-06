@@ -56,25 +56,25 @@ user_tags(neves, livros).
 
 %Relações (GRAFO)
 
-relacao(tiago,fred).
-relacao(tiago,pedro).
-relacao(tiago,daniel).
-relacao(tiago,luis).
-relacao(tiago,daniela).
-relacao(fred,jose).
-relacao(fred,neves).
-relacao(luis,daniela).
-relacao(daniela,francisco).
-relacao(pedro,rocha).
-relacao(rocha,antonio).
+relacao(tiago,fred,100).
+relacao(tiago,pedro,60).
+relacao(tiago,daniel,70).
+relacao(tiago,luis,80).
+relacao(tiago,daniel,80).
+relacao(fred,jose,100).
+relacao(fred,neves,80).
+relacao(luis,daniela,70).
+relacao(daniela,francisco,70).
+relacao(pedro,rocha,100).
+relacao(rocha,antonio,90).
 %------------------pesquisas para amigos------------------
 %amigos diretos de um utilizador
 amigos_diretos(Utilizador, L):-
-	findall(Y,(relacao(Utilizador,Y);relacao(Y,Utilizador)),L).
+	findall(Y,(relacao(Utilizador,Y,_);relacao(Y,Utilizador,_)),L).
 
 
 amigo_Do_Amigo(Utilizador,Y,L,UtilizadorCentral):-
-	(relacao(Utilizador,Y);relacao(Y,Utilizador)), \+member(Y,L), Y \== UtilizadorCentral.
+	(relacao(Utilizador,Y,_);relacao(Y,Utilizador,_)), \+member(Y,L), Y \== UtilizadorCentral.
 
 %------------------pesquisas para tags--------------------
 
@@ -188,9 +188,9 @@ compara_tags(H,LTagsU,Valor):-
 %---------------------Caminho mais curto-----------------------
 
 caminho_mais_curto(UtilizadorOrigem,UtilizadorDestino,LR):-
-	user(UtilizadorOrigem),!,
-	user(UtilizadorDestino),!,
-	findall(Y,relacao(UtilizadorOrigem,Y),L),
+	user(UtilizadorOrigem),
+	user(UtilizadorDestino),
+	findall(Y,relacao(UtilizadorOrigem,Y,_),L),
 	cria_caminho([UtilizadorOrigem],L,LC),
 	determina_caminho_curto(UtilizadorDestino,LC,LR).
 
@@ -198,7 +198,7 @@ determina_caminho_curto(UtilizadorDestino,[[UtilizadorDestino|L]|_],R):-
 	reverse([UtilizadorDestino|L],R).
 
 determina_caminho_curto(UtilizadorDestino,[[Destino|Destinos]|LR],L):-
-	findall(X,relacao(Destino,X),LL),
+	findall(X,relacao(Destino,X,_),LL),
 	cria_caminho([Destino|Destinos],LL,Lcaminho),
 	append(LR,Lcaminho,Lappend),
 	determina_caminho_curto(UtilizadorDestino,Lappend,L).
@@ -209,3 +209,41 @@ cria_caminho(Utilizadores,[Destino|Destinos],LR):-
 	cria_caminho(Utilizadores,Destinos,LR).
 cria_caminho(Utilizadores,[Destino|Destinos],[[Destino|Utilizadores]|LR]):-
 	cria_caminho(Utilizadores,Destinos,LR).
+
+
+%------------------caminho mais forte----------------------------
+
+determinar_caminho_mais_forte(O,D,V):-findall(R,determinar_caminho_mais_forte2(O,D,R),L),maior(L,V).
+
+determinar_caminho_mais_forte2(O,D,R):-findall((B,S),relacao(O,B,S),Y),cria([O],Y,U),
+	determinar_caminho_mais_forte22(D,U,R).
+
+determinar_caminho_mais_forte22(D,[[(D,S)|L]|_],[S1,(D,S)|L]):-soma([(D,S)|L],S2),
+	length([(D,S)|L],S3),
+	divide(S2,S3,S1).
+determinar_caminho_mais_forte22(D,[[(X,P)|Xs]|R],G):-findall((B,S),
+	relacao(X,B,S),H),
+	cria([(X,P)|Xs],H,U),
+	append(R,U,V),
+	%write(V),nl
+	!,
+	determinar_caminho_mais_forte22(D,V,G).
+
+cria(_,[],[]).
+cria(O,[(Y,_)|Ys],R):-member(Y,O),cria(O,Ys,R).
+cria(O,[(Y,S)|Ys],[[(Y,S)|O]|R]):-cria(O,Ys,R).
+
+soma(L,0):-length(L,1).
+soma([(_,S)|L],S1):-soma(L,P),S1 is P +S.
+
+divide(A,B,C):-C is A/B.
+
+maior(L,L):-length(L,1).
+maior([[X|Xs],[Y|_]|R],P):-X>Y,
+	%write(X),write(' ,1,  '),
+	%write(Y),nl,
+	maior([[X|Xs]|R],P).
+maior([[X|_],[Y|Ys]|R],P):-Y>=X,
+	%write(X),write(' ,2, '),
+	%write(Y),nl,
+	maior([[Y|Ys]|R],P).
