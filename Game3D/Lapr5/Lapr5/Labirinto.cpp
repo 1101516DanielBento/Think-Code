@@ -4,12 +4,13 @@
 //
 //  Created by pedrosimoes on 22/12/13.
 //  Copyright (c) 2013 pedrosimoes. All rights reserved.
-
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <vector>
+#include <iostream>
 
 
 #ifdef __APPLE__
@@ -62,7 +63,7 @@ void drawMaze(vector<vector<Cell>>  maze)
     }
 }
 
-void PrintMaze(){
+void PrintMaze(vector<vector<Cell>>  maze){
     for(int i = 0; i < 2*10; ++i){
         cout << "_";
     }
@@ -79,7 +80,7 @@ void PrintMaze(){
         cout << endl;
     }
 }
-
+*/
 /*int main()
 {
 	return 0;
