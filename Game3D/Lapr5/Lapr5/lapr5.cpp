@@ -88,7 +88,7 @@ inline tipo_material operator++(tipo_material &rs, int ) {
 typedef	GLdouble Vertice[3];
 typedef	GLdouble Vector[4];
 
-Vertice center[];
+//Vertice center[];
 
 typedef struct {
 	GLboolean   q,a,up,down,left,right;
@@ -112,8 +112,8 @@ typedef struct objecto_t{
  Vertice center;
  
  }Camera;*/
-/*
-typedef struct Estado{
+
+/*typedef struct Estado{
 	Camera		*camera;
 	GLint         timer;
 	Teclas		teclas;
@@ -146,25 +146,23 @@ Modelo modelo;
 
 void initEstado(){
 	estado->getCamera()->setDirLat(graus(M_PI/4));
-	estado->camera->setDirLong(graus(-M_PI/4));
-	estado->camera->setFov(60);
-	estado->camera->setDistance(100);
+	estado->getCamera()->setDirLong(graus(-M_PI/4));
+	estado->getCamera()->setFov(60);
+	estado->getCamera()->setDistance(100);
 	//estado.camera.velh = 1.0;
-	estado->camera->setVelv(1.0);
+	estado->getCamera()->setVelv(1.0);
 	//estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
-	estado->eixo[0]=0;
-	estado->eixo[1]=0;
-	estado->eixo[2]=0;
+	estado->setEixo(0, 0, 0);
 	/*center[0]=0;
 	 center[1]=0;
 	 center[2]=0;*/
-	estado->camera->setCenterX(0);
-	estado->camera->setCenterY(0);
-	estado->camera->setCenterZ(0);
-	estado->light=GL_FALSE;
-	estado->apresentaNormais=GL_FALSE;
-	estado->lightViewer=1;
-	estado->timer=20;
+	estado->getCamera()->setCenterX(0);
+	estado->getCamera()->setCenterY(0);
+	estado->getCamera()->setCenterZ(0);
+	estado->setLight(GL_FALSE);
+	estado->setApresentaNormais(GL_FALSE);
+	estado->setLightViewer(1);
+	estado->setTimer(20);
 	
 	//coordenadas do objecto
 	/*modelo.objecto.pos.x=90;
@@ -207,7 +205,7 @@ void myInit()
 	glDepthFunc(GL_LESS);
 	
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	initModelo();
@@ -530,22 +528,22 @@ void desenhaEixo(){
 
 void desenhaPlanoDrag(int eixo){
 	glPushMatrix();
-	glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
+	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
 	switch (eixo) {
 		case EIXO_Y :
-			if(abs(estado->camera->getDirLat())<M_PI/4)
+			if(abs(estado->getCamera()->getDirLat())<M_PI/4)
 				glRotatef(-90,0,0,1);
 			else
 				glRotatef(90,1,0,0);
 			material(red_plastic);
 			break;
 		case EIXO_X :
-			if(abs(estado->camera->getDirLat())>M_PI/6)
+			if(abs(estado->getCamera()->getDirLat())>M_PI/6)
 				glRotatef(90,1,0,0);
 			material(azul);
 			break;
 		case EIXO_Z :
-			if(abs(cos(estado->camera->getDirLong()))>0.5)
+			if(abs(cos(estado->getCamera()->getDirLong()))>0.5)
 				glRotatef(90,0,0,1);
 			
 			material(emerald);
@@ -564,7 +562,7 @@ void desenhaPlanoDrag(int eixo){
 void desenhaEixos(){
 	
 	glPushMatrix();
-	glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
+	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
 	material(emerald);
 	glPushName(EIXO_Z);
 	desenhaEixo();
@@ -589,7 +587,7 @@ void desenhaEixos(){
 void setCamera(){
 	
 	
-	if(estado->light){
+	if(estado->getLight()){
 		//Posicionar a cmera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
@@ -629,10 +627,10 @@ void display(void)
 	
 	//setCamera();
 	
-	if(estado->eixoTranslaccao) {
+	if(estado->getEixoTrans()) {
 		// desenha plano de translacção
-		cout << "Translate... " << estado->eixoTranslaccao << endl;
-		desenhaPlanoDrag(estado->eixoTranslaccao);
+		cout << "Translate... " << estado->getEixoTrans() << endl;
+		desenhaPlanoDrag(estado->getEixoTrans());
 		
 	}
 	
@@ -711,7 +709,7 @@ void Timer(int value)
 {
 	
 	
-	glutTimerFunc(estado->timer, Timer, 0);
+	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
 	GLfloat x1,y1,z1,x2,y2,z2;
 	
