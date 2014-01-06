@@ -147,19 +147,22 @@ void initEstado(){
 	estado.eixo[0]=0;
 	estado.eixo[1]=0;
 	estado.eixo[2]=0;
-	estado.camera.center[0]=0;
-	estado.camera.center[1]=0;
-	estado.camera.center[2]=0;
+	estado.camera.center[0]= 0;
+	estado.camera.center[1]= 0;
+	estado.camera.center[2]= 0;
 	estado.light=GL_FALSE;
 	estado.apresentaNormais=GL_FALSE;
 	estado.lightViewer=1;
 	estado.timer=20;
 	//coordenadas do objecto
-	modelo.objecto.pos.x=90;
+	/*modelo.objecto.pos.x=90;
 	modelo.objecto.pos.y=80;
-	modelo.objecto.pos.z=50;
-	
-	
+	modelo.objecto.pos.z=50;*/
+
+	/*modelo.objecto.pos.x = nos[0].x;
+	modelo.objecto.pos.y = nos[0].y;
+	modelo.objecto.pos.z = nos[0].z;*/
+
 }
 
 void initModelo(){
@@ -197,13 +200,19 @@ void myInit()
 
 	initModelo();
 	initEstado();
+
 	modelo.quad=gluNewQuadric();
 	gluQuadricDrawStyle(modelo.quad, GLU_FILL);
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
 	
 	
-	
+	//le o grafo exemplo
 	leGrafo();
+
+	modelo.objecto.pos.x = nos[0].x;
+	modelo.objecto.pos.y = nos[0].y;
+	modelo.objecto.pos.z = nos[0].z;
+	//por varaiaveis de teste
 }
 
 void imprime_ajuda(void)
@@ -471,7 +480,7 @@ void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
 		glTranslatef(0,0,0.05);
-		glScalef(5,5,5);
+		//glScalef(5,5,5);
 	
 		for(int i=0; i<numNos; i++){
 			glPushMatrix();
@@ -572,14 +581,18 @@ void setCamera(){
 		//Posicionar a c‰mera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-5);
+		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
+		
 		putLights((GLfloat*)white_light);
 	}else{
 		//Posicionar a c‰mera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
-		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z);
+		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-5);
+		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
+		
 	}
 }
 
@@ -588,15 +601,21 @@ void display(void)
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	glLoadIdentity();
+	
+	/*modelo.objecto.pos.x = nos[0].x;
+	modelo.objecto.pos.y = nos[0].y;
+	modelo.objecto.pos.z = nos[0].z;*/
 	setCamera();
-
 	//material(slate);
 	//desenhaSolo();
 	
 	desenhaEixos();
 	
 	desenhaLabirinto();
+
+	//setCamera();
  
 	if(estado.eixoTranslaccao) {
 		// desenha plano de translacção
@@ -609,11 +628,88 @@ void display(void)
 	glutSwapBuffers();
 
 }
+//detecta colisao esfera
+bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	int compUsers = numNos;
+	int compLigacoes = numArcos;
+
+	GLfloat raio = K_ESFERA/2.0;
+	GLfloat d;
+
+	for(int i = 1; i < compUsers; i++)
+	{
+		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
+		
+		if(d <= (raio+3))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+//detecta colisao ligacao
+
+bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	bool flag = true;
+	int noi, nof;
+	int compLigacoes = numArcos;
+	int compUsers = numNos;
+	glLoadIdentity();
+	for(int i = 1; i <= compLigacoes; i++)
+	{
+		//exemplo adaptar para Arcos e Nos
+		//encontra o arco
+		//encontra o no
+		noi = arcos[i].noi;
+		nof = arcos[i].nof;
+
+		//encontra noi e nof para fazer a ponte entre os dois
+		//lista de utilizadores
+		//convem fazer uma classe Utilizador
+		
+
+		//nao tenho a certeza
+		GLdouble larg = arcos[i].largura+0.4;
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(modelo.objecto.pos.x,modelo.objecto.pos.y,modelo.objecto.pos.z);
+		GLdouble angOrientacao = graus(atan2(ny-modelo.objecto.pos.y,nx-modelo.objecto.pos.x));
+		GLdouble catetoOposto = nz - modelo.objecto.pos.z;
+		GLdouble tamanho = sqrt(pow((nx-modelo.objecto.pos.x),2)+pow((ny-modelo.objecto.pos.y),2));
+		GLdouble angInclinacao = graus(atan2(catetoOposto,tamanho));
+		glRotated(angOrientacao,0,0,1);
+		GLdouble nx2 = (nx - modelo.objecto.pos.x)*cos(rad(angOrientacao)) + (nz - modelo.objecto.pos.z)*sin(rad(angOrientacao));
+		GLdouble ny2 = (nz - modelo.objecto.pos.z)*cos(rad(angOrientacao)) - (nx - modelo.objecto.pos.x)*sin(rad(angOrientacao));
+		GLdouble dist = sqrt(pow(nx -modelo.objecto.pos.x,2) + pow(ny - modelo.objecto.pos.y,2) + pow(nz - modelo.objecto.pos.z,2));
+		GLdouble nz2 = modelo.objecto.pos.z + nx2/tamanho*catetoOposto;
+
+		if((0 <= nx2 && nx2 <= tamanho) && (-larg/2.0 <= ny2 && ny2 <= larg/2.0) && (nz2 - (larg/2.0+0.1) <= ny && ny <= ny2 + (larg/2.0+0.1)))
+		{
+			flag = false;
+		}
+		glPopMatrix();
+	}
+	return flag;
+}
 
 void Timer(int value)
 {
+	
+
 	glutTimerFunc(estado.timer, Timer, 0);
 	
+	GLfloat x1,y1,z1,x2,y2,z2;
+	
+	x2 = modelo.objecto.pos.x + VELv*cos(modelo.objecto.dir);
+	y2 = modelo.objecto.pos.y + VELv*sin(modelo.objecto.dir);
+	x1 = modelo.objecto.pos.x;
+	y1 = modelo.objecto.pos.y;
+	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
+	GLfloat raio = pow((K_ESFERA/2.0),2);
+
 	if(estado.teclas.q)
 	{
 		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
@@ -636,8 +732,10 @@ void Timer(int value)
 
 	if(estado.teclas.up)
 	{
-		modelo.objecto.pos.x=modelo.objecto.pos.x+VELv*cos(modelo.objecto.dir);
-		modelo.objecto.pos.y+=VELv*sin(modelo.objecto.dir);
+		if(dist <= raio){
+			modelo.objecto.pos.x=modelo.objecto.pos.x+VELv*cos(modelo.objecto.dir);
+			modelo.objecto.pos.y+=VELv*sin(modelo.objecto.dir);
+		}
 	}
 	
 	if(estado.teclas.down)
@@ -1051,7 +1149,6 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
 	
 	
-	
 	glutTimerFunc(estado.timer, Timer, 0);
 
 	glutKeyboardFunc(keyboard);
@@ -1064,12 +1161,12 @@ int main(int argc, char **argv)
 	
 	
 
-	loginWindow();
+	//loginWindow();
 	//myinit + imprime ajuda dentro do login
 
-	/*myInit();
+	myInit();
 
-	imprime_ajuda();*/
+	imprime_ajuda();
 
     glutMainLoop();
 	
