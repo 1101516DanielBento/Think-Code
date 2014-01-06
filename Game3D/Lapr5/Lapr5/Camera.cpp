@@ -28,6 +28,7 @@ Camera::Camera()
 	setCenterX(0);
 	setCenterY(0);
 	setCenterZ(0);
+	setVelv(2.0);
 }
 
 void Camera::setFov(GLfloat fov)

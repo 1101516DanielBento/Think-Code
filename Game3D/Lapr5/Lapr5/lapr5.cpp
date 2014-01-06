@@ -3,16 +3,16 @@
 #include <stdlib.h>
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include <ctime>
+#include <iostream>
+#include <string>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-#include <vector>
-#include <ctime>
-#include <iostream>
-#include <string>
 using namespace std;
 
 #ifdef __APPLE__
@@ -140,7 +140,7 @@ typedef struct objecto_t{
 }Modelo;*/
 
 Estado *estado = new Estado();
-Modelo *modelo;
+Modelo *modelo = new Modelo(2);
 Teclas *teclas = new Teclas();
 
 void initEstado(){
@@ -149,7 +149,7 @@ void initEstado(){
 	estado->getCamera()->setFov(60);
 	estado->getCamera()->setDistance(100);
 	//estado.camera.velh = 1.0;
-	estado->getCamera()->setVelv(1.0);
+	estado->getCamera()->setVelv(5.0);
 	//estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
 	estado->setEixo(0, 0, 0);
 	/*center[0]=0;
@@ -188,10 +188,10 @@ void initModelo()
 	l2[2] = 5.0;
 	l2[3] = 0.0;
 	
-	
+	//modelo->getObjecto()->setVel(2.0);
+	modelo->setEscala(0.2);
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
-	modelo->setEscala(0.2);
 	modelo->setCameraMode(1);
 	
 }
@@ -201,8 +201,10 @@ void myInit()
 {
 	
 	GLfloat LuzAmbiente[]={0.5,0.5,0.5, 0.0};
+	estado->setOrtho(GL_FALSE);
+	estado->setTimer(100);
 	
-	glClearColor (0.0, 0.0, 0.0, 0.0);
+	//glClearColor (0.0, 0.0, 0.0, 0.0);
 	
 	glEnable(GL_SMOOTH); /*enable smooth shading */
 	glEnable(GL_LIGHTING); /* enable lighting */
@@ -556,14 +558,14 @@ void desenhaPlanoDrag(int eixo){
 			material(emerald);
 			break;
 	}
-	glBegin(GL_QUADS);
+	/*glBegin(GL_QUADS);
 	glNormal3f(0,1,0);
 	glVertex3f(-100,0,-100);
 	glVertex3f(100,0,-100);
 	glVertex3f(100,0,100);
 	glVertex3f(-100,0,100);
 	glEnd();
-	glPopMatrix();
+	glPopMatrix();*/
 }
 
 void desenhaEixos(){
@@ -611,6 +613,14 @@ void setCamera(){
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
 	}
+	/*estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
+
+	putLights((GLfloat*)white_light);
+	gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()+2,
+		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
+		0,0,1);*/
 }
 
 void display(void)
