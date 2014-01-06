@@ -8,24 +8,24 @@
 #define ESTE_OESTE	1
 #define PLANO		2
 
-typedef struct No{
+typedef struct Nos{
 	float x,y,z,largura;
-}No;
+}Nos;
 
 typedef struct Arco{
 	int noi,nof;
 	float peso,largura;
 }Arco;
 
-extern No nos[];
+extern Nos nos[];
 extern Arco arcos[];
 extern int numNos, numArcos;
 
-void addNo(No);
+void addNo(Nos);
 void deleteNo(int);
-void imprimeNo(No);
+void imprimeNo(Nos);
 void listNos();
-No criaNo(float, float, float);
+Nos criaNo(float, float, float);
 
 void addArco(Arco);
 void deleteArco(int);

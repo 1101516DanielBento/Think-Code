@@ -6,6 +6,7 @@
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
+#include "Lista.h"
 #include <vector>
 #include <ctime>
 #include <iostream>
@@ -448,7 +449,7 @@ void Caminho()
 
 void desenhaLigacao(Arco arco)
 {
-	No *noi,*nof;
+	Nos *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
 	
 	if(nos[arco.noi].x==nos[arco.nof].x){
@@ -460,7 +461,7 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
-		material(slate);
+		material(red_plastic);
 		desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
@@ -473,6 +474,7 @@ void desenhaLigacao(Arco arco)
 				nof=&nos[arco.noi];
 				noi=&nos[arco.nof];
 			}
+			material(red_plastic);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		}else{
 			noi=&nos[arco.noi];
@@ -494,14 +496,14 @@ void desenhaLabirinto(){
 	
 	for(int i=0; i<numNos; i++){
 		glPushMatrix();
-		material(azul);
+		material(red_plastic);
 		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 		//glutSolidCube(0.5);
 		glutSolidSphere((K_ESFERA/2.0),20,20);
 		glPopMatrix();
 		//desenhaNo(i);
 	}
-	material(emerald);
+	//material(emerald);
 	for(int i=0; i<numArcos; i++){
 		desenhaLigacao(arcos[i]);
 		//Caminho();
@@ -754,7 +756,7 @@ void Timer(int value)
 		modelo.objecto.pos.y-=VELv*sin(modelo.objecto.dir);
 	}
 	
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Velocidade %.2f \n",modelo.objecto.vel);
 	
 	glutPostRedisplay();
@@ -776,16 +778,16 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'l':
 		case 'L':
-			if(estado->lightViewer)
-				estado->lightViewer=0;
+			if(estado->getLightViewer())
+				estado->setLightViewer(0);//=0;
 			else
-				estado->lightViewer=1;
-			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
+				estado->setLightViewer(1);//=1;
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
 			glutPostRedisplay();
 			break;
 		case 'k':
 		case 'K':
-			estado->light=!estado->light;
+			estado->setLight(!estado->getLight());//=!estado->light;
 			glutPostRedisplay();
 			break;
 		case 'w':
@@ -816,7 +818,8 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'n':
 		case 'N':
-			estado->apresentaNormais=!estado->apresentaNormais;
+			//estado->apresentaNormais=!estado->apresentaNormais;
+			estado->setApresentaNormais(!estado->getApresentaNormais());
 			glutPostRedisplay();
 			break;
 		case 'i':
@@ -838,7 +841,7 @@ void keyboard(unsigned char key, int x, int y)
 			
 			break;
 	}
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Carregou na tecla %c\n",key);
 	
 }
@@ -858,7 +861,7 @@ void KeyUp(unsigned char key, int x, int y)
 			
 	}
 	
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Largou a tecla %c\n",key);
 }
 
@@ -909,7 +912,7 @@ void SpecialKey(int key, int x, int y){
 	}
 	
 	
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Carregou na tecla especial %d\n",key);
 	
 	
@@ -931,7 +934,7 @@ void SpecialKeyUp(int key, int x, int y)
 			estado->teclas.down=GL_FALSE;
 			break;
 	}
-	if(estado->debug)
+	if(estado->getDebug())
 		printf("Largou a tecla especial %d\n",key);
 	
 }
@@ -975,7 +978,7 @@ void setProjection(int x, int y, GLboolean picking){
 		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder à jana
 	}
 	
-	gluPerspective(estado->camera->getFov(),(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
+	gluPerspective(estado->getCamera()->getFov(),(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
 	
 }
 
@@ -990,28 +993,28 @@ void myReshape(int w, int h){
 void motionRotate(int x, int y){
 #define DRAG_SCALE	0.01
 	double lim=M_PI/2-0.1;
-	estado->camera->setDirLong((estado->xMouse-x)*DRAG_SCALE);//=(estado->xMouse-x)*DRAG_SCALE;
-	estado->camera->setDirLat((estado->yMouse-y)*DRAG_SCALE*0.5);//-=(estado->yMouse-y)*DRAG_SCALE*0.5;
-	if(estado->camera->getDirLat()>lim)
-		estado->camera->setDirLat(lim);
+	estado->getCamera()->setDirLong((estado->getXMouse()-x)*DRAG_SCALE);//=(estado->xMouse-x)*DRAG_SCALE;
+	estado->getCamera()->setDirLat((estado->getYMouse()-y)*DRAG_SCALE*0.5);//-=(estado->yMouse-y)*DRAG_SCALE*0.5;
+	if(estado->getCamera()->getDirLat()>lim)
+		estado->getCamera()->setDirLat(lim);
 	else
-		if(estado->camera->getDirLat()<-lim)
-			estado->camera->setDirLat(estado->camera->getDirLat() - lim);//dir_lat=-lim;
-	estado->xMouse=x;
-	estado->yMouse=y;
+		if(estado->getCamera()->getDirLat()<-lim)
+			estado->getCamera()->setDirLat(estado->getCamera()->getDirLat() - lim);//dir_lat=-lim;
+	estado->setXMouse(x);
+	estado->setYMouse(y);
 	glutPostRedisplay();
 }
 
 void motionZoom(int x, int y){
 #define ZOOM_SCALE	0.5
 	//estado.camera.dist-=(estado.yMouse-y)*ZOOM_SCALE;
-	estado->camera->setDistance((estado->yMouse -y)*ZOOM_SCALE);
-	if(estado->camera->getDistance()<5)
-		estado->camera->setDistance(5);//dist=5;
+	estado->getCamera()->setDistance((estado->getYMouse() -y)*ZOOM_SCALE);
+	if(estado->getCamera()->getDistance()<5)
+		estado->getCamera()->setDistance(5);//dist=5;
 	else
-		if(estado->camera->getDistance()>200)
-			estado->camera->setDistance(200);//dist=200;
-	estado->yMouse=y;
+		if(estado->getCamera()->getDistance()>200)
+			estado->getCamera()->setDistance(200);//dist=200;
+	estado->setYMouse(y);
 	glutPostRedisplay();
 }
 
@@ -1034,7 +1037,7 @@ void motionDrag(int x, int y){
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	setCamera();
-	desenhaPlanoDrag(estado->eixoTranslaccao);
+	desenhaPlanoDrag(estado->getEixoTrans());
 	
 	n = glRenderMode(GL_RENDER);
 	if (n > 0) {
@@ -1043,18 +1046,18 @@ void motionDrag(int x, int y){
 		glGetDoublev(GL_MODELVIEW_MATRIX, mv);
 		gluUnProject(x, glutGet(GLUT_WINDOW_HEIGHT) - y, (double) buffer[2] / UINT_MAX, mv, proj, vp, &newx, &newy, &newz);
 		printf("Novo x:%lf, y:%lf, z:%lf\n\n", newx, newy, newz);
-		switch (estado->eixoTranslaccao) {
+		switch (estado->getEixoTrans()) {
 			case EIXO_X :
-				estado->eixo[0]=newx;
+				estado->setEixoX(newx);
 				//estado.eixo[1]=newy;
 				break;
 			case EIXO_Y :
-				estado->eixo[1]=newy;
+				estado->setEixoY(newy);
 				//estado.eixo[2]=newz;
 				break;
 			case EIXO_Z :
 				//estado.eixo[0]=newx;
-				estado->eixo[2]=newz;
+				estado->setEixoZ(newz);
 				break;
 		}
 		glutPostRedisplay();
@@ -1112,8 +1115,8 @@ void mouse(int btn, int state, int x, int y){
 	switch(btn) {
 		case GLUT_RIGHT_BUTTON :
 			if(state == GLUT_DOWN){
-				estado->xMouse=x;
-				estado->yMouse=y;
+				estado->setXMouse(x);
+				estado->setYMouse(y);
 				if(glutGetModifiers() & GLUT_ACTIVE_CTRL)
 					glutMotionFunc(motionZoom);
 				else
@@ -1127,18 +1130,18 @@ void mouse(int btn, int state, int x, int y){
 			break;
 		case GLUT_LEFT_BUTTON :
 			if(state == GLUT_DOWN){
-				estado->eixoTranslaccao=picking(x,y);
-				if(estado->eixoTranslaccao)
+				estado->setEixoTrans(picking(x,y));
+				if(estado->getEixoTrans())
 					glutMotionFunc(motionDrag);
-				cout << "Right down - objecto:" << estado->eixoTranslaccao << endl;
+				cout << "Right down - objecto:" << estado->getEixoTrans() << endl;
 			}
 			else{
-				if(estado->eixoTranslaccao!=0) {
-					estado->camera->setCenterX(estado->eixo[0]);//=estado.eixo[0];
-					estado->camera->setCenterY(estado->eixo[1]);//=estado.eixo[1];
-					estado->camera->setCenterZ(estado->eixo[2]);//=estado.eixo[2];
+				if(estado->getEixoTrans()!=0) {
+					estado->getCamera()->setCenterX(estado->getEixoX());//=estado.eixo[0];
+					estado->getCamera()->setCenterY(estado->getEixoY());//=estado.eixo[1];
+					estado->getCamera()->setCenterZ(estado->getEixoZ());//=estado.eixo[2];
 					glutMotionFunc(NULL);
-					estado->eixoTranslaccao=0;
+					estado->setEixoTrans(0);//=0;
 					glutPostRedisplay();
 				}
 				cout << "Right up\n";
@@ -1160,7 +1163,7 @@ int main(int argc, char **argv)
     glutDisplayFunc(display);
 	
 	
-	glutTimerFunc(estado->timer, Timer, 0);
+	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
 	glutKeyboardFunc(keyboard);
 	//glutKeyboardFunc(KeyUp);

@@ -14,13 +14,13 @@
 
 //#define __GRAFO__FILE__ "exemplo.grafo"
 
-No nos[_MAX_NOS_GRAFO];
+Nos nos[_MAX_NOS_GRAFO];
 Arco arcos[_MAX_ARCOS_GRAFO];
 int numNos=0, numArcos=0;
 
 using namespace std;
 
-void addNo(No no){
+void addNo(Nos no){
 	if(numNos<_MAX_NOS_GRAFO){
 		nos[numNos]=no;
 		numNos++;
@@ -38,7 +38,7 @@ void deleteNo(int indNo){
 	}
 }
 
-void imprimeNo(No no){
+void imprimeNo(Nos no){
 	cout << "X:" << no.x << "Y:" << no.y << "Z:" << no.z <<endl;
 }
 
@@ -46,8 +46,8 @@ void listNos(){
 	for(int i=0; i<numNos; imprimeNo(nos[i++]));
 }
 
-No criaNo(float x, float y, float z){
-	No no;
+Nos criaNo(float x, float y, float z){
+	Nos no;
 	no.x=x;
 	no.y=y;
 	no.z=z;

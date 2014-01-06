@@ -11,7 +11,7 @@
 Estado::Estado()
 {
 	camera = new Camera();
-	eixo = new GLdouble[3];
+	//eixo = new GLdouble[3];
 	eixoX = 0;
 	eixoY = 0;
 	eixoZ = 0;
@@ -20,6 +20,7 @@ Estado::Estado()
 	setLightViewer(1);
 	setEixo(0,0,0);
 	setLocating(0);
+	//debug = GL_TRUE;
 }
 
 void Estado::setCamera(Camera *camera)
@@ -68,6 +69,21 @@ void Estado::setEixo(GLdouble x,GLdouble y,GLdouble z)
 	eixoY = y;
 	eixoZ = z;
 	
+}
+
+void Estado::setEixoX(GLfloat x)
+{
+	eixoX = x;
+}
+
+void Estado::setEixoY(GLfloat y)
+{
+	eixoY = y;
+}
+
+void Estado::setEixoZ(GLfloat z)
+{
+	eixoZ = z;
 }
 
 void Estado::setTimer(GLint timer)
@@ -133,6 +149,11 @@ GLdouble Estado::getEixoZ() const
 GLint Estado::getTimer() const
 {
 	return timer;
+}
+
+GLboolean Estado::getDebug()
+{
+	return debug;
 }
 
 void Estado :: setLocating(int loc)
