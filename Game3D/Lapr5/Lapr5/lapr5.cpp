@@ -1,6 +1,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <stdlib.h>     
+#include <stdlib.h>
 #include <cmath>
 #include <iostream>
 #include "grafos.h"
@@ -18,9 +18,9 @@ using namespace std;
 #include <GL/glut.h>
 #endif
 /*
-#ifdef _WIN32
-#include <GL/glaux.h>
-#endif*/
+ #ifdef _WIN32
+ #include <GL/glaux.h>
+ #endif*/
 
 typedef struct vecCol{
 	GLfloat x;
@@ -41,48 +41,48 @@ using namespace std;
 #define VELv 0.5
 
 
-//#define RAND_MAX 
+//#define RAND_MAX
 
 // luzes e materiais
 
 const GLfloat mat_ambient[][4] = {{0.33, 0.22, 0.03, 1.0},	// brass
-								  {0.0, 0.0, 0.0},			// red plastic
-								  {0.0215, 0.1745, 0.0215},	// emerald
-								  {0.02, 0.02, 0.02},		// slate
-								  {0.0, 0.0, 0.1745},		// azul
-								  {0.02, 0.02, 0.02},		// preto
-								  {0.1745, 0.1745, 0.1745}};// cinza
+	{0.0, 0.0, 0.0},			// red plastic
+	{0.0215, 0.1745, 0.0215},	// emerald
+	{0.02, 0.02, 0.02},		// slate
+	{0.0, 0.0, 0.1745},		// azul
+	{0.02, 0.02, 0.02},		// preto
+	{0.1745, 0.1745, 0.1745}};// cinza
 
 const GLfloat mat_diffuse[][4] = {{0.78, 0.57, 0.11, 1.0},		// brass
-								  {0.5, 0.0, 0.0},				// red plastic
-								  {0.07568, 0.61424, 0.07568},	// emerald
-								  {0.78, 0.78, 0.78},			// slate
-								  {0.0, 0.0,  0.61424},			// azul
-								  {0.08, 0.08, 0.08},			// preto
-								  {0.61424, 0.61424, 0.61424}};	// cinza
+	{0.5, 0.0, 0.0},				// red plastic
+	{0.07568, 0.61424, 0.07568},	// emerald
+	{0.78, 0.78, 0.78},			// slate
+	{0.0, 0.0,  0.61424},			// azul
+	{0.08, 0.08, 0.08},			// preto
+	{0.61424, 0.61424, 0.61424}};	// cinza
 
 const GLfloat mat_specular[][4] = {{0.99, 0.91, 0.81, 1.0},			// brass
-								   {0.7, 0.6, 0.6},					// red plastic
-								   {0.633, 0.727811, 0.633},		// emerald
-								   {0.14, 0.14, 0.14},				// slate
-								   {0.0, 0.0, 0.727811},			// azul
-								   {0.03, 0.03, 0.03},				// preto
-								   {0.727811, 0.727811, 0.727811}};	// cinza
+	{0.7, 0.6, 0.6},					// red plastic
+	{0.633, 0.727811, 0.633},		// emerald
+	{0.14, 0.14, 0.14},				// slate
+	{0.0, 0.0, 0.727811},			// azul
+	{0.03, 0.03, 0.03},				// preto
+	{0.727811, 0.727811, 0.727811}};	// cinza
 
 const GLfloat mat_shininess[] = {27.8,	// brass
-								 32.0,	// red plastic
-								 76.8,	// emerald
-								 18.78,	// slate
-								 30.0,	// azul
-								 75.0,	// preto
-								 60.0};	// cinza
+	32.0,	// red plastic
+	76.8,	// emerald
+	18.78,	// slate
+	30.0,	// azul
+	75.0,	// preto
+	60.0};	// cinza
 
 enum tipo_material {brass, red_plastic, emerald, slate, azul, preto, cinza};
 
 #ifdef __cplusplus
-	inline tipo_material operator++(tipo_material &rs, int ) {
-		return rs = (tipo_material)(rs + 1);
-	}
+inline tipo_material operator++(tipo_material &rs, int ) {
+	return rs = (tipo_material)(rs + 1);
+}
 #endif
 
 typedef	GLdouble Vertice[3];
@@ -104,16 +104,16 @@ typedef struct objecto_t{
     GLfloat  vel;
 }objecto_t;
 /*
-typedef struct Camera{
-	GLfloat fov;
-	GLdouble dir_lat;
-	GLdouble dir_long;
-	GLfloat dist;
-	Vertice center;
+ typedef struct Camera{
+ GLfloat fov;
+ GLdouble dir_lat;
+ GLdouble dir_long;
+ GLfloat dist;
+ Vertice center;
+ 
+ }Camera;*/
 
-}Camera;*/
-
-/*typedef struct Estado{
+typedef struct Estado{
 	Camera		*camera;
 	GLint         timer;
 	Teclas		teclas;
@@ -124,19 +124,19 @@ typedef struct Camera{
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
 	GLdouble	eixo[3];
-}Estado;*/
+}Estado;
 
 typedef struct Modelo {
 	objecto_t objecto;
-	#ifdef __cplusplus
-		tipo_material cor_cubo;
-	#else
-		enum tipo_material cor_cubo;
-	#endif
-
+#ifdef __cplusplus
+	tipo_material cor_cubo;
+#else
+	enum tipo_material cor_cubo;
+#endif
+	
 	GLfloat g_pos_luz1[4];
 	GLfloat g_pos_luz2[4];
-
+	
 	GLfloat escala;
 	GLUquadric *quad;
 }Modelo;
@@ -156,8 +156,8 @@ void initEstado(){
 	estado->eixo[1]=0;
 	estado->eixo[2]=0;
 	/*center[0]=0;
-	center[1]=0;
-	center[2]=0;*/
+	 center[1]=0;
+	 center[2]=0;*/
 	estado->camera->setCenterX(0);
 	estado->camera->setCenterY(0);
 	estado->camera->setCenterZ(0);
@@ -165,21 +165,21 @@ void initEstado(){
 	estado->apresentaNormais=GL_FALSE;
 	estado->lightViewer=1;
 	estado->timer=20;
-
+	
 	//coordenadas do objecto
 	/*modelo.objecto.pos.x=90;
-	modelo.objecto.pos.y=80;
-	modelo.objecto.pos.z=50;*/
-
+	 modelo.objecto.pos.y=80;
+	 modelo.objecto.pos.z=50;*/
+	
 	modelo.objecto.pos.x = nos[0].x;
 	modelo.objecto.pos.y = nos[0].y;
 	modelo.objecto.pos.z = nos[0].z;
-
+	
 }
 
 void initModelo(){
 	modelo.escala=0.2;
-
+	
 	modelo.cor_cubo = brass;
 	modelo.g_pos_luz1[0]=-5.0;
 	modelo.g_pos_luz1[1]= 5.0;
@@ -194,25 +194,25 @@ void initModelo(){
 
 void myInit()
 {
-
+	
 	GLfloat LuzAmbiente[]={0.5,0.5,0.5, 0.0};
-
+	
 	glClearColor (0.0, 0.0, 0.0, 0.0);
-
+	
 	glEnable(GL_SMOOTH); /*enable smooth shading */
 	glEnable(GL_LIGHTING); /* enable lighting */
 	glEnable(GL_DEPTH_TEST); /* enable z buffer */
 	glEnable(GL_NORMALIZE);
-
+	
 	glDepthFunc(GL_LESS);
-
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente); 
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer); 
-	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE); 
-
+	
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LuzAmbiente);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	
 	initModelo();
 	initEstado();
-
+	
 	modelo.quad=gluNewQuadric();
 	gluQuadricDrawStyle(modelo.quad, GLU_FILL);
 	gluQuadricNormals(modelo.quad, GLU_OUTSIDE);
@@ -220,7 +220,7 @@ void myInit()
 	
 	//le o grafo exemplo
 	leGrafo();
-
+	
 	modelo.objecto.pos.x = nos[0].x;
 	modelo.objecto.pos.y = nos[0].y;
 	modelo.objecto.pos.z = nos[0].z;
@@ -239,16 +239,16 @@ void imprime_ajuda(void)
 	printf("w,W - PolygonMode Wireframe \n");
 	printf("p,P - PolygonMode Point \n");
 	printf("c,C - Liga/Desliga Cull Face \n");
-	printf("n,N - Liga/Desliga apresentação das normais \n");
+	printf("n,N - Liga/Desliga apresenta¬ç¬ão das normais \n");
 	printf("******* grafos ******* \n");
 	printf("F1  - Grava grafo do ficheiro \n");
-	printf("F2  - Lê grafo para ficheiro \n");
+	printf("F2  - L¬ê grafo para ficheiro \n");
 	printf("F6  - Cria novo grafo\n");
 	printf("******* Camera ******* \n");
-	printf("Botão esquerdo - Arrastar os eixos (centro da camera)\n");
-	printf("Botão direito  - Rodar camera\n");
-	printf("Botão direito com CTRL - Zoom-in/out\n");
-	printf("PAGE_UP, PAGE_DOWN - Altera distância da camara \n");
+	printf("Bot¬ão esquerdo - Arrastar os eixos (centro da camera)\n");
+	printf("Bot¬ão direito  - Rodar camera\n");
+	printf("Bot¬ão direito com CTRL - Zoom-in/out\n");
+	printf("PAGE_UP, PAGE_DOWN - Altera dist¬ância da camara \n");
 	printf("ESC - Sair\n");
 }
 
@@ -270,17 +270,17 @@ const GLfloat white_light[] = {1.0, 1.0, 1.0, 1.0};
 void putLights(GLfloat* diffuse)
 {
 	const GLfloat white_amb[] = {0.2, 0.2, 0.2, 1.0};
-
+	
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, white_amb);
 	glLightfv(GL_LIGHT0, GL_POSITION, modelo.g_pos_luz1);
-
+	
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, white_light);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, white_amb);
 	glLightfv(GL_LIGHT1, GL_POSITION, modelo.g_pos_luz2);
-
+	
 	/* desenhar luz */
 	//material(red_plastic);
 	//glPushMatrix();
@@ -297,7 +297,7 @@ void putLights(GLfloat* diffuse)
 	//	glutSolidCube(0.1);
 	//	glEnable(GL_LIGHTING);
 	//glPopMatrix();
-
+	
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 }
@@ -305,14 +305,14 @@ void putLights(GLfloat* diffuse)
 void desenhaSolo(){
 #define STEP 10
 	glBegin(GL_QUADS);
-		glNormal3f(0,0,1);
-		for(int i=-300;i<300;i+=STEP)
-			for(int j=-300;j<300;j+=STEP){
-				glVertex2f(i,j);
-				glVertex2f(i+STEP,j);
-				glVertex2f(i+STEP,j+STEP);
-				glVertex2f(i,j+STEP);
-			}
+	glNormal3f(0,0,1);
+	for(int i=-300;i<300;i+=STEP)
+		for(int j=-300;j<300;j+=STEP){
+			glVertex2f(i,j);
+			glVertex2f(i+STEP,j);
+			glVertex2f(i+STEP,j+STEP);
+			glVertex2f(i,j+STEP);
+		}
 	glEnd();
 }
 
@@ -327,47 +327,47 @@ GLdouble VectorNormalize (GLdouble v[])
 {
 	int		i;
 	GLdouble	length;
-
+	
 	if ( fabs(v[1] - 0.000215956) < 0.0001)
 		i=1;
-
+	
 	length = 0;
 	for (i=0 ; i< 3 ; i++)
 		length += v[i]*v[i];
 	length = sqrt (length);
 	if (length == 0)
 		return 0;
-		
+	
 	for (i=0 ; i< 3 ; i++)
-		v[i] /= length;	
-
+		v[i] /= length;
+	
 	return length;
 }
 
 void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_material mat){
-
+	
 	switch (mat){
 		case red_plastic:
-				glColor3f(1,0,0);
+			glColor3f(1,0,0);
 			break;
 		case azul:
-				glColor3f(0,0,1);
+			glColor3f(0,0,1);
 			break;
 		case emerald:
-				glColor3f(0,1,0);
+			glColor3f(0,1,0);
 			break;
 		default:
-				glColor3f(1,1,0);
+			glColor3f(1,1,0);
 	}
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
-		glTranslated(x,y,z);
-		glScaled(0.4,0.4,0.4);
-		glBegin(GL_LINES);
-			glVertex3d(0,0,0);
-			glVertex3dv(normal);
-		glEnd();
-		glPopMatrix();
+	glTranslated(x,y,z);
+	glScaled(0.4,0.4,0.4);
+	glBegin(GL_LINES);
+	glVertex3d(0,0,0);
+	glVertex3dv(normal);
+	glEnd();
+	glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
 
@@ -378,23 +378,23 @@ void distribuicaoNos()
 	GLfloat range=(ceiling-floor)+1.0;
 	GLfloat floor2 = 2.0,ceiling2 = 4.0;
 	GLfloat range2=(ceiling2-floor2)+5.0;
-
+	
 	for(int i =0; i < 8/*alterar para num utilizadores*/;i++)
 	{
 		vector<GLfloat> aux3;
-
+		
 		GLfloat random_x = floor+int(range*rand()/(RAND_MAX +1.0));
 		GLfloat random_y = floor+int(range*rand()/(RAND_MAX+1.0));
 		GLfloat random_z = floor2+int(range2*rand()/(RAND_MAX+1.0));
-
+		
 		colisao[i].x = random_x;
 		colisao[i].y = random_y;
 		colisao[i].z = random_z;
-
+		
 		aux3.push_back(random_x);
 		aux3.push_back(random_y);
 		aux3.push_back(random_z);
-
+		
 		PosTodosUsers.push_back(aux3);
 		aux3.pop_back();
 	}
@@ -410,41 +410,41 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 	GLfloat ax,rx,ry,rz,raio_c;
 	raio_c = raio/2.0;
 	glPushMatrix();
-			
-			glTranslatef(xi,yi,zi);
-			//glRotatef(graus(orientacao),0,0,1);
-			//glRotatef(graus(inclinacao),0,1,0);
-			if(fabs(vz) < 0.0001)
-			{
-				glRotatef(90,0,1,0);
-				ax = 57.2957795*-atan2(vy,vx);
-				if(vx < 0)
-				{
-					ax = ax + 180;
-				}
-				rx = 1;
-				ry = 0;
-				rz = 0;
-			}else{
-				ax = 57.2957795*acos(vz/comp);
-				if(vz < 0.0){
-					ax = -ax;
-				}
-				rx = -vy*vz;
-				ry = vx*vz;
-				rz = 0;
-			}
-			glRotatef(ax, rx, ry, rz);
-			gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
-			gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal È desenhada automaticamente pela funcao
-			glPopMatrix();	
-
+	
+	glTranslatef(xi,yi,zi);
+	//glRotatef(graus(orientacao),0,0,1);
+	//glRotatef(graus(inclinacao),0,1,0);
+	if(fabs(vz) < 0.0001)
+	{
+		glRotatef(90,0,1,0);
+		ax = 57.2957795*-atan2(vy,vx);
+		if(vx < 0)
+		{
+			ax = ax + 180;
+		}
+		rx = 1;
+		ry = 0;
+		rz = 0;
+	}else{
+		ax = 57.2957795*acos(vz/comp);
+		if(vz < 0.0){
+			ax = -ax;
+		}
+		rx = -vy*vz;
+		ry = vx*vz;
+		rz = 0;
+	}
+	glRotatef(ax, rx, ry, rz);
+	gluQuadricOrientation(modelo.quad,GLU_OUTSIDE);
+	gluCylinder(modelo.quad, raio_c, raio_c, comp, 20, 1);//normal √© desenhada automaticamente pela funcao
+	glPopMatrix();
+	
 }
 
 void Caminho()
 {
 	//GLUquadricObj *obj = gluNewQuadric();
-
+	
 	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
 }
 
@@ -452,7 +452,7 @@ void desenhaLigacao(Arco arco)
 {
 	No *noi,*nof;
 	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
-
+	
 	if(nos[arco.noi].x==nos[arco.nof].x){
 		// arco vertical
 		if(nos[arco.noi].y<nos[arco.nof].y){
@@ -462,8 +462,8 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
-			material(slate);
-			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
+		material(slate);
+		desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
 		if(nos[arco.noi].y==nos[arco.nof].y){
@@ -481,46 +481,46 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.nof];
 			material(red_plastic);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-
-
+			
+			
 		}
 	}
-}	
+}
 
 
 void desenhaLabirinto(){
 	GLfloat xi,yi,zi,xf,yf,zf,raio;
 	glPushMatrix();
-		glTranslatef(0,0,0.05);
-		//glScalef(5,5,5);
+	glTranslatef(0,0,0.05);
+	//glScalef(5,5,5);
 	
-		for(int i=0; i<numNos; i++){
-			glPushMatrix();
-			material(azul);
-				glTranslatef(nos[i].x,nos[i].y,nos[i].z);
-				//glutSolidCube(0.5);
-				glutSolidSphere((K_ESFERA/2.0),20,20);
-			glPopMatrix();
-			//desenhaNo(i);
-		}
-		material(emerald);
-		for(int i=0; i<numArcos; i++){
-			desenhaLigacao(arcos[i]);
-			//Caminho();
-
-		}
+	for(int i=0; i<numNos; i++){
+		glPushMatrix();
+		material(azul);
+		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
+		//glutSolidCube(0.5);
+		glutSolidSphere((K_ESFERA/2.0),20,20);
+		glPopMatrix();
+		//desenhaNo(i);
+	}
+	material(emerald);
+	for(int i=0; i<numArcos; i++){
+		desenhaLigacao(arcos[i]);
+		//Caminho();
+		
+	}
 	glPopMatrix();
 }
 
 void desenhaEixo(){
 	gluCylinder(modelo.quad,0.5,0.5,20,16,15);
 	glPushMatrix();
-		glTranslatef(0,0,20);
-		glPushMatrix();
-			glRotatef(180,0,1,0);
-			gluDisk(modelo.quad,0.5,2,16,6);
-		glPopMatrix();
-		gluCylinder(modelo.quad,2,0,5,16,15);
+	glTranslatef(0,0,20);
+	glPushMatrix();
+	glRotatef(180,0,1,0);
+	gluDisk(modelo.quad,0.5,2,16,6);
+	glPopMatrix();
+	gluCylinder(modelo.quad,2,0,5,16,15);
 	glPopMatrix();
 }
 
@@ -530,67 +530,67 @@ void desenhaEixo(){
 
 void desenhaPlanoDrag(int eixo){
 	glPushMatrix();
-		glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
-		switch (eixo) {
-			case EIXO_Y :
-				if(abs(estado->camera->getDirLat())<M_PI/4)
-						glRotatef(-90,0,0,1);
-					else
-						glRotatef(90,1,0,0);
-					material(red_plastic);
-				break;
-			case EIXO_X :
-					if(abs(estado->camera->getDirLat())>M_PI/6)
-						glRotatef(90,1,0,0);
-					material(azul);
-				break;
-			case EIXO_Z :
-				if(abs(cos(estado->camera->getDirLong()))>0.5)
-						glRotatef(90,0,0,1);
-
-					material(emerald);
-				break;
-		}
-		glBegin(GL_QUADS);
-			glNormal3f(0,1,0);
-			glVertex3f(-100,0,-100);
-			glVertex3f(100,0,-100);
-			glVertex3f(100,0,100);
-			glVertex3f(-100,0,100);
-		glEnd();
+	glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
+	switch (eixo) {
+		case EIXO_Y :
+			if(abs(estado->camera->getDirLat())<M_PI/4)
+				glRotatef(-90,0,0,1);
+			else
+				glRotatef(90,1,0,0);
+			material(red_plastic);
+			break;
+		case EIXO_X :
+			if(abs(estado->camera->getDirLat())>M_PI/6)
+				glRotatef(90,1,0,0);
+			material(azul);
+			break;
+		case EIXO_Z :
+			if(abs(cos(estado->camera->getDirLong()))>0.5)
+				glRotatef(90,0,0,1);
+			
+			material(emerald);
+			break;
+	}
+	glBegin(GL_QUADS);
+	glNormal3f(0,1,0);
+	glVertex3f(-100,0,-100);
+	glVertex3f(100,0,-100);
+	glVertex3f(100,0,100);
+	glVertex3f(-100,0,100);
+	glEnd();
 	glPopMatrix();
 }
 
 void desenhaEixos(){
-
+	
 	glPushMatrix();
-		glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
-		material(emerald);
-		glPushName(EIXO_Z);
-			desenhaEixo();
-		glPopName();
-		glPushName(EIXO_Y);
-			glPushMatrix();
-				glRotatef(-90,1,0,0);
-				material(red_plastic);
-				desenhaEixo();
-			glPopMatrix();
-		glPopName();
-		glPushName(EIXO_X);
-			glPushMatrix();
-				glRotatef(90,0,1,0);
-				material(azul);
-				desenhaEixo();
-			glPopMatrix();
-		glPopName();
+	glTranslated(estado->eixo[0],estado->eixo[1],estado->eixo[2]);
+	material(emerald);
+	glPushName(EIXO_Z);
+	desenhaEixo();
+	glPopName();
+	glPushName(EIXO_Y);
+	glPushMatrix();
+	glRotatef(-90,1,0,0);
+	material(red_plastic);
+	desenhaEixo();
+	glPopMatrix();
+	glPopName();
+	glPushName(EIXO_X);
+	glPushMatrix();
+	glRotatef(90,0,1,0);
+	material(azul);
+	desenhaEixo();
+	glPopMatrix();
+	glPopName();
 	glPopMatrix();
 }
 
 void setCamera(){
-
-
+	
+	
 	if(estado->light){
-		//Posicionar a câmera
+		//Posicionar a c¬âmera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
 		glTranslatef(-modelo.objecto.pos.x, -modelo.objecto.pos.y, -modelo.objecto.pos.z-5);
@@ -598,7 +598,7 @@ void setCamera(){
 		
 		putLights((GLfloat*)white_light);
 	}else{
-		//Posicionar a câmera
+		//Posicionar a c¬âmera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo.objecto.dir), 0, 0, 1);
@@ -610,15 +610,15 @@ void setCamera(){
 
 void display(void)
 {
-
-
+	
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
 	
 	/*modelo.objecto.pos.x = nos[0].x;
-	modelo.objecto.pos.y = nos[0].y;
-	modelo.objecto.pos.z = nos[0].z;*/
+	 modelo.objecto.pos.y = nos[0].y;
+	 modelo.objecto.pos.z = nos[0].z;*/
 	setCamera();
 	//material(slate);
 	//desenhaSolo();
@@ -626,29 +626,29 @@ void display(void)
 	desenhaEixos();
 	
 	desenhaLabirinto();
-
+	
 	//setCamera();
- 
+	
 	if(estado->eixoTranslaccao) {
-		// desenha plano de translacÁ„o
-		cout << "Translate... " << estado->eixoTranslaccao << endl; 
+		// desenha plano de translac√ß√£o
+		cout << "Translate... " << estado->eixoTranslaccao << endl;
 		desenhaPlanoDrag(estado->eixoTranslaccao);
-
+		
 	}
-
+	
 	glFlush();
 	glutSwapBuffers();
-
+	
 }
 //detecta colisao esfera
 bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 {
 	int compUsers = numNos;
 	int compLigacoes = numArcos;
-
+	
 	GLfloat raio = K_ESFERA/2.0;
 	GLfloat d;
-
+	
 	for(int i = 1; i < compUsers; i++)
 	{
 		d = sqrt(((nx - modelo.objecto.pos.x)*(nx - modelo.objecto.pos.x))+((ny - modelo.objecto.pos.y)*(ny - modelo.objecto.pos.y))+((nz - modelo.objecto.pos.z)*(nz - modelo.objecto.pos.z)));
@@ -677,12 +677,12 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 		//encontra o no
 		noi = arcos[i].noi;
 		nof = arcos[i].nof;
-
+		
 		//encontra noi e nof para fazer a ponte entre os dois
 		//lista de utilizadores
 		//convem fazer uma classe Utilizador
 		
-
+		
 		//nao tenho a certeza
 		GLdouble larg = arcos[i].largura+0.4;
 		glPushMatrix();
@@ -697,7 +697,7 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 		GLdouble ny2 = (nz - modelo.objecto.pos.z)*cos(rad(angOrientacao)) - (nx - modelo.objecto.pos.x)*sin(rad(angOrientacao));
 		GLdouble dist = sqrt(pow(nx -modelo.objecto.pos.x,2) + pow(ny - modelo.objecto.pos.y,2) + pow(nz - modelo.objecto.pos.z,2));
 		GLdouble nz2 = modelo.objecto.pos.z + nx2/tamanho*catetoOposto;
-
+		
 		if((0 <= nx2 && nx2 <= tamanho) && (-larg/2.0 <= ny2 && ny2 <= larg/2.0) && (nz2 - (larg/2.0+0.1) <= ny && ny <= ny2 + (larg/2.0+0.1)))
 		{
 			flag = false;
@@ -710,7 +710,7 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 void Timer(int value)
 {
 	
-
+	
 	glutTimerFunc(estado->timer, Timer, 0);
 	
 	GLfloat x1,y1,z1,x2,y2,z2;
@@ -721,7 +721,7 @@ void Timer(int value)
 	y1 = modelo.objecto.pos.y;
 	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
 	GLfloat raio = pow((K_ESFERA/2.0),2);
-
+	
 	if(estado->teclas.q)
 	{
 		modelo.objecto.pos.z=modelo.objecto.pos.z+VELv;
@@ -741,7 +741,7 @@ void Timer(int value)
 	{
 		modelo.objecto.dir-=0.1;
 	}
-
+	
 	if(estado->teclas.up)
 	{
 		if(dist <= raio){
@@ -766,78 +766,78 @@ void Timer(int value)
 
 void keyboard(unsigned char key, int x, int y)
 {
-
+	
     switch (key)
     {
 		case 27 :
-				exit(0);
+			exit(0);
 			break;
 		case 'h':
 		case 'H':
-				imprime_ajuda();
+			imprime_ajuda();
 			break;
 		case 'l':
 		case 'L':
-				if(estado->lightViewer)
-					estado->lightViewer=0;
-				else
-					estado->lightViewer=1;
-				glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
-				glutPostRedisplay();
+			if(estado->lightViewer)
+				estado->lightViewer=0;
+			else
+				estado->lightViewer=1;
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->lightViewer);
+			glutPostRedisplay();
 			break;
 		case 'k':
 		case 'K':
-				estado->light=!estado->light;
-				glutPostRedisplay();
+			estado->light=!estado->light;
+			glutPostRedisplay();
 			break;
 		case 'w':
 		case 'W':
-				glDisable(GL_LIGHTING);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				glutPostRedisplay();
+			glDisable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glutPostRedisplay();
 			break;
 		case 'p':
 		case 'P':
-				glDisable(GL_LIGHTING);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-				glutPostRedisplay();
+			glDisable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			glutPostRedisplay();
 			break;
 		case 's':
 		case 'S':
-				glEnable(GL_LIGHTING);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glutPostRedisplay();
+			glEnable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glutPostRedisplay();
 			break;
 		case 'c':
 		case 'C':
-				if(glIsEnabled(GL_CULL_FACE))
-					glDisable(GL_CULL_FACE);
-				else
-					glEnable(GL_CULL_FACE);
-				glutPostRedisplay();
-			break;    
+			if(glIsEnabled(GL_CULL_FACE))
+				glDisable(GL_CULL_FACE);
+			else
+				glEnable(GL_CULL_FACE);
+			glutPostRedisplay();
+			break;
 		case 'n':
 		case 'N':
-				estado->apresentaNormais=!estado->apresentaNormais;
-				glutPostRedisplay();
-			break;    		
+			estado->apresentaNormais=!estado->apresentaNormais;
+			glutPostRedisplay();
+			break;
 		case 'i':
 		case 'I':
-				initEstado();
-				initModelo();
-				glutPostRedisplay();
+			initEstado();
+			initModelo();
+			glutPostRedisplay();
 			break;
 		case 'a':
 		case 'A':
-				estado->teclas.a=GL_TRUE;
-				//estado.camera.center[2]-=0.2;
+			estado->teclas.a=GL_TRUE;
+			//estado.camera.center[2]-=0.2;
 			printf("carregou no a\n");
 			break;
 		case 'q':
 		case 'Q':
-				estado->teclas.q=GL_TRUE;
-				//estado.camera.center[2]+=0.2;
-				
+			estado->teclas.q=GL_TRUE;
+			//estado.camera.center[2]+=0.2;
+			
 			break;
 	}
 	if(estado->debug)
@@ -867,35 +867,35 @@ void KeyUp(unsigned char key, int x, int y)
 // Callback para interaccao via teclas especiais  (carregar na tecla)
 
 void SpecialKey(int key, int x, int y){
-
+	
 	switch(key){
 		case GLUT_KEY_F1 :
-				gravaGrafo();
+			gravaGrafo();
 			break;
 		case GLUT_KEY_F2 :
-				leGrafo();
-				glutPostRedisplay();
-			break;	
-
-		case GLUT_KEY_F6 :
-				numNos=numArcos=0;
-				addNo(criaNo( 0, 10,0));  // 0
-				addNo(criaNo( 0,  5,0));  // 1
-				addNo(criaNo(-5,  5,0));  // 2
-				addNo(criaNo( 5,  5,0));  // 3
-				addNo(criaNo(-5,  0,0));  // 4
-				addNo(criaNo( 5,  0,0));  // 5
-				addNo(criaNo(-5, -5,0));  // 6
-				addArco(criaArco(0,1,1,1));  // 0 - 1
-				addArco(criaArco(1,2,1,1));  // 1 - 2
-				addArco(criaArco(1,3,1,1));  // 1 - 3
-				addArco(criaArco(2,4,1,1));  // 2 - 4
-				addArco(criaArco(3,5,1,1));  // 3 - 5
-				addArco(criaArco(4,5,1,1));  // 4 - 5
-				addArco(criaArco(4,6,1,1));  // 4 - 6
-				glutPostRedisplay();
+			leGrafo();
+			glutPostRedisplay();
 			break;
-
+			
+		case GLUT_KEY_F6 :
+			numNos=numArcos=0;
+			addNo(criaNo( 0, 10,0));  // 0
+			addNo(criaNo( 0,  5,0));  // 1
+			addNo(criaNo(-5,  5,0));  // 2
+			addNo(criaNo( 5,  5,0));  // 3
+			addNo(criaNo(-5,  0,0));  // 4
+			addNo(criaNo( 5,  0,0));  // 5
+			addNo(criaNo(-5, -5,0));  // 6
+			addArco(criaArco(0,1,1,1));  // 0 - 1
+			addArco(criaArco(1,2,1,1));  // 1 - 2
+			addArco(criaArco(1,3,1,1));  // 1 - 3
+			addArco(criaArco(2,4,1,1));  // 2 - 4
+			addArco(criaArco(3,5,1,1));  // 3 - 5
+			addArco(criaArco(4,5,1,1));  // 4 - 5
+			addArco(criaArco(4,6,1,1));  // 4 - 6
+			glutPostRedisplay();
+			break;
+			
 		case GLUT_KEY_RIGHT :
 			estado->teclas.right=GL_TRUE;
 			break;
@@ -909,12 +909,12 @@ void SpecialKey(int key, int x, int y){
 			estado->teclas.down=GL_TRUE;
 			break;
 	}
-
+	
 	
 	if(estado->debug)
 		printf("Carregou na tecla especial %d\n",key);
-
-
+	
+	
 }
 
 void SpecialKeyUp(int key, int x, int y)
@@ -935,9 +935,9 @@ void SpecialKeyUp(int key, int x, int y)
 	}
 	if(estado->debug)
 		printf("Largou a tecla especial %d\n",key);
-
+	
 }
-	//biilboard(?) + botao + campos de texto
+//biilboard(?) + botao + campos de texto
 bool login()
 {
 	char user1[10], pass[10];
@@ -945,7 +945,7 @@ bool login()
 	cin >> user1;
 	printf("Password: ");
 	cin >> pass;
-
+	
 	//em vez do if ---> webservice para verificar o utilizador, no qual o result sera true ou false
 	if(strcmp(user1,"user1") == 0){
 		if(strcmp(pass,"qwerty")==0){
@@ -966,22 +966,22 @@ void loginWindow()
 		myInit();
 		imprime_ajuda();
 	}
-
+	
 }
 
 void setProjection(int x, int y, GLboolean picking){
     glLoadIdentity();
-	if (picking) { // se est· no modo picking, lÍ viewport e define zona de picking
+	if (picking) { // se est√° no modo picking, l√™ viewport e define zona de picking
 		GLint vport[4];
 		glGetIntegerv(GL_VIEWPORT, vport);
-		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder ‡ jana
+		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder √† jana
 	}
-	    
+	
 	gluPerspective(estado->camera->getFov(),(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
-
+	
 }
 
-void myReshape(int w, int h){	
+void myReshape(int w, int h){
 	glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
 	setProjection(0,0,GL_FALSE);
@@ -996,7 +996,7 @@ void motionRotate(int x, int y){
 	estado->camera->setDirLat((estado->yMouse-y)*DRAG_SCALE*0.5);//-=(estado->yMouse-y)*DRAG_SCALE*0.5;
 	if(estado->camera->getDirLat()>lim)
 		estado->camera->setDirLat(lim);
-	else 
+	else
 		if(estado->camera->getDirLat()<-lim)
 			estado->camera->setDirLat(estado->camera->getDirLat() - lim);//dir_lat=-lim;
 	estado->xMouse=x;
@@ -1010,7 +1010,7 @@ void motionZoom(int x, int y){
 	estado->camera->setDistance((estado->yMouse -y)*ZOOM_SCALE);
 	if(estado->camera->getDistance()<5)
 		estado->camera->setDistance(5);//dist=5;
-	else 
+	else
 		if(estado->camera->getDistance()>200)
 			estado->camera->setDistance(200);//dist=200;
 	estado->yMouse=y;
@@ -1023,15 +1023,15 @@ void motionDrag(int x, int y){
 	GLdouble proj[16], mv[16];
 	int n;
 	GLdouble newx, newy, newz;
-
+	
 	glSelectBuffer(100, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
-
+	
 	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // guarda a projecÁ„o
-		glLoadIdentity();
-		setProjection(x,y,GL_TRUE);
+	glPushMatrix(); // guarda a projec√ß√£o
+	glLoadIdentity();
+	setProjection(x,y,GL_TRUE);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -1047,23 +1047,23 @@ void motionDrag(int x, int y){
 		printf("Novo x:%lf, y:%lf, z:%lf\n\n", newx, newy, newz);
 		switch (estado->eixoTranslaccao) {
 			case EIXO_X :
-					estado->eixo[0]=newx;
-					//estado.eixo[1]=newy;
+				estado->eixo[0]=newx;
+				//estado.eixo[1]=newy;
 				break;
 			case EIXO_Y :
-					estado->eixo[1]=newy;
-					//estado.eixo[2]=newz;
+				estado->eixo[1]=newy;
+				//estado.eixo[2]=newz;
 				break;
 			case EIXO_Z :
-					//estado.eixo[0]=newx;
-					estado->eixo[2]=newz;
-				break;		
+				//estado.eixo[0]=newx;
+				estado->eixo[2]=newz;
+				break;
 		}
 		glutPostRedisplay();
 	}
-
-
-	glMatrixMode(GL_PROJECTION); //repıe matriz projecÁ„o
+	
+	
+	glMatrixMode(GL_PROJECTION); //rep√µe matriz projec√ß√£o
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glutPostRedisplay();
@@ -1073,15 +1073,15 @@ int picking(int x, int y){
 	int i, n, objid=0;
 	double zmin = 10.0;
 	GLuint buffer[100], *ptr;
-
+	
 	glSelectBuffer(100, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
-
+	
 	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // guarda a projecÁ„o
-		glLoadIdentity();
-		setProjection(x,y,GL_TRUE);
+	glPushMatrix(); // guarda a projec√ß√£o
+	glLoadIdentity();
+	setProjection(x,y,GL_TRUE);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -1098,63 +1098,63 @@ int picking(int x, int y){
 				zmin = (double) ptr[1] / UINT_MAX;
 				objid = ptr[3];
 			}
-			ptr += 3 + ptr[0]; // ptr[0] contem o n˙mero de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
+			ptr += 3 + ptr[0]; // ptr[0] contem o n√∫mero de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
 		}
 	}
-
-
-	glMatrixMode(GL_PROJECTION); //repıe matriz projecÁ„o
+	
+	
+	glMatrixMode(GL_PROJECTION); //rep√µe matriz projec√ß√£o
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-
+	
 	return objid;
 }
 
 void mouse(int btn, int state, int x, int y){
 	switch(btn) {
 		case GLUT_RIGHT_BUTTON :
-					if(state == GLUT_DOWN){
-						estado->xMouse=x;
-						estado->yMouse=y;
-						if(glutGetModifiers() & GLUT_ACTIVE_CTRL)
-							glutMotionFunc(motionZoom);
-						else
-							glutMotionFunc(motionRotate);
-						cout << "Left down\n";
-					}
-					else{
-						glutMotionFunc(NULL);
-						cout << "Left up\n";
-					}
-				break;
+			if(state == GLUT_DOWN){
+				estado->xMouse=x;
+				estado->yMouse=y;
+				if(glutGetModifiers() & GLUT_ACTIVE_CTRL)
+					glutMotionFunc(motionZoom);
+				else
+					glutMotionFunc(motionRotate);
+				cout << "Left down\n";
+			}
+			else{
+				glutMotionFunc(NULL);
+				cout << "Left up\n";
+			}
+			break;
 		case GLUT_LEFT_BUTTON :
-					if(state == GLUT_DOWN){
-						estado->eixoTranslaccao=picking(x,y);
-						if(estado->eixoTranslaccao)
-							glutMotionFunc(motionDrag);
-					cout << "Right down - objecto:" << estado->eixoTranslaccao << endl;
-					}
-					else{
-						if(estado->eixoTranslaccao!=0) {
-							estado->camera->setCenterX(estado->eixo[0]);//=estado.eixo[0];
-							estado->camera->setCenterY(estado->eixo[1]);//=estado.eixo[1];
-							estado->camera->setCenterZ(estado->eixo[2]);//=estado.eixo[2];
-							glutMotionFunc(NULL);
-							estado->eixoTranslaccao=0;
-							glutPostRedisplay();
-						}
-						cout << "Right up\n";
-					}
-				break;
+			if(state == GLUT_DOWN){
+				estado->eixoTranslaccao=picking(x,y);
+				if(estado->eixoTranslaccao)
+					glutMotionFunc(motionDrag);
+				cout << "Right down - objecto:" << estado->eixoTranslaccao << endl;
+			}
+			else{
+				if(estado->eixoTranslaccao!=0) {
+					estado->camera->setCenterX(estado->eixo[0]);//=estado.eixo[0];
+					estado->camera->setCenterY(estado->eixo[1]);//=estado.eixo[1];
+					estado->camera->setCenterZ(estado->eixo[2]);//=estado.eixo[2];
+					glutMotionFunc(NULL);
+					estado->eixoTranslaccao=0;
+					glutPostRedisplay();
+				}
+				cout << "Right up\n";
+			}
+			break;
 	}
 }
 
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-
-/* need both double buffering and z buffer */
-
+	
+	/* need both double buffering and z buffer */
+	
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(640, 480);
     glutCreateWindow("Think&Code");
@@ -1163,7 +1163,7 @@ int main(int argc, char **argv)
 	
 	
 	glutTimerFunc(estado->timer, Timer, 0);
-
+	
 	glutKeyboardFunc(keyboard);
 	//glutKeyboardFunc(KeyUp);
 	glutSpecialFunc(SpecialKey);
@@ -1173,14 +1173,14 @@ int main(int argc, char **argv)
 	
 	
 	
-
+	
 	//loginWindow();
 	//myinit + imprime ajuda dentro do login
-
+	
 	myInit();
-
+	
 	imprime_ajuda();
-
+	
     glutMainLoop();
 	
 	return 0;
