@@ -188,9 +188,10 @@ void initModelo()
 	l2[2] = 5.0;
 	l2[3] = 0.0;
 	
-	modelo->setEscala(0.2);
+	
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
+	modelo->setEscala(0.2);
 	modelo->setCameraMode(1);
 	
 }
