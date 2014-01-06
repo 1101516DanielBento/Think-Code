@@ -28,7 +28,9 @@ private:
 	GLboolean   ortho;
 	GLint		lightViewer;
 	GLint		eixoTranslaccao;
-	GLdouble	*eixo;
+	GLdouble	eixoX;
+	GLdouble	eixoY;
+	GLdouble	eixoZ;
 	GLint       timer;
 	int locating;
 	
@@ -56,7 +58,9 @@ public:
 	GLboolean getOrtho() const;
 	GLint getLightViewer() const;
 	GLint getEixoTrans() const;
-	GLdouble* getEixo() const;
+	GLdouble getEixoX() const;
+	GLdouble getEixoY() const;
+	GLdouble getEixoZ() const;
 	GLint getTimer() const;
 	int getLocating()const;
 	

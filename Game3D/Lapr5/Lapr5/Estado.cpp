@@ -12,9 +12,9 @@ Estado::Estado()
 {
 	camera = new Camera();
 	eixo = new GLdouble[3];
-	eixo[0] = 0;
-	eixo[1] = 0;
-	eixo[2] = 0;
+	eixoX = 0;
+	eixoY = 0;
+	eixoZ = 0;
 	setLight(GL_FALSE);
 	setApresentaNormais(GL_FALSE);
 	setLightViewer(1);
@@ -64,9 +64,9 @@ void Estado::setEixoTrans(GLint eixoTranslaccao)
 
 void Estado::setEixo(GLdouble x,GLdouble y,GLdouble z)
 {
-	eixo[0] = x;
-	eixo[1] = y;
-	eixo[2] = z;
+	eixoX = x;
+	eixoY = y;
+	eixoZ = z;
 	
 }
 
@@ -115,9 +115,19 @@ GLint Estado::getEixoTrans() const
 	return eixoTranslaccao;
 }
 
-GLdouble* Estado::getEixo() const
+GLdouble Estado::getEixoX() const
 {
-	return eixo;
+	return eixoX;
+}
+
+GLdouble Estado::getEixoY() const
+{
+	return eixoY;
+}
+
+GLdouble Estado::getEixoZ() const
+{
+	return eixoZ;
 }
 
 GLint Estado::getTimer() const
