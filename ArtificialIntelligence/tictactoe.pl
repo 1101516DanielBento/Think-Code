@@ -71,6 +71,7 @@ evaluate_and_choose(Player,[Move|Moves],Position,D,Alpha,Beta,Record,BestMove) :
    alpha_beta(OtherPlayer,D,Position1,Alpha,Beta,_OtherMove,Value),
    Value1 is -Value,
    cutoff(Player,Move,Value1,D,Alpha,Beta,Moves,Position,Record,BestMove).
+
 evaluate_and_choose(_Player,[],_Position,_D,Alpha,_Beta,Move,(Move,Alpha)).
 
 cutoff(_Player,Move,Value,_D,_Alpha,Beta,_Moves,_Position,_Record,(Move,Value)) :-
@@ -102,6 +103,20 @@ s :- showBoard.
 
 mark(X) :- var(X), write('#').
 mark(X) :- \+var(X),write(X).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

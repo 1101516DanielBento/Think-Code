@@ -1,7 +1,7 @@
 #include <SWI-cpp.h>
 #include <iostream>
 #include "ReadProlog.h"
-#include "Writer.h"
+#include "HangMan.h"
 
 using namespace std;
 
@@ -12,7 +12,7 @@ using namespace std;
 
 int main(){
 
-	//char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\write\\test.pl",NULL};
+	//char* argv[] = {"swipl.ll","-s","C:\\Users\\Fred\\Desktop\\ISEP\\LAPR5\\Project\\ArtificialIntelligence\\write\\test.pl",NULL};
 
 	//PlEngine e(3,argv);
 
@@ -20,8 +20,15 @@ int main(){
 
 	//reader->showNetwork();
 
-	Writer* w = new Writer();
-	w->getFromService("1,Father;2,Friend;3,Mother;5,Uncle", ';');
+	//Writer* w = new Writer();
+	//w->getFromService("1,Father;2,Friend;3,Mother;5,Uncle", ';');
+	char* argv[] = {"swipl.ll","-s","C:\\Users\\Fred\\Desktop\\ISEP\\LAPR5\\Project\\ArtificialIntelligence\\hangman.pl",NULL};
+	PlEngine e(3,argv);
+
+	HangMan* hangman = new HangMan();
+
+	//hangman->initialize();
+	hangman->UI(hangman->getWord(),hangman->getHint(hangman->getWord()));
 
 	cin.get();
 	return 1;	
