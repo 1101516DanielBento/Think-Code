@@ -18,8 +18,8 @@ Camera::Camera(GLfloat x, GLfloat y, GLfloat z)
 Camera::Camera()
 {
 
-	setDirLat(10);
-	setDirLong(10);
+	setDirLat(0.0);
+	setDirLong(0.0);
 	setFov(30);
 	setDistance(100);
 	setEyeX(40);
@@ -47,7 +47,7 @@ void Camera::setDirLong(GLdouble dirlong)
 
 void Camera::setDistance(GLfloat dist)
 {
-	this->dist = dist;
+	dist = dist;
 }
 
 void Camera::setEyeX(GLfloat x)
