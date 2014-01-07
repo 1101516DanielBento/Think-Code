@@ -97,7 +97,7 @@ typedef	GLdouble Vector[4];
 	GLboolean   q,a,up,down,left,right;
 }Teclas;*/
 
-typedef struct pos_t{
+/*typedef struct pos_t{
     GLfloat    x,y,z;
 }pos_t;
 
@@ -106,7 +106,7 @@ typedef struct objecto_t{
     GLfloat  dir;
     GLfloat  vel;
 }objecto_t;
-/*
+
  typedef struct Camera{
  GLfloat fov;
  GLdouble dir_lat;
@@ -140,7 +140,7 @@ typedef struct objecto_t{
 }Modelo;*/
 
 Estado *estado = new Estado();
-Modelo *modelo = new Modelo(2);
+Modelo *modelo= new Modelo(5);
 Teclas *teclas = new Teclas();
 
 void initEstado(){
@@ -188,7 +188,7 @@ void initModelo()
 	l2[2] = 5.0;
 	l2[3] = 0.0;
 	
-	//modelo->getObjecto()->setVel(2.0);
+	modelo->getObjecto()->setVel(2.0);
 	modelo->setEscala(0.2);
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
@@ -218,7 +218,7 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	initModelo();
-	//initEstado();
+	initEstado();
 	
 	modelo->setQuad(gluNewQuadric());
 	gluQuadricDrawStyle(modelo->getQuad(),GLU_FILL);
@@ -558,14 +558,14 @@ void desenhaPlanoDrag(int eixo){
 			material(emerald);
 			break;
 	}
-	/*glBegin(GL_QUADS);
+	glBegin(GL_QUADS);
 	glNormal3f(0,1,0);
 	glVertex3f(-100,0,-100);
 	glVertex3f(100,0,-100);
 	glVertex3f(100,0,100);
 	glVertex3f(-100,0,100);
 	glEnd();
-	glPopMatrix();*/
+	glPopMatrix();
 }
 
 void desenhaEixos(){
@@ -613,14 +613,14 @@ void setCamera(){
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
 	}
-	/*estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
 
 	putLights((GLfloat*)white_light);
 	gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()+2,
 		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
-		0,0,1);*/
+		0,0,1);
 }
 
 void display(void)
@@ -631,12 +631,13 @@ void display(void)
 	
 	glLoadIdentity();
 	
-	/*modelo.objecto.pos.x = nos[0].x;
-	 modelo.objecto.pos.y = nos[0].y;
-	 modelo.objecto.pos.z = nos[0].z;*/
+	modelo->getObjecto()->setX(nos[0].x);
+	modelo->getObjecto()->setY(nos[0].y);
+	modelo->getObjecto()->setZ(nos[0].z);
+
 	setCamera();
-	//material(slate);
-	//desenhaSolo();
+	material(slate);
+	desenhaSolo();
 	
 	desenhaEixos();
 	
