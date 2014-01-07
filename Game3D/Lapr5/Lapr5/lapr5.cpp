@@ -97,7 +97,7 @@ typedef	GLdouble Vector[4];
 	GLboolean   q,a,up,down,left,right;
 }Teclas;*/
 
-/*typedef struct pos_t{
+typedef struct pos_t{
     GLfloat    x,y,z;
 }pos_t;
 
@@ -106,7 +106,7 @@ typedef struct objecto_t{
     GLfloat  dir;
     GLfloat  vel;
 }objecto_t;
-
+/*
  typedef struct Camera{
  GLfloat fov;
  GLdouble dir_lat;
@@ -140,7 +140,7 @@ typedef struct objecto_t{
 }Modelo;*/
 
 Estado *estado = new Estado();
-Modelo *modelo;
+Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 
 void initEstado(){
@@ -172,8 +172,6 @@ void initEstado(){
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
 	
-
-	
 }
 
 void initModelo()
@@ -190,7 +188,7 @@ void initModelo()
 	l2[2] = 5.0;
 	l2[3] = 0.0;
 	
-	modelo->getObjecto()->setVel(2.0);
+	//modelo->getObjecto()->setVel(2.0);
 	modelo->setEscala(0.2);
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
@@ -231,7 +229,6 @@ void myInit()
 	leGrafo();
 	
 	
-	
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
@@ -251,16 +248,16 @@ void imprime_ajuda(void)
 	printf("w,W - PolygonMode Wireframe \n");
 	printf("p,P - PolygonMode Point \n");
 	printf("c,C - Liga/Desliga Cull Face \n");
-	printf("n,N - Liga/Desliga apresentao das normais \n");
+	printf("n,N - Liga/Desliga apresenta?o das normais \n");
 	printf("******* grafos ******* \n");
 	printf("F1  - Grava grafo do ficheiro \n");
 	printf("F2  - L grafo para ficheiro \n");
 	printf("F6  - Cria novo grafo\n");
 	printf("******* Camera ******* \n");
-	printf("Boto esquerdo - Arrastar os eixos (centro da camera)\n");
-	printf("Boto direito  - Rodar camera\n");
-	printf("Boto direito com CTRL - Zoom-in/out\n");
-	printf("PAGE_UP, PAGE_DOWN - Altera distncia da camara \n");
+	printf("Bot?o esquerdo - Arrastar os eixos (centro da camera)\n");
+	printf("Bot?o direito  - Rodar camera\n");
+	printf("Bot?o direito com CTRL - Zoom-in/out\n");
+	printf("PAGE_UP, PAGE_DOWN - Altera dist?ncia da camara \n");
 	printf("ESC - Sair\n");
 }
 
@@ -602,7 +599,7 @@ void setCamera(){
 	
 	
 	if(estado->getLight()){
-		//Posicionar a cmera
+		//Posicionar a c?mera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
@@ -610,7 +607,7 @@ void setCamera(){
 		
 		putLights((GLfloat*)white_light);
 	}else{
-		//Posicionar a cmera
+		//Posicionar a c?mera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
@@ -636,10 +633,9 @@ void display(void)
 	
 	glLoadIdentity();
 	
-	modelo->getObjecto()->setX(nos[0].x);
-	modelo->getObjecto()->setY(nos[0].y);
-	modelo->getObjecto()->setZ(nos[0].z);
-
+	/*modelo.objecto.pos.x = nos[0].x;
+	 modelo.objecto.pos.y = nos[0].y;
+	 modelo.objecto.pos.z = nos[0].z;*/
 	setCamera();
 	//material(slate);
 	//desenhaSolo();
@@ -742,7 +738,6 @@ void Timer(int value)
 	y1 = modelo->getObjecto()->getY();
 	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
 	GLfloat raio = pow((K_ESFERA/2.0),2);
-	modelo->setObjecto(new Objecto());
 	
 	if(teclas->getQ())
 	{

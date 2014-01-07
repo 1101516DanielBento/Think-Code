@@ -8,7 +8,7 @@
 
 #include "Modelo.h"
 
-Modelo::Modelo(int numUsers)
+Modelo::Modelo(/*int numUsers*/)
 {
 	g_pos_luz1 = new GLfloat[4];
 	g_pos_luz2 = new GLfloat[4];
