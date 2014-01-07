@@ -228,9 +228,11 @@ void myInit()
 	//le o grafo exemplo
 	leGrafo();
 	
+	
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
+
 	//por varaiaveis de teste
 }
 
@@ -599,7 +601,7 @@ void setCamera(){
 	if(estado->getLight()){
 		//Posicionar a cmera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
@@ -608,7 +610,7 @@ void setCamera(){
 		//Posicionar a cmera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
