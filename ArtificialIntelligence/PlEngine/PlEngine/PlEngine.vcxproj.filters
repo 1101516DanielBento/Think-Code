@@ -29,5 +29,8 @@
     <ClInclude Include="Writer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HangMan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
