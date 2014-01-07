@@ -140,7 +140,7 @@ typedef struct objecto_t{
 }Modelo;*/
 
 Estado *estado = new Estado();
-Modelo *modelo= new Modelo(5);
+Modelo *modelo;
 Teclas *teclas = new Teclas();
 
 void initEstado(){
@@ -171,6 +171,8 @@ void initEstado(){
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
+	
+
 	
 }
 
@@ -218,7 +220,7 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	initModelo();
-//	initEstado();
+	initEstado();
 	
 	modelo->setQuad(gluNewQuadric());
 	gluQuadricDrawStyle(modelo->getQuad(),GLU_FILL);
@@ -227,6 +229,7 @@ void myInit()
 	
 	//le o grafo exemplo
 	leGrafo();
+	
 	
 	
 	modelo->getObjecto()->setX(nos[0].x);
@@ -739,6 +742,7 @@ void Timer(int value)
 	y1 = modelo->getObjecto()->getY();
 	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
 	GLfloat raio = pow((K_ESFERA/2.0),2);
+	modelo->setObjecto(new Objecto());
 	
 	if(teclas->getQ())
 	{
