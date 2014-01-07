@@ -43,6 +43,13 @@ using namespace std;
 #define K_ESFERA 4.0
 #define VELv 0.5
 
+#define CAMERA_LIVRE 1
+#define CAMERA_RASANTE 2
+
+#define EIXO_X		1
+#define EIXO_Y		2
+#define EIXO_Z		3
+
 
 //#define RAND_MAX
 
@@ -230,8 +237,8 @@ void myInit()
 	leGrafo();
 	
 	modelo->getObjecto()->setX(nos[0].x);
-	modelo->getObjecto()->setY(nos[0].y);
-	modelo->getObjecto()->setZ(nos[0].z);
+	modelo->getObjecto()->setY(nos[0].z);
+	modelo->getObjecto()->setZ(nos[0].y);
 
 	//por varaiaveis de teste
 }
@@ -532,10 +539,6 @@ void desenhaEixo(){
 	glPopMatrix();
 }
 
-#define EIXO_X		1
-#define EIXO_Y		2
-#define EIXO_Z		3
-
 void desenhaPlanoDrag(int eixo){
 	glPushMatrix();
 	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
@@ -597,7 +600,7 @@ void desenhaEixos(){
 void setCamera(){
 	
 	
-	if(estado->getLight()){
+	/*if(estado->getLight()){
 		//Posicionar a c?mera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
@@ -619,19 +622,20 @@ void setCamera(){
 		/*gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getY(),modelo->getObjecto()->getZ()+2,
 		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
 		0,0,1);*/
-		estado->getCamera()->drawMe();
+		/*estado->getCamera()->drawMe();
 		
-	}
+	}*/
 
-	
-	/*estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+
+	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
 
 	putLights((GLfloat*)white_light);
-	gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()+2,
-		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
-		0,0,1);*/
+	
+	gluLookAt(modelo->getObjecto()->getX() , modelo->getObjecto()->getZ() , modelo->getObjecto()->getY() + 2 ,
+			  estado->getCamera()->getCenterX() , estado->getCamera()->getCenterY() , estado->getCamera()->getCenterZ() ,
+			  0,0,1);
 }
 
 void display(void)
@@ -750,38 +754,71 @@ void Timer(int value)
 	
 	if(teclas->getQ())
 	{
-		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ()+VELv);
-		teclas->setQ(GL_FALSE);
+		modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv);
+		//teclas->setQ(GL_FALSE);
 	}
 	if(teclas->getA())
 	{
-		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ()-VELv);
-		teclas->setA(GL_FALSE);
+		modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv);
+		//teclas->setA(GL_FALSE);
 	}
 	if(teclas->getLEFT())
 	{
-		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
 	}
 	
 	if(teclas->getRIGHT())
 	{
-		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
+		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
 	}
 	
 	if(teclas->getUP())
 	{
-		if(dist <= raio)
-		{
-			modelo->getObjecto()->setX(modelo->getObjecto()->getX()+VELv*cos(modelo->getObjecto()->getDir()));
-			modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv*sin(modelo->getObjecto()->getDir()));
-		}
+		//if(dist <= raio)
+		//{
+			//modelo->getObjecto()->setX(modelo->getObjecto()->getX()+VELv*cos(modelo->getObjecto()->getDir()));
+			//modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv*sin(modelo->getObjecto()->getDir()));
+		//}
+
+		modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 	}
 	
 	if(teclas->getDOWN())
 	{
-		modelo->getObjecto()->setX(modelo->getObjecto()->getX()-VELv*cos(modelo->getObjecto()->getDir()));
-		modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv*sin(modelo->getObjecto()->getDir()));
+		//modelo->getObjecto()->setX(modelo->getObjecto()->getX()-VELv*cos(modelo->getObjecto()->getDir()));
+		//modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv*sin(modelo->getObjecto()->getDir()));
+
+		modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+		modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+
 	}
+
+	//if(teclas->getR())
+	//{
+		//modelo->setCameraMode(CAMERA_RASANTE);
+		//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
+		//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].y + 0.1);
+		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].z - 2);
+	//}
+
+	/*if(teclas->getV())
+	{
+		modelo->setCameraMode(CAMERA_LIVRE);
+		modelo->setObjecto(new Objecto());
+		estado->getCamera()->setDirLat(0);
+		estado->getCamera()->setDirLong(0);
+		estado->getCamera()->setFov(30);
+		estado->getCamera()->setDistance(100);
+		estado->getCamera()->setEyeX(40);
+		estado->getCamera()->setEyeY(40);
+		estado->getCamera()->setEyeZ(0);
+		estado->getCamera()->setCenterX(nos[0].x);
+		estado->getCamera()->setCenterY(nos[0].y);
+		estado->getCamera()->setCenterZ(nos[0].z);
+	}*/
 	
 	if(estado->getDebug())
 		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
@@ -864,7 +901,14 @@ void keyboard(unsigned char key, int x, int y)
 		case 'Q':
 			teclas->setQ(GL_TRUE);
 			//estado.camera.center[2]+=0.2;
-			
+			break;
+		case 'r':
+		case 'R':
+			teclas->setR(GL_TRUE);
+			break;
+		case 'v':
+		case 'V':
+			teclas->setV(GL_TRUE);
 			break;
 	}
 	if(estado->getDebug())

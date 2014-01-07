@@ -19,7 +19,7 @@
 
 class Teclas{
 private:
-	GLboolean q,a,up,down,left,right;
+	GLboolean q,a,r,v,up,down,left,right;
 	
 public:
 	Teclas();
@@ -27,6 +27,8 @@ public:
 	
 	void setQ(GLboolean q);
 	void setA(GLboolean a);
+	void setR(GLboolean r);
+	void setV(GLboolean v);
 	void setUP(GLboolean up);
 	void setDOWN(GLboolean down);
 	void setLEFT(GLboolean left);
@@ -34,6 +36,8 @@ public:
 	
 	GLboolean getQ() const;
 	GLboolean getA() const;
+	GLboolean getR() const;
+	GLboolean getV() const;
 	GLboolean getUP() const;
 	GLboolean getDOWN() const;
 	GLboolean getLEFT() const;

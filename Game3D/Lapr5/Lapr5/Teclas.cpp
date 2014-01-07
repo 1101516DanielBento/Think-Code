@@ -28,6 +28,16 @@ void Teclas::setA(GLboolean a)
 	this->a=a;
 }
 
+void Teclas::setR(GLboolean r)
+{
+	this->r=r;
+}
+
+void Teclas::setV(GLboolean v)
+{
+	this->v=v;
+}
+
 void Teclas::setUP(GLboolean up)
 {
 	this->up=up;
@@ -56,6 +66,16 @@ GLboolean Teclas::getQ() const
 GLboolean Teclas::getA() const
 {
 	return a;
+}
+
+GLboolean Teclas::getR() const
+{
+	return r;
+}
+
+GLboolean Teclas::getV() const
+{
+	return v;
 }
 
 GLboolean Teclas::getUP() const
