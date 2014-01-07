@@ -82,6 +82,7 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HangMan.h" />
     <ClInclude Include="ReadProlog.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="Writer.h" />

@@ -22,13 +22,13 @@ int main(){
 
 	//Writer* w = new Writer();
 	//w->getFromService("1,Father;2,Friend;3,Mother;5,Uncle", ';');
-	char* argv[] = {"swipl.ll","-s","C:\\Users\\Fred\\Desktop\\ISEP\\LAPR5\\Project\\ArtificialIntelligence\\hangman.pl",NULL};
+	char* argv[] = {"swipl.ll","-s","C:\\Users\\W370ET\\Desktop\\ISEP\\LAPR5\\Lapr5Project\\ArtificialIntelligence\\hangman.pl",NULL};
 	PlEngine e(3,argv);
 
 	HangMan* hangman = new HangMan();
 
-	//hangman->initialize();
-	hangman->UI(hangman->getWord(),hangman->getHint(hangman->getWord()));
+	//cout<<hangman->charToString('f');
+	hangman->Start();
 
 	cin.get();
 	return 1;	
