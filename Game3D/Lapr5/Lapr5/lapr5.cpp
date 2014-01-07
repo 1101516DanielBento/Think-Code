@@ -218,7 +218,7 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	initModelo();
-	initEstado();
+//	initEstado();
 	
 	modelo->setQuad(gluNewQuadric());
 	gluQuadricDrawStyle(modelo->getQuad(),GLU_FILL);
@@ -228,9 +228,11 @@ void myInit()
 	//le o grafo exemplo
 	leGrafo();
 	
+	
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
+
 	//por varaiaveis de teste
 }
 
@@ -558,14 +560,14 @@ void desenhaPlanoDrag(int eixo){
 			material(emerald);
 			break;
 	}
-	glBegin(GL_QUADS);
+	/*glBegin(GL_QUADS);
 	glNormal3f(0,1,0);
 	glVertex3f(-100,0,-100);
 	glVertex3f(100,0,-100);
 	glVertex3f(100,0,100);
 	glVertex3f(-100,0,100);
 	glEnd();
-	glPopMatrix();
+	glPopMatrix();*/
 }
 
 void desenhaEixos(){
@@ -599,7 +601,7 @@ void setCamera(){
 	if(estado->getLight()){
 		//Posicionar a cmera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
@@ -608,19 +610,19 @@ void setCamera(){
 		//Posicionar a cmera
 		putLights((GLfloat*)white_light);
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
 	}
-	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	/*estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
 
 	putLights((GLfloat*)white_light);
 	gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()+2,
 		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
-		0,0,1);
+		0,0,1);*/
 }
 
 void display(void)
@@ -636,8 +638,8 @@ void display(void)
 	modelo->getObjecto()->setZ(nos[0].z);
 
 	setCamera();
-	material(slate);
-	desenhaSolo();
+	//material(slate);
+	//desenhaSolo();
 	
 	desenhaEixos();
 	
