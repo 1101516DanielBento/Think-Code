@@ -161,7 +161,7 @@ void initEstado(){
 	estado->setLight(GL_TRUE);
 	estado->setApresentaNormais(GL_TRUE);
 	estado->setLightViewer(1);
-	estado->setTimer(20);
+	estado->setTimer(100);
 	
 	//coordenadas do objecto
 	/*modelo.objecto.pos.x=90;
@@ -171,6 +171,7 @@ void initEstado(){
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
 	modelo->getObjecto()->setZ(nos[0].z);
+	
 	
 }
 
@@ -193,7 +194,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	
+	//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong());
 }
 
 
@@ -227,7 +228,6 @@ void myInit()
 	
 	//le o grafo exemplo
 	leGrafo();
-	
 	
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].y);
@@ -450,12 +450,12 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 	
 }
 
-void Caminho()
+/*void Caminho()
 {
 	//GLUquadricObj *obj = gluNewQuadric();
 	
 	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
-}
+}*/
 
 void desenhaLigacao(Arco arco)
 {
@@ -471,7 +471,7 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
-		material(slate);
+		material(red_plastic);
 		desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
 	}else{
@@ -505,18 +505,17 @@ void desenhaLabirinto(){
 	
 	for(int i=0; i<numNos; i++){
 		glPushMatrix();
-		material(azul);
+		material(red_plastic);
 		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 		//glutSolidCube(0.5);
 		glutSolidSphere((K_ESFERA/2.0),20,20);
 		glPopMatrix();
 		//desenhaNo(i);
 	}
-	material(emerald);
+	//material(emerald);
 	for(int i=0; i<numArcos; i++){
 		desenhaLigacao(arcos[i]);
 		//Caminho();
-		
 	}
 	glPopMatrix();
 }
@@ -601,7 +600,7 @@ void setCamera(){
 	if(estado->getLight()){
 		//Posicionar a c?mera
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
 		
@@ -612,9 +611,19 @@ void setCamera(){
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
+		estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+		estado->getCamera()->setCenterY(modelo->getObjecto()->getY() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+		estado->getCamera()->setCenterZ(modelo->getObjecto()->getZ() + 2 + sin(estado->getCamera()->getDirLat()));
 		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
+
+		/*gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getY(),modelo->getObjecto()->getZ()+2,
+		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
+		0,0,1);*/
+		estado->getCamera()->drawMe();
 		
 	}
+
+	
 	/*estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
