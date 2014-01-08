@@ -61,6 +61,7 @@ relacao(tiago,pedro,60).
 relacao(tiago,daniel,70).
 relacao(tiago,luis,80).
 relacao(tiago,daniel,80).
+relacao(tiago,daniela,70).
 relacao(fred,jose,100).
 relacao(fred,neves,80).
 relacao(luis,daniela,70).
@@ -213,37 +214,33 @@ cria_caminho(Utilizadores,[Destino|Destinos],[[Destino|Utilizadores]|LR]):-
 
 %------------------caminho mais forte----------------------------
 
-determinar_caminho_mais_forte(O,D,V):-findall(R,determinar_caminho_mais_forte2(O,D,R),L),maior(L,V).
+determinar_caminho_mais_forte(UtilizadorOrigem,UtilizadorDestino,LF):-findall(Y,determinar_caminho_mais_forte2(UtilizadorOrigem,UtilizadorDestino,Y),L),maior(L,LF).
 
-determinar_caminho_mais_forte2(O,D,R):-findall((B,S),relacao(O,B,S),Y),cria([O],Y,U),
-	determinar_caminho_mais_forte22(D,U,R).
+determinar_caminho_mais_forte2(UtilizadorOrigem,UtilizadorDestino,LF):-findall((D,P),relacao(UtilizadorOrigem,D,P),LR),cria([UtilizadorOrigem],LR,Lcria),
+	determinar_caminho_mais_forte22(UtilizadorDestino,Lcria,LF).
 
-determinar_caminho_mais_forte22(D,[[(D,S)|L]|_],[S1,(D,S)|L]):-soma([(D,S)|L],S2),
-	length([(D,S)|L],S3),
-	divide(S2,S3,S1).
-determinar_caminho_mais_forte22(D,[[(X,P)|Xs]|R],G):-findall((B,S),
-	relacao(X,B,S),H),
-	cria([(X,P)|Xs],H,U),
-	append(R,U,V),
+determinar_caminho_mais_forte22(UtilizadorDestino,[[(UtilizadorDestino,Peso)|Caminho]|_],[ResultadoDivisao,(UtilizadorDestino,Peso)|Caminho]):-soma([(UtilizadorDestino,Peso)|Caminho],PesoTotal),
+	length([(UtilizadorDestino,Peso)|Caminho],Npessoas),
+	divide(PesoTotal,Npessoas,ResultadoDivisao).
+determinar_caminho_mais_forte22(UtilizadorDestino,[[(Pessoa,Peso)|Caminho]|R],LF):-findall((Y,P),
+	relacao(Pessoa,Y,P),L),
+	cria([(Pessoa,Peso)|Caminho],L,LR),
+	append(R,LR,La),
 	%write(V),nl
 	!,
-	determinar_caminho_mais_forte22(D,V,G).
+	determinar_caminho_mais_forte22(UtilizadorDestino,La,LF).
 
 cria(_,[],[]).
 cria(O,[(Y,_)|Ys],R):-member(Y,O),cria(O,Ys,R).
 cria(O,[(Y,S)|Ys],[[(Y,S)|O]|R]):-cria(O,Ys,R).
 
 soma(L,0):-length(L,1).
-soma([(_,S)|L],S1):-soma(L,P),S1 is P +S.
+soma([(_,Peso)|Caminho],PesoTotal):-soma(Caminho,P),PesoTotal is P +Peso.
 
 divide(A,B,C):-C is A/B.
 
 maior(L,L):-length(L,1).
 maior([[X|Xs],[Y|_]|R],P):-X>Y,
-	%write(X),write(' ,1,  '),
-	%write(Y),nl,
 	maior([[X|Xs]|R],P).
 maior([[X|_],[Y|Ys]|R],P):-Y>=X,
-	%write(X),write(' ,2, '),
-	%write(Y),nl,
 	maior([[Y|Ys]|R],P).
