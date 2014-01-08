@@ -43,7 +43,7 @@
                         <br />
                         <asp:GridView ID="grdRanking" cellpadding="20" cellspacing="5" runat="server" AllowPaging="True" 
                             AutoGenerateColumns="False"
-                            OnPageIndexChanging="grdRanking_PageIndexChanging" Width="300px">
+                            OnPageIndexChanging="grdRanking_PageIndexChanging" Width="300px" style="margin-left: 0px">
                             <Columns>
                                 <asp:BoundField DataField="Username" DataFormatString="{0}"
                                     HeaderText="Username" ReadOnly="True">
@@ -53,7 +53,14 @@
                                     ReadOnly="True">
                                     <ItemStyle Width="50px" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="mostraTagsRel" DataFormatString="{0}" HeaderText="Relation Tag" ItemStyle-Width="195%" ReadOnly="True" />
+                                <asp:BoundField DataField="mostraTagsRel" DataFormatString="{0}" HeaderText="Relation Tag" ItemStyle-Width="195%" ReadOnly="True" >
+                                <ItemStyle Width="195%" />
+                                </asp:BoundField>
+                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="AddTagToFriendship.aspx?usr={0}" Text="Add Tag" >
+
+                                <ItemStyle Width="200px" />
+                                </asp:HyperLinkField>
+
                                 <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="removeFriendship.aspx?usr={0}" DataTextField="texto" DataTextFormatString="{0}">
                                 <ItemStyle Width="200px" />
                                 </asp:HyperLinkField>
