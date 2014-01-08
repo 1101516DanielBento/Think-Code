@@ -208,6 +208,7 @@ void initModelo()
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
 	//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong());
+	teclas->setRIGHT(GL_TRUE);
 }
 
 
@@ -246,7 +247,6 @@ void myInit()
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].z);
 	modelo->getObjecto()->setZ(nos[0].y);
-
 
 	//por varaiaveis de teste
 }
@@ -663,11 +663,21 @@ void setCamera(){
 		/*estado->getCamera()->drawMe();
 		
 	}*/
+	
+	/*glRotatef(graus(-M_PI/2.0), 0, 0, 1);
+	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
+	/*glLoadIdentity();
+
+	glRotatef(graus(-M_PI/2.0), 0, 0, 1);
+	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
 
 	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
-
+	
+	
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(modelo->getObjecto()->getX(), modelo->getObjecto()->getZ(), modelo->getObjecto()->getY() + 2 ,
@@ -947,6 +957,14 @@ void KeyUp(unsigned char key, int x, int y)
 		case 'A' :
 		case 'a' : teclas->setA(GL_FALSE);
 			break;
+		case 'R':
+		case 'r':
+			teclas->setR(GL_FALSE);
+			break;
+		case 'V':
+		case 'v':
+			teclas->setR(GL_FALSE);
+			break;
 			
 	}
 	
@@ -1125,7 +1143,7 @@ void motionDrag(int x, int y){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	setCamera();
+	//setCamera();
 	desenhaPlanoDrag(estado->getEixoTrans());
 	
 	n = glRenderMode(GL_RENDER);
@@ -1203,7 +1221,7 @@ int picking(int x, int y){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	setCamera();
+	//setCamera();
 	desenhaEixos();
 
 	n = glRenderMode(GL_RENDER);
@@ -1292,15 +1310,15 @@ void mouse(int btn, int state, int x, int y){
 				estado->setYMouse(y);
 				if(glutGetModifiers() & GLUT_ACTIVE_CTRL){
 					//glutMotionFunc(motionZoom);
-					printf("hello!!!");
+					//printf("hello!!!");
 				}else{
 					//glutMotionFunc(motionRotate);
-					printf("hello2!!!");
+					//printf("hello2!!!");
 				}
 				cout << "Right down\n";
 			}
 			else{
-				glutMotionFunc(NULL);
+				//glutMotionFunc(NULL);
 				cout << "Right up\n";
 			}
 			break;
@@ -1346,7 +1364,7 @@ void display(void)
 	
 	//selectObjects();
 
-	if(estado->getEixoTrans()) {
+	if(!estado->getEixoTrans()) {
 		// desenha plano de translacção
 		cout << "Translate... " << estado->getEixoTrans() << endl;
 		desenhaPlanoDrag(estado->getEixoTrans());

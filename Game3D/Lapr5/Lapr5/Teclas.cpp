@@ -10,7 +10,7 @@
 
 Teclas::Teclas()
 {
-	q,a,up,down,left,right=GL_FALSE;
+	q,a,r,v,up,down,left,right = GL_FALSE;
 }
 
 Teclas* Teclas::clone() const
