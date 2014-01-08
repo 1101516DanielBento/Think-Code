@@ -36,7 +36,7 @@ private:
 
 	
 public:
-	Modelo(int numUsers);
+	Modelo(/*int numUsers*/);
 	~Modelo();
 	
 	GLfloat* getGPosLuz1() const;

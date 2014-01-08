@@ -5,11 +5,11 @@
 #ifdef __APPLE__
 #define __GRAFO__FILE__ "/Users/pedrosimoes/Think-Code/Game3D/Lapr5/Lapr5/exemplo.grafo"
 #else
-#define __GRAFO__FILE__ "exemplo.grafo"
+#define __GRAFO__FILE__ "exemplo2.grafo"
 #endif
 
 #ifdef _WIN32
-#define __GRAFO__FILE__ "exemplo.grafo"
+#define __GRAFO__FILE__ "exemplo2.grafo"
 #endif
 
 //#define __GRAFO__FILE__ "exemplo.grafo"

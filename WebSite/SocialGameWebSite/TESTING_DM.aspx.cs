@@ -30,6 +30,9 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.IdTag = 5;
         tr2.TagName = "Amigo";
 
+        IList<Tuple<int, DateTime>> friends = userBll.loadFriendsRequestFromUser(4);
+        User u2= userBll.loadUserById(4);
+
         //if (tg.delTagsUser(4, "Isep"))
         //{
         //    Response.Write("DELETED");
