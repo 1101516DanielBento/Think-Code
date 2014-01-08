@@ -111,11 +111,11 @@ typedef struct pos_t{
     GLfloat    x,y,z;
 }pos_t;
 
-typedef struct objecto_t{
+/*typedef struct objecto_t{
     pos_t    pos;
     GLfloat  dir;
     GLfloat  vel;
-}objecto_t;
+}objecto_t;*/
 /*
  typedef struct Camera{
  GLfloat fov;
@@ -161,7 +161,7 @@ void initEstado(){
 	estado->getCamera()->setFov(60);
 	estado->getCamera()->setDistance(100);
 	//estado.camera.velh = 1.0;
-	estado->getCamera()->setVelv(5.0);
+	estado->getCamera()->setVelv(2.0);
 	//estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
 	estado->setEixo(0, 0, 0);
 	/*center[0]=0;
