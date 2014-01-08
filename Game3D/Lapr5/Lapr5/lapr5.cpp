@@ -319,6 +319,7 @@ void putLights(GLfloat* diffuse)
 }
 
 void desenhaSolo(){
+<<<<<<< HEAD
 	/*#define STEP 10
 	 glBegin(GL_QUADS);
 	 glNormal3f(0,0,1);
@@ -343,6 +344,32 @@ void desenhaSolo(){
 	glTexCoord2f(1,0);
 	glVertex2f(550,0);
 	glEnd();
+=======
+/*#define STEP 10
+	glBegin(GL_QUADS);
+	glNormal3f(0,0,1);
+	for(int i=-300;i<300;i+=STEP)
+		for(int j=-300;j<300;j+=STEP){
+			glVertex2f(i,j);
+			glVertex2f(i+STEP,j);
+			glVertex2f(i+STEP,j+STEP);
+			glVertex2f(i,j+STEP);
+		}
+	glEnd();*/
+	glPushMatrix();
+	glTranslatef(-275,-275,-5);
+	glBegin(GL_QUADS);
+		glNormal3f(0,0,1);
+		glTexCoord2f(0,0);
+		glVertex2f(0,0);
+		glTexCoord2f(0,1);
+		glVertex2f(0,550);
+		glTexCoord2f(1,1);
+		glVertex2f(550,550);
+		glTexCoord2f(1,0);
+		glVertex2f(550,0);
+		glEnd();
+>>>>>>> 7c277c7507576b22ff29cb4dee152cd60a4d2ce7
 	glPopMatrix();
 }
 
@@ -537,6 +564,7 @@ void desenhaLabirinto(){
 	//glScalef(5,5,5);
 	
 	/*for(int i=0; i<numNos; i++){
+<<<<<<< HEAD
 	 glPushMatrix();
 	 material(red_plastic);
 	 glTranslatef(nos[i].x,nos[i].y,nos[i].z);
@@ -546,6 +574,17 @@ void desenhaLabirinto(){
 	 //desenhaNo(i);
 	 */
 	desenhaNos();
+=======
+		glPushMatrix();
+		material(red_plastic);
+		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
+		//glutSolidCube(0.5);
+		glutSolidSphere((K_ESFERA/2.0),20,20);
+		glPopMatrix();
+		//desenhaNo(i);
+	*/
+		desenhaNos();
+>>>>>>> 7c277c7507576b22ff29cb4dee152cd60a4d2ce7
 	//material(emerald);
 	for(int i=0; i<numArcos; i++){
 		desenhaLigacao(arcos[i]);
@@ -557,12 +596,12 @@ void desenhaLabirinto(){
 void desenhaEixo(){
 	gluCylinder(modelo->getQuad(),0.5,0.5,20,16,15);
 	glPushMatrix();
-	glTranslatef(0,0,20);
+		glTranslatef(0,0,20);
 	glPushMatrix();
-	glRotatef(180,0,1,0);
-	gluDisk(modelo->getQuad(),0.5,2,16,6);
+		glRotatef(180,0,1,0);
+		gluDisk(modelo->getQuad(),0.5,2,16,6);
 	glPopMatrix();
-	gluCylinder(modelo->getQuad(),2,0,5,16,15);
+		gluCylinder(modelo->getQuad(),2,0,5,16,15);
 	glPopMatrix();
 }
 
@@ -602,25 +641,25 @@ void desenhaPlanoDrag(int eixo){
 void desenhaEixos(){
 	
 	glPushMatrix();
-	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
-	material(emerald);
-	glPushName(EIXO_Z);
-	desenhaEixo();
-	glPopName();
-	glPushName(EIXO_Y);
-	glPushMatrix();
-	glRotatef(-90,1,0,0);
-	material(red_plastic);
-	desenhaEixo();
-	glPopMatrix();
-	glPopName();
-	glPushName(EIXO_X);
-	glPushMatrix();
-	glRotatef(90,0,1,0);
-	material(azul);
-	desenhaEixo();
-	glPopMatrix();
-	glPopName();
+		glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
+		material(emerald);
+		glPushName(EIXO_Z);
+			desenhaEixo();
+		glPopName();
+		glPushName(EIXO_Y);
+			glPushMatrix();
+				glRotatef(-90,1,0,0);
+				material(red_plastic);
+				desenhaEixo();
+			glPopMatrix();
+		glPopName();
+		glPushName(EIXO_X);
+			glPushMatrix();
+				glRotatef(90,0,1,0);
+				material(azul);
+				desenhaEixo();
+			glPopMatrix();
+		glPopName();
 	glPopMatrix();
 }
 
@@ -628,6 +667,7 @@ void setCamera(){
 	
 	
 	/*if(estado->getLight()){
+<<<<<<< HEAD
 	 //Posicionar a c?mera
 	 glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 	 glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
@@ -653,6 +693,33 @@ void setCamera(){
 	 
 	 }*/
 	
+=======
+		//Posicionar a c?mera
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
+		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
+		
+		putLights((GLfloat*)white_light);
+	}else{
+		//Posicionar a c?mera
+		putLights((GLfloat*)white_light);
+		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir())-90, 0, 0, 1);
+		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ()-5);
+		estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+		estado->getCamera()->setCenterY(modelo->getObjecto()->getY() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+		estado->getCamera()->setCenterZ(modelo->getObjecto()->getZ() + 2 + sin(estado->getCamera()->getDirLat()));
+		//glTranslatef(-nos[0].x,-nos[0].y,-nos[0].z-5);
+
+		/*gluLookAt(modelo->getObjecto()->getX(),modelo->getObjecto()->getY(),modelo->getObjecto()->getZ()+2,
+		estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),
+		0,0,1);*/
+		/*estado->getCamera()->drawMe();
+		
+	}*/
+
+>>>>>>> 7c277c7507576b22ff29cb4dee152cd60a4d2ce7
 	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
@@ -660,11 +727,19 @@ void setCamera(){
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(modelo->getObjecto()->getX(), modelo->getObjecto()->getZ(), modelo->getObjecto()->getY() + 2 ,
+<<<<<<< HEAD
 			  estado->getCamera()->getCenterX() , estado->getCamera()->getCenterY() , estado->getCamera()->getCenterZ() ,
 			  //modelo->getObjecto()->getX()+2,modelo->getObjecto()->getZ()+2 , modelo->getObjecto()->getY() + 2 ,
 			  0,0,1);
 	
 	
+=======
+			 estado->getCamera()->getCenterX() , estado->getCamera()->getCenterY() , estado->getCamera()->getCenterZ() ,
+			 //modelo->getObjecto()->getX()+2,modelo->getObjecto()->getZ()+2 , modelo->getObjecto()->getY() + 2 ,
+			  0,0,1);
+	
+
+>>>>>>> 7c277c7507576b22ff29cb4dee152cd60a4d2ce7
 }
 
 void display(void)
@@ -814,10 +889,17 @@ void Timer(int value)
 		//modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv*sin(modelo->getObjecto()->getDir()));
 		//}
 		if(detectaColisoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()))
+<<<<<<< HEAD
 		{
 			modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 			modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 		}
+=======
+			{
+				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+			}
+>>>>>>> 7c277c7507576b22ff29cb4dee152cd60a4d2ce7
 	}
 	
 	if(teclas->getDOWN())
@@ -1077,11 +1159,11 @@ void loginWindow()
 
 void setProjection(int x, int y, GLboolean picking){
     glLoadIdentity();
-	if (picking) { // se está no modo picking, lê viewport e define zona de picking
-		GLint vport[4];
-		glGetIntegerv(GL_VIEWPORT, vport);
-		gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder à jana
-	}
+		if (picking) { // se está no modo picking, lê viewport e define zona de picking
+			GLint vport[4];
+			glGetIntegerv(GL_VIEWPORT, vport);
+			gluPickMatrix(x, glutGet(GLUT_WINDOW_HEIGHT)  - y, 4, 4, vport); // Inverte o y do rato para corresponder à jana
+		}
 	
 	gluPerspective(estado->getCamera()->getFov(),(GLfloat)glutGet(GLUT_WINDOW_WIDTH) /glutGet(GLUT_WINDOW_HEIGHT) ,1,500);
 	
