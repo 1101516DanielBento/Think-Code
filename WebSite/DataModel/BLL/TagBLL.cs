@@ -215,5 +215,11 @@ namespace DataModel.BLL
             return tagGateway.delTagUser(idUser, tagName) ;
         }
 
+        public Tag getRelTagFromFriendshipByIds(int idUserA, int idUserB) { 
+            
+            UserBLL bll = new UserBLL();
+            return bll.loadTagsFromFriendship(tagGateway.getRelTagFromFriendshipByIds(idUserA, idUserB));
+        }
+
     }
 }
