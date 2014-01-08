@@ -21,9 +21,84 @@
     <ClCompile Include="lapr5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MiniJogoLabirinto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MinijogoEnforcado.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MinijogoGalo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JogoDoGalo_openGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Labirinto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Estado.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Modelo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objecto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ponto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Relacao.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilizador.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Teclas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="grafos.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicLogin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Estado.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Modelo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objecto.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ponto.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Relacao.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilizador.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Lista.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ListaIterador.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="No.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Teclas.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

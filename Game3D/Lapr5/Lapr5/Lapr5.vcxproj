@@ -47,9 +47,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>GLUT_BUILDING_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glut32.lib;glu32.lib;WS2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,11 +68,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Estado.cpp" />
     <ClCompile Include="grafos.cpp" />
+    <ClCompile Include="JogoDoGalo_openGL.cpp" />
+    <ClCompile Include="Labirinto.cpp" />
     <ClCompile Include="lapr5.cpp" />
+    <ClCompile Include="MinijogoEnforcado.cpp" />
+    <ClCompile Include="MinijogoGalo.cpp" />
+    <ClCompile Include="MiniJogoLabirinto.cpp" />
+    <ClCompile Include="Modelo.cpp" />
+    <ClCompile Include="Objecto.cpp" />
+    <ClCompile Include="Ponto.cpp" />
+    <ClCompile Include="Relacao.cpp" />
+    <ClCompile Include="Teclas.cpp" />
+    <ClCompile Include="Utilizador.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicLogin.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Estado.h" />
     <ClInclude Include="grafos.h" />
+    <ClInclude Include="Lista.h" />
+    <ClInclude Include="ListaIterador.h" />
+    <ClInclude Include="Modelo.h" />
+    <ClInclude Include="No.h" />
+    <ClInclude Include="Objecto.h" />
+    <ClInclude Include="Ponto.h" />
+    <ClInclude Include="Relacao.h" />
+    <ClInclude Include="Teclas.h" />
+    <ClInclude Include="Utilizador.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="exemplo.grafo" />

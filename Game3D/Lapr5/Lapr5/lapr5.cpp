@@ -13,6 +13,7 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
+
 using namespace std;
 
 #ifdef __APPLE__
@@ -33,15 +34,16 @@ typedef struct vecCol{
 
 vecCol colisao[100];
 
-std::vector<std::vector<GLfloat>> PosTodosUsers;
+vector<vector<GLfloat>> PosTodosUsers;
 
-
-using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
+
 #define K_ESFERA 4.0
 #define VELv 0.5
+#define DIMENSAO_CAMARA 8
+#define BUFSIZE 512
 
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
@@ -49,6 +51,8 @@ using namespace std;
 #define EIXO_X		1
 #define EIXO_Y		2
 #define EIXO_Z		3
+
+
 
 
 //#define RAND_MAX
@@ -149,6 +153,8 @@ typedef struct objecto_t{
 Estado *estado = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
+int obj = 0;
+//GLuint buffer[BUF_SIZE];
 
 void initEstado(){
 	estado->getCamera()->setDirLat(graus(M_PI/4));
@@ -236,9 +242,10 @@ void myInit()
 	//le o grafo exemplo
 	leGrafo();
 	
-	modelo->getObjecto()->setX(nos[0].x);
+	/*modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].z);
-	modelo->getObjecto()->setZ(nos[0].y);
+	modelo->getObjecto()->setZ(nos[0].y);*/
+
 
 	//por varaiaveis de teste
 }
@@ -492,6 +499,7 @@ void desenhaLigacao(Arco arco)
 			nof=&nos[arco.noi];
 			noi=&nos[arco.nof];
 		}
+		glLoadName(obj++);
 		material(red_plastic);
 		desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		
@@ -505,14 +513,14 @@ void desenhaLigacao(Arco arco)
 				nof=&nos[arco.noi];
 				noi=&nos[arco.nof];
 			}
+			glLoadName(obj++);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
 		}else{
 			noi=&nos[arco.noi];
 			nof=&nos[arco.nof];
 			material(red_plastic);
+			glLoadName(obj++);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-			
-			
 		}
 	}
 }
@@ -522,6 +530,7 @@ void desenhaNos()
 	for(int i = 0; i < numNos; i++)
 	{
 		glPushMatrix();
+		glLoadName(i);
 		material(red_plastic);
 		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 		glutSolidSphere((K_ESFERA/2),20,20);
@@ -675,9 +684,6 @@ void display(void)
 	
 	glLoadIdentity();
 	
-	/*modelo.objecto.pos.x = nos[0].x;
-	 modelo.objecto.pos.y = nos[0].y;
-	 modelo.objecto.pos.z = nos[0].z;*/
 	setCamera();
 	//material(slate);
 	
@@ -700,7 +706,23 @@ void display(void)
 	glutSwapBuffers();
 	
 }
-//detecta colisao esfera
+
+bool detetaColisoesVL(GLfloat nx, GLfloat ny, GLfloat nz)
+{
+	glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
+
+	/*glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
+		glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
+		glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());*/
+		return true;
+}
+//detecta colisao esfera voo rasante
 bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 {
 	int compUsers = numNos;
@@ -713,7 +735,7 @@ bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 	{
 		d = sqrt(((nx - nos[i].x)*(nx - nos[i].x)+((ny - nos[i].y)*(ny - nos[i].y))+((nz - nos[i].z)*(nz - nos[i].z))));
 		
-		if(d <= (raio))
+		if(d <= (raio+1))
 		{
 			return false;
 		}
@@ -855,7 +877,7 @@ void Timer(int value)
 		estado->getCamera()->setCenterZ(nos[0].z);
 	}*/
 	
-	if(estado->getDebug())
+	if(!estado->getDebug())
 		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
 	
 	glutPostRedisplay();
@@ -1181,7 +1203,7 @@ int picking(int x, int y){
 	GLuint buffer[100], *ptr;
 	
 	glSelectBuffer(100, buffer);
-	glRenderMode(GL_SELECT);
+	//glRenderMode(GL_SELECT);
 	glInitNames();
 	
 	glMatrixMode(GL_PROJECTION);
@@ -1216,6 +1238,65 @@ int picking(int x, int y){
 	return objid;
 }
 
+void selectionMode(int x, int y, int z)
+{
+	int i, d, objid = 0,hits;
+	double zmin = 0, zmax = 1.0;
+	GLuint buffer[BUFSIZE], *ptr;
+
+	glSelectBuffer(BUFSIZE, buffer);
+	glRenderMode(GL_SELECT);
+	glInitNames();
+	glPushName(0);
+
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
+
+	glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
+		glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
+		glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
+		desenhaLabirinto();
+	glPopMatrix();
+	glFlush();
+
+	hits = glRenderMode(GL_RENDER);
+	//processHits(hits,buffer);
+
+}
+
+void processHits(GLint hits, GLuint buffer[])
+{
+	unsigned int i, j;
+	GLuint names,*ptr;
+
+	printf("hits = %d\n",hits);
+	ptr = (GLuint *) buffer;
+	for(int i = 0; i < hits; i++)
+	{/*para cada hit*/
+		names = *ptr;
+		printf("numero de nomes por hit = %d \n", names);
+		ptr++;
+		printf(" z1 is %g;", (float) *ptr/0x7fffffff);
+		ptr++;
+		printf("z2 is %g\n;", (float) *ptr/0x7fffffff);
+		ptr++;
+		printf(" nome : ");
+		for(j = 0; j < names; j++)
+		{/*para cada nome*/
+			printf("%d", *ptr);
+			ptr++;
+		}
+		printf("\n");
+	}
+}
+
+//definir mouse para mudar de direcao de forma a ter 2 opçoes setas e rato (right mouse button)
 void mouse(int btn, int state, int x, int y){
 	switch(btn) {
 		case GLUT_RIGHT_BUTTON :
