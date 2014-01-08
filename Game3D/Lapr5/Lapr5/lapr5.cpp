@@ -12,6 +12,8 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
+#include "WebService_Request.h"
+#include "User_C.h"
 
 using namespace std;
 
@@ -41,9 +43,8 @@ vector<vector<GLfloat>> PosTodosUsers;
 
 #define K_ESFERA 4.0
 #define VELv 0.5
-#define DIMENSAO_CAMARA 10
+#define DIMENSAO_CAMARA 4
 #define BUFSIZE 512
-#define DISTANCIA_SOLO 1.0
 
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
@@ -208,7 +209,6 @@ void initModelo()
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
 	//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong());
-	teclas->setRIGHT(GL_TRUE);
 }
 
 
@@ -244,9 +244,10 @@ void myInit()
 	//le o grafo exemplo
 	leGrafo();
 	
-	modelo->getObjecto()->setX(nos[0].x);
+	/*modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].z);
-	modelo->getObjecto()->setZ(nos[0].y);
+	modelo->getObjecto()->setZ(nos[0].y);*/
+
 
 	//por varaiaveis de teste
 }
@@ -581,14 +582,14 @@ void desenhaPlanoDrag(int eixo){
 	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
 	switch (eixo) {
 		case EIXO_Y :
-			if(abs(estado->getCamera()->getDirLong())<M_PI/4)
+			if(abs(estado->getCamera()->getDirLat())<M_PI/4)
 				glRotatef(-90,0,0,1);
 			else
 				glRotatef(90,1,0,0);
 			material(red_plastic);
 			break;
 		case EIXO_X :
-			if(abs(estado->getCamera()->getDirLong())>M_PI/6)
+			if(abs(estado->getCamera()->getDirLat())>M_PI/6)
 				glRotatef(90,1,0,0);
 			material(azul);
 			break;
@@ -599,7 +600,6 @@ void desenhaPlanoDrag(int eixo){
 			material(emerald);
 			break;
 	}
-	glPopMatrix();
 	/*glBegin(GL_QUADS);
 	glNormal3f(0,1,0);
 	glVertex3f(-100,0,-100);
@@ -663,21 +663,11 @@ void setCamera(){
 		/*estado->getCamera()->drawMe();
 		
 	}*/
-	
-	/*glRotatef(graus(-M_PI/2.0), 0, 0, 1);
-	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
-	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
-	/*glLoadIdentity();
-
-	glRotatef(graus(-M_PI/2.0), 0, 0, 1);
-	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
-	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
 
 	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
-	
-	
+
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(modelo->getObjecto()->getX(), modelo->getObjecto()->getZ(), modelo->getObjecto()->getY() + 2 ,
@@ -699,14 +689,13 @@ bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
 	int compLigacoes = numArcos;
 	
 	GLfloat raio = K_ESFERA/2.0;
-	GLfloat r = pow(raio,2);
 	GLfloat d;
 	
 	for(int i = 1; i < compUsers; i++)
 	{
-		d = sqrt(((nx - nos[i].x)*(nx - nos[i].x)+/*((ny - nos[i].y)*(ny - nos[i].y))*/+((nz - nos[i].z)*(nz - nos[i].z))));
+		d = sqrt(((nx - nos[i].x)*(nx - nos[i].x)+((ny - nos[i].y)*(ny - nos[i].y))+((nz - nos[i].z)*(nz - nos[i].z))));
 		
-		if(d <= r)
+		if(d <= (raio+1))
 		{
 			return false;
 		}
@@ -810,7 +799,6 @@ void Timer(int value)
 			{
 				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				//modelo->getObjecto()->setY(modelo->getObjecto()->getY() + DISTANCIA_SOLO);
 			}
 	}
 	
@@ -956,14 +944,6 @@ void KeyUp(unsigned char key, int x, int y)
 			break;
 		case 'A' :
 		case 'a' : teclas->setA(GL_FALSE);
-			break;
-		case 'R':
-		case 'r':
-			teclas->setR(GL_FALSE);
-			break;
-		case 'V':
-		case 'v':
-			teclas->setR(GL_FALSE);
 			break;
 			
 	}
@@ -1143,7 +1123,7 @@ void motionDrag(int x, int y){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//setCamera();
+	setCamera();
 	desenhaPlanoDrag(estado->getEixoTrans());
 	
 	n = glRenderMode(GL_RENDER);
@@ -1177,7 +1157,46 @@ void motionDrag(int x, int y){
 	glutPostRedisplay();
 }
 
-
+int picking(int x, int y){
+	int i, n, objid=0;
+	double zmin = 10.0;
+	GLuint buffer[100], *ptr;
+	
+	glSelectBuffer(100, buffer);
+	glRenderMode(GL_SELECT);
+	glInitNames();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix(); // guarda a projecção
+	glLoadIdentity();
+	setProjection(x,y,GL_TRUE);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	setCamera();
+	desenhaEixos();
+	
+	n = glRenderMode(GL_RENDER);
+	if (n > 0)
+	{
+		ptr = buffer;
+		for (i = 0; i < n; i++)
+		{
+			if (zmin > (double) ptr[1] / UINT_MAX) {
+				zmin = (double) ptr[1] / UINT_MAX;
+				objid = ptr[3];
+			}
+			ptr += 3 + ptr[0]; // ptr[0] contem o número de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
+		}
+	}
+	
+	
+	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	
+	return objid;
+}
 
 void processHits(GLint hits, GLuint buffer[])
 {
@@ -1205,99 +1224,40 @@ void processHits(GLint hits, GLuint buffer[])
 	}
 }
 
-int picking(int x, int y){
-	int i, n, objid=0;
-	double zmin = 10.0;
-	GLuint buffer[100], *ptr;
-	
-	glSelectBuffer(100, buffer);
-	glRenderMode(GL_SELECT);
-	glInitNames();
-	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // guarda a projecção
-	glLoadIdentity();
-	setProjection(x,y,GL_TRUE);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	//setCamera();
-	desenhaEixos();
-
-	n = glRenderMode(GL_RENDER);
-	if (n > 0)
-	{
-		ptr = buffer;
-		for (i = 0; i < n; i++)
-		{
-			if (zmin > (double) ptr[1] / UINT_MAX) {
-				zmin = (double) ptr[1] / UINT_MAX;
-				objid = ptr[3];
-			}
-			ptr += 3 + ptr[0]; // ptr[0] contem o número de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
-		}
-	}
-	
-	
-	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	
-	return objid;
-}
-int selectObjects(int x, int y)
+void selectObjects()
 {
 	int i, d, objid = 0;
 	GLint hits;
-	double zmin = 10.0, zmax = 1.0;
+	double zmin = 0, zmax = 1.0;
 	GLuint buffer[BUFSIZE], *ptr;
 
 	glSelectBuffer(BUFSIZE, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
-	//glPushName(0);//colocar o inicial na stack - 0
+	glPushName(0);//colocar o inicial na stack - 0
 
-	
-	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		/*glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
 			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
-			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());*/
-		setProjection(x,y,GL_TRUE);
+			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
 	
 	glMatrixMode(GL_MODELVIEW);
 
 		glLoadIdentity();
-		setCamera();
 		//glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
 		//glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
 		//glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
-		glPushMatrix();
-			desenhaLabirinto();
-		glPopMatrix();
+		desenhaNos();
+		for(int i = 1; i < numArcos; i++)
+			desenhaLigacao(arcos[i]);
+	glPopMatrix();
+	glFlush();
 
-		hits = glRenderMode(GL_RENDER);
-		if(hits > 0)
-		{
-			ptr = buffer;
-			for(i = 0; i < hits; i++)
-			{
-				if(zmin > (double) ptr[1]/UINT_MAX)
-				{
-					zmin = (double) ptr[1] / UINT_MAX;
-					objid = ptr[3];
-				}
-				ptr += 3 + ptr[0];
-			}
-		}
-		//processHits(hits,buffer);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-
-		return objid;
-	//glFlush();
+	hits = glRenderMode(GL_RENDER);
+		processHits(hits,buffer);
+	
 }
 
 
@@ -1308,27 +1268,23 @@ void mouse(int btn, int state, int x, int y){
 			if(state == GLUT_DOWN){
 				estado->setXMouse(x);
 				estado->setYMouse(y);
-				if(glutGetModifiers() & GLUT_ACTIVE_CTRL){
-					//glutMotionFunc(motionZoom);
-					//printf("hello!!!");
-				}else{
-					//glutMotionFunc(motionRotate);
-					//printf("hello2!!!");
-				}
-				cout << "Right down\n";
+				if(glutGetModifiers() & GLUT_ACTIVE_CTRL)
+					glutMotionFunc(motionZoom);
+				else
+					glutMotionFunc(motionRotate);
+				cout << "Left down\n";
 			}
 			else{
-				//glutMotionFunc(NULL);
-				cout << "Right up\n";
+				glutMotionFunc(NULL);
+				cout << "Left up\n";
 			}
 			break;
 		case GLUT_LEFT_BUTTON :
 			if(state == GLUT_DOWN){
 				estado->setEixoTrans(picking(x,y));
-				//estado->setEixoTrans(selectObjects(x,y));
 				if(estado->getEixoTrans())
-					//glutMotionFunc(motionDrag);
-				cout << "Left down - objecto:" << estado->getEixoTrans() << endl;
+					glutMotionFunc(motionDrag);
+				cout << "Right down - objecto:" << estado->getEixoTrans() << endl;
 			}
 			else{
 				if(estado->getEixoTrans()!=0) {
@@ -1339,7 +1295,7 @@ void mouse(int btn, int state, int x, int y){
 					estado->setEixoTrans(0);//=0;
 					glutPostRedisplay();
 				}
-				cout << "Left up\n";
+				cout << "Right up\n";
 			}
 			break;
 	}
@@ -1364,7 +1320,7 @@ void display(void)
 	
 	//selectObjects();
 
-	if(!estado->getEixoTrans()) {
+	if(estado->getEixoTrans()) {
 		// desenha plano de translacção
 		cout << "Translate... " << estado->getEixoTrans() << endl;
 		desenhaPlanoDrag(estado->getEixoTrans());
@@ -1379,6 +1335,11 @@ void display(void)
 
 int main(int argc, char **argv)
 {
+	WebService_Request *ws= new WebService_Request();
+	int id=ws->login("Quim","qwerty");
+	vector<User_C> *userList = ws->getNetworkById(id);
+
+
     glutInit(&argc, argv);
 	
 	/* need both double buffering and z buffer */

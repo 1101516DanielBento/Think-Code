@@ -356,8 +356,10 @@ namespace DataModel.DAL
             {
                 return false;
             }
+            TagGateway tg = new TagGateway();
+            int idNT=tg.getIdTagFriendshipNo_TAG();
 
-            string query = "INSERT INTO [GameDataBase].[dbo].[Friendship]([idUserA],[idUserB],[date]) VALUES (" + myId + "," + idUser + ", SYSDATETIME())";
+            string query = "INSERT INTO [GameDataBase].[dbo].[Friendship]([idUserA],[idUserB],[date],[idTag]) VALUES (" + myId + "," + idUser + ", SYSDATETIME(), "+idNT+")";
 
             int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
 

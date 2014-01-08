@@ -293,6 +293,42 @@ namespace DataModel.DAL
 
             return ret;
         }
+
+
+        public int getIdTagFriendshipNo_TAG()
+        {
+            string query = "SELECT idTag FROM [GameDataBase].[dbo].[TagList] where [type]=1 and [tagName] = 'No Tag'";
+
+            DataSet ds = ExecuteQuery(GetConnection(false), query);
+
+            bool flag = true;
+
+            int idT = -1;
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                idT = (int)r["idTag"];
+                flag = false;
+            }
+
+            if (flag)
+            {
+                query = "INSERT INTO [GameDataBase].[dbo].[TagList]([tagName],[type]) VALUES ('No Tag', 1);SELECT SCOPE_IDENTITY() as idT";
+
+                ds = ExecuteQuery(GetConnection(true), query);
+
+                foreach (DataRow r in ds.Tables[0].Rows)
+                {
+                    idT = Convert.ToInt32(r["idT"]);
+                    flag = false;
+                }
+            }
+            
+
+            return idT;
+        }
+
+
     }
 }
 

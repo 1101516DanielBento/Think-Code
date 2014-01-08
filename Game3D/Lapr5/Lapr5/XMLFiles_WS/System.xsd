@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataModel.Model" />
+  <xs:complexType name="ArrayOfTupleOfintdateTimeTag2Xw_Sbs0H">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfintdateTimeTag2Xw_Sbs0H" nillable="true" type="tns:TupleOfintdateTimeTag2Xw_Sbs0H" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTupleOfintdateTimeTag2Xw_Sbs0H" nillable="true" type="tns:ArrayOfTupleOfintdateTimeTag2Xw_Sbs0H" />
+  <xs:complexType name="TupleOfintdateTimeTag2Xw_Sbs0H">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{2}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="int" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="dateTime" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="Tag" Namespace="http://schemas.datacontract.org/2004/07/DataModel.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" type="xs:int" />
+      <xs:element name="m_Item2" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataModel.Model" name="m_Item3" nillable="true" type="q1:Tag" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfintdateTimeTag2Xw_Sbs0H" nillable="true" type="tns:TupleOfintdateTimeTag2Xw_Sbs0H" />
+  <xs:complexType name="ArrayOfTupleOfintdateTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfintdateTime" nillable="true" type="tns:TupleOfintdateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTupleOfintdateTime" nillable="true" type="tns:ArrayOfTupleOfintdateTime" />
+  <xs:complexType name="TupleOfintdateTime">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="int" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="dateTime" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" type="xs:int" />
+      <xs:element name="m_Item2" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfintdateTime" nillable="true" type="tns:TupleOfintdateTime" />
+  <xs:complexType name="ArrayOfTupleOfintArrayOfGameRequestDj_S7S2QP">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfintArrayOfGameRequestDj_S7S2QP" nillable="true" type="tns:TupleOfintArrayOfGameRequestDj_S7S2QP" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTupleOfintArrayOfGameRequestDj_S7S2QP" nillable="true" type="tns:ArrayOfTupleOfintArrayOfGameRequestDj_S7S2QP" />
+  <xs:complexType name="TupleOfintArrayOfGameRequestDj_S7S2QP">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="int" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="ArrayOfGameRequest" Namespace="http://schemas.datacontract.org/2004/07/DataModel.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" type="xs:int" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataModel.Model" name="m_Item2" nillable="true" type="q2:ArrayOfGameRequest" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfintArrayOfGameRequestDj_S7S2QP" nillable="true" type="tns:TupleOfintArrayOfGameRequestDj_S7S2QP" />
+</xs:schema>
