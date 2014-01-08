@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <cmath>
-#include <iostream>
 #include <vector>
 #include <ctime>
 #include <iostream>
@@ -42,7 +41,7 @@ vector<vector<GLfloat>> PosTodosUsers;
 
 #define K_ESFERA 4.0
 #define VELv 0.5
-#define DIMENSAO_CAMARA 8
+#define DIMENSAO_CAMARA 4
 #define BUFSIZE 512
 
 #define CAMERA_LIVRE 1
@@ -174,7 +173,7 @@ void initEstado(){
 	estado->setLight(GL_TRUE);
 	estado->setApresentaNormais(GL_TRUE);
 	estado->setLightViewer(1);
-	estado->setTimer(100);
+	estado->setTimer(20);
 	
 	//coordenadas do objecto
 	/*modelo.objecto.pos.x=90;
@@ -216,7 +215,7 @@ void myInit()
 	
 	GLfloat LuzAmbiente[]={0.5,0.5,0.5, 0.0};
 	estado->setOrtho(GL_FALSE);
-	estado->setTimer(100);
+	estado->setTimer(20);
 	
 	//glClearColor (0.0, 0.0, 0.0, 0.0);
 	
@@ -231,6 +230,7 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
+	//glShadeModel(GL_FLAT);
 	initModelo();
 	//initEstado();
 	
@@ -676,51 +676,9 @@ void setCamera(){
 
 }
 
-void display(void)
-{
-	
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glLoadIdentity();
-	
-	setCamera();
-	//material(slate);
-	
-	desenhaSolo();
-	
-	desenhaEixos();
-	
-	desenhaLabirinto();
-	
-	//setCamera();
-	
-	if(estado->getEixoTrans()) {
-		// desenha plano de translacção
-		cout << "Translate... " << estado->getEixoTrans() << endl;
-		desenhaPlanoDrag(estado->getEixoTrans());
-		
-	}
-	
-	glFlush();
-	glutSwapBuffers();
-	
-}
-
 bool detetaColisoesVL(GLfloat nx, GLfloat ny, GLfloat nz)
 {
-	glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
-			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
-			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
-
-	/*glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
-		glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
-		glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());*/
-		return true;
+	return true;
 }
 //detecta colisao esfera voo rasante
 bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
@@ -1203,7 +1161,7 @@ int picking(int x, int y){
 	GLuint buffer[100], *ptr;
 	
 	glSelectBuffer(100, buffer);
-	//glRenderMode(GL_SELECT);
+	glRenderMode(GL_SELECT);
 	glInitNames();
 	
 	glMatrixMode(GL_PROJECTION);
@@ -1238,38 +1196,6 @@ int picking(int x, int y){
 	return objid;
 }
 
-void selectionMode(int x, int y, int z)
-{
-	int i, d, objid = 0,hits;
-	double zmin = 0, zmax = 1.0;
-	GLuint buffer[BUFSIZE], *ptr;
-
-	glSelectBuffer(BUFSIZE, buffer);
-	glRenderMode(GL_SELECT);
-	glInitNames();
-	glPushName(0);
-
-	glPushMatrix();
-	glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
-			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
-			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
-
-	glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
-		glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
-		glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
-		desenhaLabirinto();
-	glPopMatrix();
-	glFlush();
-
-	hits = glRenderMode(GL_RENDER);
-	//processHits(hits,buffer);
-
-}
-
 void processHits(GLint hits, GLuint buffer[])
 {
 	unsigned int i, j;
@@ -1295,6 +1221,43 @@ void processHits(GLint hits, GLuint buffer[])
 		printf("\n");
 	}
 }
+
+void selectObjects()
+{
+	int i, d, objid = 0;
+	GLint hits;
+	double zmin = 0, zmax = 1.0;
+	GLuint buffer[BUFSIZE], *ptr;
+
+	glSelectBuffer(BUFSIZE, buffer);
+	glRenderMode(GL_SELECT);
+	glInitNames();
+	glPushName(0);//colocar o inicial na stack - 0
+
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
+			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
+	
+	glMatrixMode(GL_MODELVIEW);
+
+		glLoadIdentity();
+		//glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
+		//glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
+		//glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
+		desenhaNos();
+		for(int i = 1; i < numArcos; i++)
+			desenhaLigacao(arcos[i]);
+	glPopMatrix();
+	glFlush();
+
+	hits = glRenderMode(GL_RENDER);
+		processHits(hits,buffer);
+	
+}
+
 
 //definir mouse para mudar de direcao de forma a ter 2 opçoes setas e rato (right mouse button)
 void mouse(int btn, int state, int x, int y){
@@ -1335,6 +1298,38 @@ void mouse(int btn, int state, int x, int y){
 			break;
 	}
 }
+
+void display(void)
+{
+	
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glLoadIdentity();
+	
+	setCamera();
+	//material(slate);
+	
+	desenhaSolo();
+	
+	desenhaEixos();
+	
+	desenhaLabirinto();
+	
+	//selectObjects();
+
+	if(estado->getEixoTrans()) {
+		// desenha plano de translacção
+		cout << "Translate... " << estado->getEixoTrans() << endl;
+		desenhaPlanoDrag(estado->getEixoTrans());
+		
+	}
+	
+	glFlush();
+	glutSwapBuffers();
+	
+}
+
 
 int main(int argc, char **argv)
 {
