@@ -277,6 +277,22 @@ namespace DataModel.DAL
 
             return false;
         }
+
+
+        public int getRelTagFromFriendshipByIds(int idUserA, int idUserB)
+        {
+            string query = "SELECT [idTag] FROM [GameDataBase].[dbo].[Friendship] where [idUserA]=" + idUserA + " and [idUserB] =" + idUserB + " or [idUserA]=" + idUserB + " and [idUserB] =" + idUserA;
+
+            DataSet ds = ExecuteQuery(GetConnection(false), query);
+            int ret = -1;
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                return (int)r["idTag"];
+                
+            }
+
+            return ret;
+        }
     }
 }
 

@@ -16,11 +16,20 @@ Estado::Estado()
 	eixoY = 0;
 	eixoZ = 0;
 	setLight(GL_FALSE);
-	setApresentaNormais(GL_FALSE);
+	//setApresentaNormais(GL_FALSE);
 	setLightViewer(1);
 	setEixo(0,0,0);
 	setLocating(0);
 	//debug = GL_TRUE;
+	
+	//camara->setDirLat(graus(M_PI/4));
+	
+	camera->setCenterX(0);
+	camera->setCenterY(0);
+	camera->setCenterZ(0);
+	setLight(GL_TRUE);
+	setApresentaNormais(GL_TRUE);
+	setTimer(20);
 }
 
 void Estado::setCamera(Camera *camera)
