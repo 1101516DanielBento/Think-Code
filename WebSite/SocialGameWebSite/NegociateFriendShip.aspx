@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FrontOffice.master" AutoEventWireup="true" CodeFile="PendingRequest.aspx.cs" Inherits="PendingRequest" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FrontOffice.master" AutoEventWireup="true" CodeFile="NegociateFriendShip.aspx.cs" Inherits="NegociateFriendShip" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -24,7 +24,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" runat="Server">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="cel_titulo">PendingRequest<p class="barra_titulo">&nbsp;</p>
+            <td class="cel_titulo">Negociate FriendShip<p class="barra_titulo">&nbsp;</p>
             </td>
         </tr>
         <tr>
@@ -43,25 +43,52 @@
                         <br />
                         <asp:GridView ID="grdRanking" runat="server" AllowPaging="True"
                             AutoGenerateColumns="False"
-                            OnPageIndexChanging="grdRanking_PageIndexChanging" Width="800px" OnSelectedIndexChanged="grdRanking_SelectedIndexChanged">
+                            OnPageIndexChanging="grdRanking_PageIndexChanging" Width="800px" OnSelectedIndexChanged="grdRanking_SelectedIndexChanged" >
                             <Columns>
-                                <asp:BoundField DataField="FraseInicial" DataFormatString="{0}" ReadOnly="True" >
+                                <asp:BoundField DataField="GameType" DataFormatString="{0}" ReadOnly="True" HeaderText="Games Available" >
                                 <ControlStyle Width="100px" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="Username" DataFormatString="{0}" ReadOnly="True">
-                                    <ItemStyle Width="200px" />
+                                <asp:ImageField DataImageUrlField="Image" 
+                                    DataImageUrlFormatString="imgs/{0}" 
+                                            NullImageUrl="imgs/ImagemNaoDisponivel.jpg">
+                                <ControlStyle Height="140" Width="100px" />
+                            </asp:ImageField>
+                                    
+                                <asp:TemplateField HeaderText="Choose Game">
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="CheckBoxGame" runat="server" Enabled='<%# Eval("SelectGame") == "1" ? true:false %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Level 1">
+                                    <ItemTemplate>
+                                        <asp:RadioButton ID="RadioButton1" GroupName= "level" runat="server" Enabled='<%# Eval("DifficultOne") == "1" ? true:false %>' Checked="true" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+                                <asp:TemplateField HeaderText="Level 2">
+                                    <ItemTemplate>
+                                        <asp:RadioButton ID="RadioButton2" GroupName= "level"  runat="server" Enabled='<%# Eval("DifficultTwo") == "1" ? true:false %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                              
+                                <asp:TemplateField HeaderText="Level 3">
+                                    <ItemTemplate>
+                                        <asp:RadioButton ID="RadioButton3" GroupName= "level"  runat="server" Enabled='<%# Eval("DifficultThree") == "1" ? true:false %>' />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                              
+                                <asp:BoundField DataField="GameID" DataFormatString="{0}">
+                                <ItemStyle ForeColor="White" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="FraseFinal" DataFormatString="{0}" ReadOnly="True" >
-                                <ControlStyle Width="200px" />
-                                </asp:BoundField>
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="AcceptFriendRequest.aspx?usr={0}" DataTextField="Accept" DataTextFormatString="{0}" Text="Accept" />
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="RefuseFriendRequest.aspx?usr={0}" DataTextField="Reject" DataTextFormatString="{0}" Text="Recusar" />
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="NegociateFriendShip.aspx?usr={0}" DataTextField="Challenge" DataTextFormatString="{0}" Text="Desafio" />
+                              
                             </Columns>
                             <PagerStyle HorizontalAlign="Center" />
 
                         </asp:GridView>
                     </ContentTemplate>
+                
+                <asp:Button ID="btnNegociate" runat="server" OnClick="btnNegotiate_Click" Text="Negociate" style="height: 29px" />
                 
                 <br />
                 <br />

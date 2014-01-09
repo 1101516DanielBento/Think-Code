@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FrontOffice.master" AutoEventWireup="true" CodeFile="ShowFriendsList.aspx.cs" Inherits="ShowFriendsList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/FrontOffice.master" AutoEventWireup="true" CodeFile="TagsManagement.aspx.cs" Inherits="TagsManagement" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
 </asp:Content>
@@ -24,7 +24,7 @@
 <asp:Content ID="Content4" ContentPlaceHolderID="MainContent" runat="Server">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="cel_titulo">ShowAllUsers<p class="barra_titulo">&nbsp;</p>
+            <td class="cel_titulo">TagsManagement<p class="barra_titulo">&nbsp;</p>
             </td>
         </tr>
         <tr>
@@ -33,43 +33,32 @@
                     &nbsp;
             <center>
                 <p class="p_mensagens_formulario_geral">
-                    <asp:ScriptManager ID="ScriptManager1" runat="server">
-                    </asp:ScriptManager>
-                </p>
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    &nbsp;</p>
+                
                     <ContentTemplate>
                         <asp:Label ID="lblMensagem" runat="server" Font-Bold="True" CssClass="p_sucesso"></asp:Label>
                         <br />
+                        <asp:Label ID="lblMensagem2" runat="server" Font-Bold="True" CssClass="p_sucesso"></asp:Label>
                         <br />
-                        <asp:GridView ID="grdRanking" cellpadding="20" cellspacing="5" runat="server" AllowPaging="True" 
+                        <br />
+                <asp:TextBox ID="AddNewTagTextBox" runat="server" Width="111px"></asp:TextBox>
+&nbsp;<asp:Button ID="AddNewTag" runat="server" Text="Insert Tag" OnClick="AddNewTag_Click1" />
+                <br />
+                        <br />
+                        <asp:GridView ID="grdTags" cellpadding="20" cellspacing="5" runat="server" AllowPaging="True"
                             AutoGenerateColumns="False"
-                            OnPageIndexChanging="grdRanking_PageIndexChanging" Width="300px" style="margin-left: 0px">
+                            OnPageIndexChanging="grdRanking_PageIndexChanging" OnSelectedIndexChanged="grdRanking_SelectedIndexChanged">
                             <Columns>
-                                <asp:BoundField DataField="Username" DataFormatString="{0}"
-                                    HeaderText="Username" ReadOnly="True">
-                                    <ItemStyle Width="200px" />
+                                <asp:BoundField DataField="MyTag" DataFormatString="{0}" ReadOnly="True" HeaderText="Current Tags" >
+                                <ControlStyle Width="100px" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="Pontuacao" DataFormatString="{0}" HeaderText="Pontuação"
-                                    ReadOnly="True">
-                                    <ItemStyle Width="50px" />
-                                </asp:BoundField>
-                                <asp:BoundField DataField="mostraTagsRel" DataFormatString="{0}" HeaderText="Relation Tag" ItemStyle-Width="195%" ReadOnly="True" >
-                                <ItemStyle Width="195%" />
-                                </asp:BoundField>
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="AddTagToFriendship.aspx?usr={0}" Text="Add Tag" >
-
-                                <ItemStyle Width="200px" />
-                                </asp:HyperLinkField>
-
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="removeFriendship.aspx?usr={0}" DataTextField="texto" DataTextFormatString="{0}">
-                                <ItemStyle Width="200px" />
-                                </asp:HyperLinkField>
+                                <asp:HyperLinkField Text="Remove" DataNavigateUrlFields="IdTag" DataNavigateUrlFormatString="RemoveUserTag.aspx?tag={0}" />
                             </Columns>
                             <PagerStyle HorizontalAlign="Center" />
 
                         </asp:GridView>
                     </ContentTemplate>
-                </asp:UpdatePanel>
+                
                 <br />
                 <br />
 

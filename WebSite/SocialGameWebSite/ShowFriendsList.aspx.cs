@@ -55,7 +55,7 @@ public partial class ShowFriendsList : System.Web.UI.Page
 
         friends = usrBll.loadFriendsFromUser((int)Session["id"]);
 
-        relationTag = usrBll.loadTagsFromFriendship((int)Session["id"]);
+        
 
         DataTable dataTable = new DataTable();
         dataTable.Columns.Add("Username");
@@ -70,11 +70,18 @@ public partial class ShowFriendsList : System.Web.UI.Page
             DataRow dr = dataTable.NewRow();
 
             User user = usrBll.loadUserById(frnd.Item1);
+            TagBLL tagBll = new TagBLL();
+
+            relationTag  = tagBll.getRelTagFromFriendshipByIds((int)Session["id"], user.IdUser);
+
+            if (relationTag.TagName == null)
+                dr["mostraTagsRel"] = " - ";
+            else
+                dr["mostraTagsRel"] = relationTag.TagName;
 
             dr["Username"] = user.Username;
             dr["Pontuacao"] = user.Points;
             dr["idUser"] = user.IdUser;
-            dr["mostraTagsRel"] = relationTag.TagName;
             dr["texto"] = "Remove Friendship";
                 
             dataTable.Rows.Add(dr);

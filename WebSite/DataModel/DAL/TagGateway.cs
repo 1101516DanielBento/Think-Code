@@ -287,7 +287,7 @@ namespace DataModel.DAL
             int ret = -1;
             foreach (DataRow r in ds.Tables[0].Rows)
             {
-                return (int)r["idTag"];
+                ret = (int)r["idTag"];
                 
             }
 

@@ -40,6 +40,8 @@ namespace DataModel.BLL
                 user.Points = (int)r["points"];
                 user.Active = (bool)r["active"];
                 user.Birthdate = (DateTime)r["birthdate"];
+                user.Mood = (int)r["MoodState"];
+                
 
                 loadTagsFromUser(user);
 
@@ -79,6 +81,7 @@ namespace DataModel.BLL
                 user.Points = (int)r["points"];
                 user.Active = (bool)r["active"];
                 user.Birthdate = (DateTime)r["birthdate"];
+                user.Mood = (int)r["MoodState"];
 
                 loadTagsFromUser(user);
 
@@ -540,6 +543,28 @@ namespace DataModel.BLL
                 return false;
 
             return userGateway.editUser(u);
+        }
+
+        /// <summary>
+        /// Edit User Mood information, only (0-5).
+        /// List of Moods:
+        /// 0->Empty
+        /// 1->
+        /// 2->
+        /// 3->
+        /// 4->
+        /// 5->
+        /// </summary>
+        /// <param name="idUser">idUser</param>
+        /// <param name="moodValue">Mood Value (0-5) ONLY</param>
+        /// <returns>Result status</returns>
+        public bool editUserMood(int idUser, int moodValue)
+        {
+            if (moodValue < 0 || moodValue > 5)
+            {
+                return false;
+            }
+            return userGateway.editUserMood(idUser,moodValue);
         }
 
         /// <summary>
