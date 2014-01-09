@@ -210,9 +210,9 @@ namespace DataModel.BLL
         /// <param name="idUser">id user</param>
         /// <param name="tagName">tag name</param>
         /// <returns>result</returns>
-        public bool delTagsUser(int idUser, string tagName)
+        public bool delTagsUser(int idUser, int tagID)
         {
-            return tagGateway.delTagUser(idUser, tagName) ;
+            return tagGateway.delTagUser(idUser, tagID) ;
         }
 
         public Tag getRelTagFromFriendshipByIds(int idUserA, int idUserB) { 

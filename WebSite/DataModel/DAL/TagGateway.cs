@@ -266,9 +266,9 @@ namespace DataModel.DAL
 
 
 
-        public bool delTagUser(int idUser, string tagName)
+        public bool delTagUser(int idUser, int tagID)
         {
-            string cmd = " DELETE FROM [GameDataBase].[dbo].[UserTags] WHERE idUser=" + idUser + " and idTag=(select idTag from [GameDataBase].[dbo].[TagList] where tagName = '" + tagName + "')";
+            string cmd = "DELETE FROM [GameDataBase].[dbo].[UserTags] WHERE idUser=" + idUser + "and idTag=" + tagID+" ";
 
             int res = ExecuteNonQuery(GetConnection(true), cmd);
 
@@ -277,7 +277,7 @@ namespace DataModel.DAL
 
             return false;
         }
-
+        
 
         public int getRelTagFromFriendshipByIds(int idUserA, int idUserB)
         {
