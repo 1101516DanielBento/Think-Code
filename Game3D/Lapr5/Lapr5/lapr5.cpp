@@ -12,7 +12,7 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-#include "WebService_Request.h"
+//#include "WebService_Request.h"
 #include "User_C.h"
 
 using namespace std;
@@ -1027,13 +1027,13 @@ void myReshape(int w, int h){
 void motionRotate(int x, int y){
 #define DRAG_SCALE	0.01
 	double lim=M_PI/2-0.1;
-	estado->getCamera()->setDirLong((estado->getXMouse()-x)*DRAG_SCALE);//=(estado->xMouse-x)*DRAG_SCALE;
-	estado->getCamera()->setDirLat((estado->getYMouse()-y)*DRAG_SCALE*0.5);//-=(estado->yMouse-y)*DRAG_SCALE*0.5;
+	estado->getCamera()->setDirLong((estado->getXMouse()-x)*DRAG_SCALE);
+	estado->getCamera()->setDirLat((estado->getYMouse()-y)*DRAG_SCALE*0.5);
 	if(estado->getCamera()->getDirLat()>lim)
 		estado->getCamera()->setDirLat(lim);
 	else
 		if(estado->getCamera()->getDirLat()<-lim)
-			estado->getCamera()->setDirLat(estado->getCamera()->getDirLat() - lim);//dir_lat=-lim;
+			estado->getCamera()->setDirLat(estado->getCamera()->getDirLat() - lim);
 	estado->setXMouse(x);
 	estado->setYMouse(y);
 	glutPostRedisplay();
@@ -1083,14 +1083,11 @@ void motionDrag(int x, int y){
 		switch (estado->getEixoTrans()) {
 			case EIXO_X :
 				estado->setEixoX(newx);
-				//estado.eixo[1]=newy;
 				break;
 			case EIXO_Y :
 				estado->setEixoY(newy);
-				//estado.eixo[2]=newz;
 				break;
 			case EIXO_Z :
-				//estado.eixo[0]=newx;
 				estado->setEixoZ(newz);
 				break;
 		}
@@ -1127,9 +1124,13 @@ void minimapaView()
 	estadominimapa->getCamera()->setEyeY(0);
 	
 	
-	estadominimapa->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
-	estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
-	estadominimapa->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estadominimapa->getCamera()->getDirLat()));
+	//estadominimapa->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
+	//estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
+	estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getY() + 2 + sin(estadominimapa->getCamera()->getDirLat()));
+	
+	estadominimapa->getCamera()->setCenterX(0);
+	estadominimapa->getCamera()->setCenterZ(0);
+	//estadominimapa->getCamera()->setCenterY(100);
 	
 	
 	putLights((GLfloat*)white_light);
@@ -1332,9 +1333,9 @@ void display(void)
 
 int main(int argc, char **argv)
 {
-	WebService_Request *ws= new WebService_Request();
-	int id=ws->login("Quim","qwerty");
-	vector<User_C> *userList = ws->getNetworkById(id);
+	//WebService_Request *ws= new WebService_Request();
+	//int id=ws->login("Quim","qwerty");
+	//vector<User_C> *userList = ws->getNetworkById(id);
 
 
     glutInit(&argc, argv);
