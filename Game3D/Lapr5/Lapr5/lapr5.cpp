@@ -12,6 +12,7 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
+//#include "objLoader.h"
 #include "WebService_Request.h"
 #include "User_C.h"
 
@@ -27,24 +28,18 @@ using namespace std;
  #include <GL/glaux.h>
  #endif*/
 
-typedef struct vecCol{
-	GLfloat x;
-	GLfloat y;
-	GLfloat z;
-}vecCol;
-
-vecCol colisao[100];
-
-vector<vector<GLfloat>> PosTodosUsers;
-
-
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
 
-#define K_ESFERA 4.0
+#define K_ESFERA 2.1
 #define VELv 0.5
-#define DIMENSAO_CAMARA 4
+#define DIMENSAO_CAMARA 2
 #define BUFSIZE 512
+#define DISTANCIA_SOLO 1.0
+#define WINDOW_SIZE_HEIGHT 600
+#define WINDOW_SIZE_WIDTH 800
+#define INFINITESIMO 0,0000000000000001
+
 
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
@@ -52,8 +47,6 @@ vector<vector<GLfloat>> PosTodosUsers;
 #define EIXO_X		1
 #define EIXO_Y		2
 #define EIXO_Z		3
-
-
 
 
 //#define RAND_MAX
@@ -103,91 +96,10 @@ inline tipo_material operator++(tipo_material &rs, int ) {
 typedef	GLdouble Vertice[3];
 typedef	GLdouble Vector[4];
 
-//Vertice center[];
-
-/*typedef struct {
-	GLboolean   q,a,up,down,left,right;
-}Teclas;*/
-
-typedef struct pos_t{
-    GLfloat    x,y,z;
-}pos_t;
-
-/*typedef struct objecto_t{
-    pos_t    pos;
-    GLfloat  dir;
-    GLfloat  vel;
-}objecto_t;*/
-/*
- typedef struct Camera{
- GLfloat fov;
- GLdouble dir_lat;
- GLdouble dir_long;
- GLfloat dist;
- Vertice center;
- 
- }Camera;*/
-
-/*typedef struct Estado{
-	Camera		*camera;
-	GLint         timer;
-	Teclas		teclas;
-	int			xMouse,yMouse;
-	GLboolean	light;
-	GLboolean   debug;
-	GLboolean	apresentaNormais;
-	GLint		lightViewer;
-	GLint		eixoTranslaccao;
-	GLdouble	eixo[3];
-}Estado;*/
-
-/*typedef struct Modelo {
-	objecto_t objecto;
-	
-	GLfloat g_pos_luz1[4];
-	GLfloat g_pos_luz2[4];
-	
-	GLfloat escala;
-	GLUquadric *quad;
-}Modelo;*/
-
 Estado *estado = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 int obj = 0;
-//GLuint buffer[BUF_SIZE];
-
-void initEstado(){
-	estado->getCamera()->setDirLat(graus(M_PI/4));
-	estado->getCamera()->setDirLong(graus(-M_PI/4));
-	estado->getCamera()->setFov(60);
-	estado->getCamera()->setDistance(100);
-	//estado.camera.velh = 1.0;
-	estado->getCamera()->setVelv(2.0);
-	//estado.camera.velTotal = estado.camera.velh + estado.camera.velv;
-	estado->setEixo(0, 0, 0);
-	/*center[0]=0;
-	 center[1]=0;
-	 center[2]=0;*/
-	estado->getCamera()->setCenterX(0);
-	estado->getCamera()->setCenterY(0);
-	estado->getCamera()->setCenterZ(0);
-	estado->setLight(GL_TRUE);
-	estado->setApresentaNormais(GL_TRUE);
-	estado->setLightViewer(1);
-	estado->setTimer(20);
-	
-	//coordenadas do objecto
-	/*modelo.objecto.pos.x=90;
-	 modelo.objecto.pos.y=80;
-	 modelo.objecto.pos.z=50;*/
-	
-	modelo->getObjecto()->setX(nos[0].x);
-	modelo->getObjecto()->setY(nos[0].y);
-	modelo->getObjecto()->setZ(nos[0].z);
-	
-	
-}
 
 void initModelo()
 {
@@ -203,12 +115,12 @@ void initModelo()
 	l2[2] = 5.0;
 	l2[3] = 0.0;
 	
-	//modelo->getObjecto()->setVel(2.0);
+
 	modelo->setEscala(0.2);
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong());
+
 }
 
 
@@ -244,10 +156,9 @@ void myInit()
 	//le o grafo exemplo
 	leGrafo();
 	
-	/*modelo->getObjecto()->setX(nos[0].x);
-	modelo->getObjecto()->setY(nos[0].z);
-	modelo->getObjecto()->setZ(nos[0].y);*/
-
+	modelo->getObjecto()->setX(nos[0].x);
+	modelo->getObjecto()->setY(nos[0].z + K_ESFERA*nos[0].largura/2.0+1.0);
+	modelo->getObjecto()->setZ(nos[0].y);
 
 	//por varaiaveis de teste
 }
@@ -409,7 +320,6 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
-
 void distribuicaoNos()
 {
 	srand((unsigned)time(0));
@@ -480,13 +390,6 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 	
 }
 
-/*void Caminho()
-{
-	//GLUquadricObj *obj = gluNewQuadric();
-	
-	desenhaCilindro(PosTodosUsers[0][0],PosTodosUsers[0][1],PosTodosUsers[0][2],PosTodosUsers[1][0],PosTodosUsers[1][1],PosTodosUsers[1][2],3.0);
-}*/
-
 void desenhaLigacao(Arco arco)
 {
 	Nos *noi,*nof;
@@ -527,22 +430,23 @@ void desenhaLigacao(Arco arco)
 	}
 }
 
+
 void desenhaNos()
 {
 	for(int i = 0; i < numNos; i++)
 	{
 		glPushMatrix();
-		glLoadName(i);
 		material(red_plastic);
 		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
-		glutSolidSphere((K_ESFERA/2),20,20);
+		glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+		//glutSpher
 		glPopMatrix();
 	}
 }
 
 
 void desenhaLabirinto(){
-	GLfloat xi,yi,zi,xf,yf,zf,raio;
+	
 	glPushMatrix();
 	glTranslatef(0,0,0.05);
 	//glScalef(5,5,5);
@@ -582,14 +486,14 @@ void desenhaPlanoDrag(int eixo){
 	glTranslated(estado->getEixoX(),estado->getEixoY(),estado->getEixoZ());
 	switch (eixo) {
 		case EIXO_Y :
-			if(abs(estado->getCamera()->getDirLat())<M_PI/4)
+			if(abs(estado->getCamera()->getDirLong())<M_PI/4)
 				glRotatef(-90,0,0,1);
 			else
 				glRotatef(90,1,0,0);
 			material(red_plastic);
 			break;
 		case EIXO_X :
-			if(abs(estado->getCamera()->getDirLat())>M_PI/6)
+			if(abs(estado->getCamera()->getDirLong())>M_PI/6)
 				glRotatef(90,1,0,0);
 			material(azul);
 			break;
@@ -600,6 +504,7 @@ void desenhaPlanoDrag(int eixo){
 			material(emerald);
 			break;
 	}
+	glPopMatrix();
 	/*glBegin(GL_QUADS);
 	glNormal3f(0,1,0);
 	glVertex3f(-100,0,-100);
@@ -663,11 +568,21 @@ void setCamera(){
 		/*estado->getCamera()->drawMe();
 		
 	}*/
+	
+	/*glRotatef(graus(-M_PI/2.0), 0, 0, 1);
+	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
+	/*glLoadIdentity();
+
+	glRotatef(graus(-M_PI/2.0), 0, 0, 1);
+	glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 1, 0);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());*/
 
 	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
 	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
-
+	
+	
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(modelo->getObjecto()->getX(), modelo->getObjecto()->getZ(), modelo->getObjecto()->getY() + 2 ,
@@ -678,33 +593,7 @@ void setCamera(){
 
 }
 
-bool detetaColisoesVL(GLfloat nx, GLfloat ny, GLfloat nz)
-{
-	return true;
-}
-//detecta colisao esfera voo rasante
-bool detectaColisoes(GLfloat nx, GLfloat ny, GLfloat nz)
-{
-	int compUsers = numNos;
-	int compLigacoes = numArcos;
-	
-	GLfloat raio = K_ESFERA/2.0;
-	GLfloat d;
-	
-	for(int i = 1; i < compUsers; i++)
-	{
-		d = sqrt(((nx - nos[i].x)*(nx - nos[i].x)+((ny - nos[i].y)*(ny - nos[i].y))+((nz - nos[i].z)*(nz - nos[i].z))));
-		
-		if(d <= (raio+1))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-//detecta colisao ligacao
-
+//not done
 bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 {
 	bool flag = true;
@@ -748,101 +637,6 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 	}
 	return flag;
 }
-
-void Timer(int value)
-{
-	
-	
-	glutTimerFunc(estado->getTimer(), Timer, 0);
-	
-	GLfloat x1,y1,z1,x2,y2,z2;
-	
-	x2 = modelo->getObjecto()->getX() + VELv*cos(modelo->getObjecto()->getDir());
-	y2 = modelo->getObjecto()->getY() + VELv*sin(modelo->getObjecto()->getDir());
-	x1 = modelo->getObjecto()->getX();
-	y1 = modelo->getObjecto()->getY();
-	GLfloat dist = pow((x2 - x1),2) + pow((y2 - y1),2);
-	GLfloat raio = pow((K_ESFERA/2.0),2);
-	
-	if(teclas->getQ())
-	{
-		modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv);
-		teclas->setQ(GL_FALSE);
-	}
-	if(teclas->getA())
-	{
-		modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv);
-		teclas->setA(GL_FALSE);
-	}
-	if(teclas->getLEFT())
-	{
-		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
-		modelo->getObjecto()->setDir(estado->getCamera()->getDirLong() - 0.1);
-		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
-	}
-	
-	if(teclas->getRIGHT())
-	{
-		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
-		modelo->getObjecto()->setDir(estado->getCamera()->getDirLong()+0.1);
-		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
-	}
-	
-	if(teclas->getUP())
-	{
-		//if(dist <= raio)
-		//{
-			//modelo->getObjecto()->setX(modelo->getObjecto()->getX()+VELv*cos(modelo->getObjecto()->getDir()));
-			//modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv*sin(modelo->getObjecto()->getDir()));
-		//}
-		if(detectaColisoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()))
-			{
-				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-			}
-	}
-	
-	if(teclas->getDOWN())
-	{
-		//modelo->getObjecto()->setX(modelo->getObjecto()->getX()-VELv*cos(modelo->getObjecto()->getDir()));
-		//modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv*sin(modelo->getObjecto()->getDir()));
-		if(detectaColisoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()))
-		{
-			modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-			modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-		}
-	}
-
-	//if(teclas->getR())
-	//{
-		//modelo->setCameraMode(CAMERA_RASANTE);
-		//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
-		//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].y + 0.1);
-		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].z - 2);
-	//}
-
-	/*if(teclas->getV())
-	{
-		modelo->setCameraMode(CAMERA_LIVRE);
-		modelo->setObjecto(new Objecto());
-		estado->getCamera()->setDirLat(0);
-		estado->getCamera()->setDirLong(0);
-		estado->getCamera()->setFov(30);
-		estado->getCamera()->setDistance(100);
-		estado->getCamera()->setEyeX(40);
-		estado->getCamera()->setEyeY(40);
-		estado->getCamera()->setEyeZ(0);
-		estado->getCamera()->setCenterX(nos[0].x);
-		estado->getCamera()->setCenterY(nos[0].y);
-		estado->getCamera()->setCenterZ(nos[0].z);
-	}*/
-	
-	if(!estado->getDebug())
-		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
-	
-	glutPostRedisplay();
-}
-
 
 
 void keyboard(unsigned char key, int x, int y)
@@ -944,6 +738,14 @@ void KeyUp(unsigned char key, int x, int y)
 			break;
 		case 'A' :
 		case 'a' : teclas->setA(GL_FALSE);
+			break;
+		case 'R':
+		case 'r':
+			teclas->setR(GL_FALSE);
+			break;
+		case 'V':
+		case 'v':
+			teclas->setR(GL_FALSE);
 			break;
 			
 	}
@@ -1123,7 +925,7 @@ void motionDrag(int x, int y){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	setCamera();
+	//setCamera();
 	desenhaPlanoDrag(estado->getEixoTrans());
 	
 	n = glRenderMode(GL_RENDER);
@@ -1157,50 +959,10 @@ void motionDrag(int x, int y){
 	glutPostRedisplay();
 }
 
-int picking(int x, int y){
-	int i, n, objid=0;
-	double zmin = 10.0;
-	GLuint buffer[100], *ptr;
-	
-	glSelectBuffer(100, buffer);
-	glRenderMode(GL_SELECT);
-	glInitNames();
-	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix(); // guarda a projecção
-	glLoadIdentity();
-	setProjection(x,y,GL_TRUE);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	setCamera();
-	desenhaEixos();
-	
-	n = glRenderMode(GL_RENDER);
-	if (n > 0)
-	{
-		ptr = buffer;
-		for (i = 0; i < n; i++)
-		{
-			if (zmin > (double) ptr[1] / UINT_MAX) {
-				zmin = (double) ptr[1] / UINT_MAX;
-				objid = ptr[3];
-			}
-			ptr += 3 + ptr[0]; // ptr[0] contem o número de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
-		}
-	}
-	
-	
-	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	
-	return objid;
-}
 
 void processHits(GLint hits, GLuint buffer[])
 {
-	unsigned int i, j;
+	unsigned int  j;
 	GLuint names,*ptr;
 
 	printf("hits = %d\n",hits);
@@ -1224,41 +986,215 @@ void processHits(GLint hits, GLuint buffer[])
 	}
 }
 
-void selectObjects()
+int picking(int x, int y){
+	int i, n, objid=0;
+	double zmin = 10.0;
+	GLuint buffer[100], *ptr;
+	
+	glSelectBuffer(100, buffer);
+	glRenderMode(GL_SELECT);
+	glInitNames();
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix(); // guarda a projecção
+	glLoadIdentity();
+	setProjection(x,y,GL_TRUE);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	//setCamera();
+	desenhaEixos();
+
+	n = glRenderMode(GL_RENDER);
+	if (n > 0)
+	{
+		ptr = buffer;
+		for (i = 0; i < n; i++)
+		{
+			if (zmin > (double) ptr[1] / UINT_MAX) {
+				zmin = (double) ptr[1] / UINT_MAX;
+				objid = ptr[3];
+			}
+			ptr += 3 + ptr[0]; // ptr[0] contem o número de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
+		}
+	}
+	
+	
+	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	
+	return objid;
+}
+int selectObjects(/*int x, int y*/)
 {
-	int i, d, objid = 0;
+	int i, objid = 0;
 	GLint hits;
-	double zmin = 0, zmax = 1.0;
+	double zmin = 1.0, zmax = 1.0;
 	GLuint buffer[BUFSIZE], *ptr;
 
 	glSelectBuffer(BUFSIZE, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
-	glPushName(0);//colocar o inicial na stack - 0
+	//glPushName(0);//colocar o inicial na stack - 0
 
-	glPushMatrix();
+	
 	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
 		glLoadIdentity();
 		glOrtho(-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
 			-DIMENSAO_CAMARA/2.0,DIMENSAO_CAMARA/2.0,
 			0.0,DIMENSAO_CAMARA/2.0 + modelo->getObjecto()->getVel());
+		setProjection(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),GL_TRUE);
 	
 	glMatrixMode(GL_MODELVIEW);
 
 		glLoadIdentity();
+		setCamera();
 		//glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
 		//glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
 		//glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
-		desenhaNos();
-		for(int i = 1; i < numArcos; i++)
-			desenhaLigacao(arcos[i]);
-	glPopMatrix();
-	glFlush();
+		glPushMatrix();
+			desenhaLabirinto();
+		glPopMatrix();
 
-	hits = glRenderMode(GL_RENDER);
+		hits = glRenderMode(GL_RENDER);
+		if(hits > 0)
+		{
+			ptr = buffer;
+			for(i = 0; i < hits; i++)
+			{
+				if(zmin > (double) ptr[1]/UINT_MAX)
+				{
+					zmin = (double) ptr[1] / UINT_MAX;
+					objid = ptr[3];
+				}
+				ptr += 3 + ptr[0];
+			}
+		}
 		processHits(hits,buffer);
-	
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+
+		return objid;
+	glFlush();
 }
+
+bool detectaColisoesLigacoes2(GLfloat nx, GLfloat nz, GLfloat ny)
+{
+	nz-=1;
+	bool flag = false;
+	//int noi, nof;
+	glLoadIdentity();
+	for(int i = 1; i <=numArcos; i++)
+	{
+		//nos[arcos[i].noi] useri
+		//nos[arcos[i].nof userf
+		GLdouble larg = nos[arcos[i].noi].largura + 0.4;
+		glPushMatrix();
+			glLoadIdentity();
+			glTranslatef(nos[arcos[i].noi].x,nos[arcos[i].noi].y,nos[arcos[i].noi].z);
+			GLdouble angOr = graus(atan2((nos[arcos[i].nof].y - nos[arcos[i].noi].y),(nos[arcos[i].nof].x - nos[arcos[i].nof].x)));
+			GLdouble catetoOposto = nos[arcos[i].nof].z - nos[arcos[i].nof].z;
+			GLdouble tamanho = sqrt(pow((nos[arcos[i].nof].x - nos[arcos[i].noi].x),2) + pow((nos[arcos[i].nof].y - nos[arcos[i].noi].y),2) + pow((nos[arcos[i].nof].z - nos[arcos[i].noi].z),2));
+			GLdouble angIncl = graus(atan2(catetoOposto,tamanho));
+			glRotated(angOr,0,0,1);
+			GLdouble nx2 = (nx - nos[arcos[i].noi].x*cos(rad(angOr))) + (nz - nos[arcos[i].noi].y)*sin(rad(angOr));
+			GLdouble ny2 = (nz - nos[arcos[i].noi].y*cos(rad(angOr))) - (nx - nos[arcos[i].noi].x)*sin(rad(angOr));
+			GLdouble d = sqrt(pow((nos[arcos[i].nof].x - nos[arcos[i].noi].x),2) + pow((nos[arcos[i].nof].y - nos[arcos[i].noi].y),2) + pow((nos[arcos[i].nof].y - nos[arcos[i].noi].y),2));
+			GLdouble nz2 = nos[arcos[i].noi].z + nx2/tamanho*catetoOposto;
+
+			if((0 <= nx2 && nx2 <= tamanho) && ((-larg/2.0)+2.2 <= ny2 && ny2 <= (larg/2.0)-3) && ((nz2-((larg/2.0+0.1)+4) <= ny && ny <= (nz2 + (larg/2.0-0.2)))))
+			{
+				flag = true;
+			}
+			glPopMatrix();
+	}
+	return flag;
+}
+
+GLfloat pointDistance(Nos noi, Nos nof)
+{
+	Nos vec;
+	vec.x = nof.x -noi.x;
+	vec.y = nof.y - noi.y;
+	vec.z = nof.z - noi.z;
+	return(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z);
+}
+
+//deteta colisoes esfera-esfera
+//deteta Colisao esfera especifica
+bool colisaoEsferaEsfera(Nos& noCam , float r1, Nos nod , float r2)
+{
+	Nos vec;
+	float dist = pointDistance(noCam,nod);
+	if(dist <= (r1+r2))
+	{
+		float a = sqrt(dist) - (r1+r2);
+		//coordinate vec(c2.x - c1.x,c2.y-c1.y,c2.z-c1.z);//c2-c1
+		vec.x = nod.x - noCam.x;
+		vec.y = nod.y - noCam.y;
+		vec.z = nod.z - noCam.z;
+		float len = sqrt((vec.x*vec.x + vec.y*vec.y + vec.z*vec.z));
+		vec.x/=len;
+		vec.y/=len;
+		vec.z/=len;
+
+		noCam.x = noCam.x+vec.x*a;
+		noCam.y = noCam.y + vec.y*a;
+		noCam.z = noCam.z + vec.z*a;
+		return 1;//true
+	}
+	return 0;
+}
+
+bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
+{
+	Nos vec;
+	float dist;
+	for(int i = 0; i < numNos; i++)
+	{
+		dist = pointDistance(noCam,lnos[i]);
+		if(dist <= (r1+r2))
+		{
+			float a = sqrt(dist) - (r1+r2);
+			//coordinate vec(c2.x - c1.x,c2.y-c1.y,c2.z-c1.z);//c2-c1
+			vec.x = lnos[i].x - noCam.x;
+			vec.y = lnos[i].y - noCam.y;
+			vec.z = lnos[i].z - noCam.z;
+			float len = sqrt((vec.x*vec.x + vec.y*vec.y + vec.z*vec.z));
+			vec.x/=len;
+			vec.y/=len;
+			vec.z/=len;
+
+			noCam.x = noCam.x+vec.x*a;
+			noCam.y = noCam.y + vec.y*a;
+			noCam.z = noCam.z + vec.z*a;
+			return 1;//true
+		}
+	}
+	return 0;
+}
+
+
+void moveTo(Nos c)
+{
+	estado->getCamera()->setCenterX(c.x);
+	estado->getCamera()->setCenterY(c.z);
+	estado->getCamera()->setCenterZ(c.y);
+}
+
+Nos camPos()
+{
+	Nos camNewPos;
+	camNewPos.x = estado->getCamera()->getCenterX();
+	camNewPos.y = estado->getCamera()->getCenterY();
+	camNewPos.z = estado->getCamera()->getCenterZ();
+	return camNewPos;
+	//return (coordinate(estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ())); 
+}
+
 
 
 //definir mouse para mudar de direcao de forma a ter 2 opçoes setas e rato (right mouse button)
@@ -1268,23 +1204,27 @@ void mouse(int btn, int state, int x, int y){
 			if(state == GLUT_DOWN){
 				estado->setXMouse(x);
 				estado->setYMouse(y);
-				if(glutGetModifiers() & GLUT_ACTIVE_CTRL)
+				if(glutGetModifiers() & GLUT_ACTIVE_CTRL){
 					glutMotionFunc(motionZoom);
-				else
+					//printf("hello!!!");
+				}else{
 					glutMotionFunc(motionRotate);
-				cout << "Left down\n";
+					//printf("hello2!!!");
+				}
+				std::cout << "Right down\n";
 			}
 			else{
 				glutMotionFunc(NULL);
-				cout << "Left up\n";
+				std::cout << "Right up\n";
 			}
 			break;
 		case GLUT_LEFT_BUTTON :
 			if(state == GLUT_DOWN){
 				estado->setEixoTrans(picking(x,y));
+				//estado->setEixoTrans(selectObjects(x,y));
 				if(estado->getEixoTrans())
-					glutMotionFunc(motionDrag);
-				cout << "Right down - objecto:" << estado->getEixoTrans() << endl;
+					//glutMotionFunc(motionDrag);
+				std::cout << "Left down - objecto:" << estado->getEixoTrans() << endl;
 			}
 			else{
 				if(estado->getEixoTrans()!=0) {
@@ -1295,10 +1235,188 @@ void mouse(int btn, int state, int x, int y){
 					estado->setEixoTrans(0);//=0;
 					glutPostRedisplay();
 				}
-				cout << "Right up\n";
+				std::cout << "Left up\n";
 			}
 			break;
 	}
+}
+
+void Timer(int value)
+{
+	
+	glutTimerFunc(estado->getTimer(), Timer, 0);
+	
+	switch(modelo->getCameraMode())
+	{
+		case CAMERA_RASANTE:
+			
+			if(teclas->getLEFT())
+			{
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+			}
+	
+			if(teclas->getRIGHT())
+			{
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
+			}
+	
+			if(teclas->getUP())
+			{
+				Nos cameraPos = camPos();
+				
+				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+					{
+						//cout<<"Colisao\n";
+						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						moveTo(cameraPos);
+					}else{
+						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							//cout<<"colisao subir\n";
+						}else{
+							if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							{
+								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+								//cout<<"colisao descer\n";
+							}
+						}
+					}
+			}
+
+			if(teclas->getDOWN())
+			{
+		
+				Nos cameraPos = camPos();
+				
+					if(!colisaoEsferaEsfera(cameraPos,5.0,c,(K_ESFERA*nos[1].largura/2.0)))
+					{
+						//cout<<"Colisao\n";
+						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						moveTo(cameraPos);
+					}else{
+						if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							//cout<<"colisao subir\n";
+						}else{
+							if((modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							{
+								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+								//cout<<"colisao descer\n";
+							}
+						}
+					}
+			}
+		break;
+		case CAMERA_LIVRE:
+			if(teclas->getQ())
+			{
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv);
+				teclas->setQ(GL_FALSE);
+			}
+			if(teclas->getA())
+			{
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv);
+				teclas->setA(GL_FALSE);
+			}
+			if(teclas->getLEFT())
+			{
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+			}
+	
+			if(teclas->getRIGHT())
+			{
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
+			}
+	
+			if(teclas->getUP())
+			{
+				Nos cameraPos = camPos();
+				
+				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+					{
+						//cout<<"Colisao\n";
+						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						moveTo(cameraPos);
+					}else{
+						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							//cout<<"colisao subir\n";
+						}else{
+							if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							{
+								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+								//cout<<"colisao descer\n";
+							}
+						}
+					}
+			}
+
+			if(teclas->getDOWN())
+			{
+		
+				Nos cameraPos = camPos();
+																//alterar para mudar dinamicamente o raio da esfera
+					if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+					{
+						//cout<<"Colisao\n";
+						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						moveTo(cameraPos);
+					}else{
+						if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							//cout<<"colisao subir\n";
+						}else{
+							if((modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							{
+								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+								//cout<<"colisao descer\n";
+							}
+						}
+					}
+			}
+			break;
+	}
+
+		if(teclas->getR())
+		{
+			modelo->setCameraMode(CAMERA_RASANTE);
+			modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
+			modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
+			modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
+		}
+
+		if(teclas->getV())
+		{
+			modelo->setCameraMode(CAMERA_LIVRE);
+			modelo->setObjecto(new Objecto());
+			estado->getCamera()->setDirLat(0);
+			estado->getCamera()->setDirLong(0);
+			estado->getCamera()->setFov(30);
+			estado->getCamera()->setDistance(100);
+			estado->getCamera()->setEyeX(40);
+			estado->getCamera()->setEyeY(40);
+			estado->getCamera()->setEyeZ(0);
+			estado->getCamera()->setCenterX(nos[0].x);
+			estado->getCamera()->setCenterY(nos[0].y);
+			estado->getCamera()->setCenterZ(nos[0].z);
+		}
+			
+	if(!estado->getDebug())
+		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
+	
+	glutPostRedisplay();
 }
 
 void display(void)
@@ -1322,7 +1440,7 @@ void display(void)
 
 	if(estado->getEixoTrans()) {
 		// desenha plano de translacção
-		cout << "Translate... " << estado->getEixoTrans() << endl;
+		std::cout << "Translate... " << estado->getEixoTrans() << endl;
 		desenhaPlanoDrag(estado->getEixoTrans());
 		
 	}
@@ -1333,6 +1451,7 @@ void display(void)
 }
 
 
+
 int main(int argc, char **argv)
 {
 	WebService_Request *ws= new WebService_Request();
@@ -1340,16 +1459,16 @@ int main(int argc, char **argv)
 	vector<User_C> *userList = ws->getNetworkById(id);
 
 
-    glutInit(&argc, argv);
+     glutInit(&argc, argv);
 	
 	/* need both double buffering and z buffer */
 	
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(640, 480);
+	glutInitWindowSize(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
     glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
-	
+
 	
 	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
@@ -1359,9 +1478,6 @@ int main(int argc, char **argv)
 	glutSpecialUpFunc(SpecialKeyUp);
 	
 	glutMouseFunc(mouse);
-	
-	
-	
 	
 	//loginWindow();
 	//myinit + imprime ajuda dentro do login
