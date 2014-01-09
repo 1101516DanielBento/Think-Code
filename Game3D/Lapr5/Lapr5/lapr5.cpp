@@ -51,9 +51,6 @@ vector<vector<GLfloat>> PosTodosUsers;
 #define EIXO_Y		2
 #define EIXO_Z		3
 
-
-
-
 //#define RAND_MAX
 
 // luzes e materiais
@@ -103,53 +100,12 @@ typedef	GLdouble Vector[4];
 
 //Vertice center[];
 
-/*typedef struct {
-	GLboolean   q,a,up,down,left,right;
-}Teclas;*/
-
 typedef struct pos_t{
     GLfloat    x,y,z;
 }pos_t;
 
-/*typedef struct objecto_t{
-    pos_t    pos;
-    GLfloat  dir;
-    GLfloat  vel;
-}objecto_t;*/
-/*
- typedef struct Camera{
- GLfloat fov;
- GLdouble dir_lat;
- GLdouble dir_long;
- GLfloat dist;
- Vertice center;
- 
- }Camera;*/
-
-/*typedef struct Estado{
-	Camera		*camera;
-	GLint         timer;
-	Teclas		teclas;
-	int			xMouse,yMouse;
-	GLboolean	light;
-	GLboolean   debug;
-	GLboolean	apresentaNormais;
-	GLint		lightViewer;
-	GLint		eixoTranslaccao;
-	GLdouble	eixo[3];
-}Estado;*/
-
-/*typedef struct Modelo {
-	objecto_t objecto;
-	
-	GLfloat g_pos_luz1[4];
-	GLfloat g_pos_luz2[4];
-	
-	GLfloat escala;
-	GLUquadric *quad;
-}Modelo;*/
-
 Estado *estado = new Estado();
+Estado *estadominimapa = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 int obj = 0;
@@ -326,18 +282,9 @@ void putLights(GLfloat* diffuse)
 }
 
 void desenhaSolo(){
-/*#define STEP 10
-	glBegin(GL_QUADS);
-	glNormal3f(0,0,1);
-	for(int i=-300;i<300;i+=STEP)
-		for(int j=-300;j<300;j+=STEP){
-			glVertex2f(i,j);
-			glVertex2f(i+STEP,j);
-			glVertex2f(i+STEP,j+STEP);
-			glVertex2f(i,j+STEP);
-		}
-	glEnd();*/
+
 	glPushMatrix();
+	material(slate);
 	glTranslatef(-275,-275,-5);
 	glBegin(GL_QUADS);
 		glNormal3f(0,0,1);
@@ -774,15 +721,15 @@ void Timer(int value)
 	}
 	if(teclas->getLEFT())
 	{
-		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
-		modelo->getObjecto()->setDir(estado->getCamera()->getDirLong() - 0.1);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+		//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong() - 0.1);
 		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
 	}
 	
 	if(teclas->getRIGHT())
 	{
-		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
-		modelo->getObjecto()->setDir(estado->getCamera()->getDirLong()+0.1);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
+		//modelo->getObjecto()->setDir(estado->getCamera()->getDirLong()+0.1);
 		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
 	}
 	
@@ -1155,6 +1102,56 @@ void motionDrag(int x, int y){
 	glutPostRedisplay();
 }
 
+void Reshape(int w, int h)
+{
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	setProjection(0,0,GL_FALSE);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+//################MINI-MAPA###############
+
+void minimapaView()
+{
+	estadominimapa->getCamera()->setDirLat(-(M_PI/2));
+	estadominimapa->getCamera()->setDirLong(0);
+	estadominimapa->getCamera()->setCenterZ(0);
+	estadominimapa->getCamera()->setCenterX(0);
+	estadominimapa->getCamera()->setCenterY(0);
+	
+	estadominimapa->getCamera()->setEyeZ(200);
+	estadominimapa->getCamera()->setEyeX(0);
+	estadominimapa->getCamera()->setEyeY(0);
+	
+	
+	estadominimapa->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
+	estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
+	estadominimapa->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estadominimapa->getCamera()->getDirLat()));
+	
+	
+	putLights((GLfloat*)white_light);
+	
+	gluLookAt(estadominimapa->getCamera()->getEyeY(),estadominimapa->getCamera()->getEyeX(),estadominimapa->getCamera()->getEyeZ(),estadominimapa->getCamera()->getCenterX(),estadominimapa->getCamera()->getCenterY(),estadominimapa->getCamera()->getCenterZ(),0,0,1);
+}
+
+void desenhaMinimapa(int width, int height)
+{
+	glViewport(0,0, (GLint) width/6, (GLint) height/6);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	minimapaView();
+	//desenhaEixos();
+	material(slate);
+	desenhaSolo();
+	desenhaLabirinto();
+
+	
+	glFlush();
+	Reshape(width,height);
+}
+
 int picking(int x, int y){
 	int i, n, objid=0;
 	double zmin = 10.0;
@@ -1324,7 +1321,7 @@ void display(void)
 		desenhaPlanoDrag(estado->getEixoTrans());
 		
 	}
-	
+	desenhaMinimapa(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_INIT_WINDOW_HEIGHT));
 	glFlush();
 	glutSwapBuffers();
 	
@@ -1338,7 +1335,7 @@ int main(int argc, char **argv)
 	/* need both double buffering and z buffer */
 	
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(640, 480);
+    glutInitWindowSize(800, 600);
     glutCreateWindow("Think&Code");
     glutReshapeFunc(myReshape);
     glutDisplayFunc(display);
