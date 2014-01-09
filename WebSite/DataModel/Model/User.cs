@@ -91,6 +91,7 @@ namespace DataModel.Model
         public User()
         {
             _userTags = new List<Tag>();
+            _mood = 0;
         }
 
         public void addTagToUser(Tag tag){
@@ -154,7 +155,14 @@ namespace DataModel.Model
         {
             _relationshipRequestNegociation.Remove(user);
         }
-        
+
+        private int _mood;
+
+        public int Mood
+        {
+            get { return _mood; }
+            set { _mood = value; }
+        }
 
     }
 }
