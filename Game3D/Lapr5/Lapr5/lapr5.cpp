@@ -12,6 +12,8 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
+#include "WebService_Request.h"
+#include "User_C.h"
 
 using namespace std;
 
@@ -1330,6 +1332,11 @@ void display(void)
 
 int main(int argc, char **argv)
 {
+	WebService_Request *ws= new WebService_Request();
+	int id=ws->login("Quim","qwerty");
+	vector<User_C> *userList = ws->getNetworkById(id);
+
+
     glutInit(&argc, argv);
 	
 	/* need both double buffering and z buffer */

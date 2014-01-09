@@ -245,7 +245,7 @@ namespace DataModel.DAL
         public int registerUser(User u)
         {
 
-            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [GameDataBase].[dbo].[User]([username],[password],[email],[name],[idPermission],[points],[active],[birthdate])VALUES(@username,@pass,@email,@name,@idPer, @points, @active,@birth);SELECT SCOPE_IDENTITY()");
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [GameDataBase].[dbo].[User]([username],[password],[email],[name],[idPermission],[points],[active],[birthdate][MoodState])VALUES(@username,@pass,@email,@name,@idPer, @points, @active,@birth,0);SELECT SCOPE_IDENTITY()");
             string pass = SimpleEncryptor.Encrypt(u.Password, PasswordEncryptionKey);
             int act = Convert.ToInt32(u.Active);
             sqlCmd.Parameters.AddWithValue("@username", "'" + u.Username + "'");
@@ -320,7 +320,17 @@ namespace DataModel.DAL
         }
 
 
+        public bool editUserMood(int idUser, int mood)
+        {
+            string cmd = " UPDATE [GameDataBase].[dbo].[User]SET [MoodState]= " + mood + " WHERE idUser=" + idUser;
 
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
 
 
         public bool editUser(User u)
@@ -356,8 +366,10 @@ namespace DataModel.DAL
             {
                 return false;
             }
+            TagGateway tg = new TagGateway();
+            int idNT=tg.getIdTagFriendshipNo_TAG();
 
-            string query = "INSERT INTO [GameDataBase].[dbo].[Friendship]([idUserA],[idUserB],[date]) VALUES (" + myId + "," + idUser + ", SYSDATETIME())";
+            string query = "INSERT INTO [GameDataBase].[dbo].[Friendship]([idUserA],[idUserB],[date],[idTag]) VALUES (" + myId + "," + idUser + ", SYSDATETIME(), "+idNT+")";
 
             int obj = ExecuteNonQuery(GetConnection(true), new SqlCommand(query));
 
@@ -430,8 +442,10 @@ namespace DataModel.DAL
 
         }
 
-
-
+        /// <summary>
+        /// This method is inside UserGateway, because it's only to consult, and used by users ONLY
+        /// </summary>
+        /// <returns>List of Games</returns>
 
         public DataTable getGames()
         {

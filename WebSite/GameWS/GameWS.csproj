@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\WVM023.pubxml" />
+    <None Include="Properties\PublishProfiles\WVM_WS_BACKUP.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -56,7 +56,7 @@
                                 </asp:BoundField>
                                 <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="AcceptFriendRequest.aspx?usr={0}" DataTextField="Accept" DataTextFormatString="{0}" Text="Accept" />
                                 <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="RefuseFriendRequest.aspx?usr={0}" DataTextField="Reject" DataTextFormatString="{0}" Text="Recusar" />
-                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="challengingPlayer.aspx?usr={0}" DataTextField="Challenge" DataTextFormatString="{0}" Text="Desafio" />
+                                <asp:HyperLinkField DataNavigateUrlFields="idUser" DataNavigateUrlFormatString="NegociateFriendShip.aspx?usr={0}" DataTextField="Challenge" DataTextFormatString="{0}" Text="Desafio" />
                             </Columns>
                             <PagerStyle HorizontalAlign="Center" />
 

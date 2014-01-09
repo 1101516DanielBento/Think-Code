@@ -1,0 +1,38 @@
+﻿Build started 08-01-2014 14:43:39.
+     1>Project "C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Lapr5\Lapr5.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         D:\ISEP\Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D GLUT_BUILDING_LIB /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt lapr5.cpp
+         lapr5.cpp
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'yf' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'xf' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'raio' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'yi' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'zf' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'zi' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(544): warning C4101: 'xi' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(759): warning C4101: 'z2' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(759): warning C4101: 'z1' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(1166): warning C4101: 'i' : unreferenced local variable
+     1>c:\users\asus\desktop\lapr5\game3d\lapr5\lapr5\lapr5.cpp(1232): warning C4101: 'd' : unreferenced local variable
+       Link:
+         D:\ISEP\Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Debug\Lapr5.exe" /INCREMENTAL /NOLOGO opengl32.lib glut32.lib glu32.lib WS2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Debug\Lapr5.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Debug\Lapr5.lib" /MACHINE:X86 Debug\Camera.obj
+         Debug\Estado.obj
+         Debug\grafos.obj
+         Debug\JogoDoGalo_openGL.obj
+         Debug\Labirinto.obj
+         Debug\lapr5.obj
+         Debug\MinijogoEnforcado.obj
+         Debug\MinijogoGalo.obj
+         Debug\MiniJogoLabirinto.obj
+         Debug\Modelo.obj
+         Debug\Objecto.obj
+         Debug\Ponto.obj
+         Debug\Relacao.obj
+         Debug\Teclas.obj
+         Debug\Utilizador.obj
+         Lapr5.vcxproj -> C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Debug\Lapr5.exe
+     1>Done Building Project "C:\Users\Asus\Desktop\LAPR5\Game3D\Lapr5\Lapr5\Lapr5.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.07
