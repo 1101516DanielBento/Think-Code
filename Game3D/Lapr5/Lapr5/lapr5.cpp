@@ -1353,6 +1353,7 @@ void Timer(int value)
 								while(modelo->getObjecto()->getY() >= nos[0].y)
 								{
 									modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+									
 								}
 								//cout<<"colisao descer\n";
 							}
