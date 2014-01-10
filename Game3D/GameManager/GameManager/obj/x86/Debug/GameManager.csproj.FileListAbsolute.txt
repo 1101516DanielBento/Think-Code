@@ -1,0 +1,49 @@
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\bin\Debug\GameManager.exe
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\bin\Debug\GameManager.pdb
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GameManager.Form1.resources
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GameManager.Properties.Resources.resources
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GameManager.exe
+C:\Users\Bino\AppData\Local\Temporary Projects\GameManager\obj\x86\Debug\GameManager.pdb
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GameManager.exe
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GameManager.pdb
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\bin\Debug\GameManager.exe
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\bin\Debug\GameManager.pdb
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GameManager.Properties.Resources.resources
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Debug\GameManager.Form_Maps.resources
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\bin\Debug\GameManager.exe.config
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.exe
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.pdb
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\bin\Debug\GameManager.exe
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\bin\Debug\GameManager.pdb
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.LoginForm.resources
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.MainForm.resources
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.MapsDownloadForm.resources
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.Properties.Resources.resources
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Documents and Settings\i080759\Desktop\GameManager\GameManager\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Tiago\Desktop\GameManager\GameManager\bin\Debug\GameManager.exe.config
+C:\Users\Tiago\Desktop\GameManager\GameManager\bin\Debug\GameManager.exe
+C:\Users\Tiago\Desktop\GameManager\GameManager\bin\Debug\GameManager.pdb
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.LoginForm.resources
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.MainForm.resources
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.MapsDownloadForm.resources
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.Properties.Resources.resources
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.exe
+C:\Users\Tiago\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.pdb
+C:\Users\Luis\Desktop\GameManager\GameManager\bin\Debug\GameManager.exe.config
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.exe
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.pdb
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.LoginForm.resources
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.Properties.Resources.resources
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.csproj.GenerateResource.Cache
+C:\Users\Luis\Desktop\GameManager\GameManager\obj\x86\Debug\GameManager.csprojResolveAssemblyReference.cache
