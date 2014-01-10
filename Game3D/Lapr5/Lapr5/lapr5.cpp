@@ -518,18 +518,19 @@ void desenhaEixos(){
 void setCamera(){
 	
 	if(estado->getLight()){
-		//Posicionar a c‰mera
+		//Posicionar a camera
 		glLoadIdentity();
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
-		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 0);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getZ(), -modelo->getObjecto()->getY());
 		putLights((GLfloat*)white_light);
 	}else{
-		//Posicionar a c‰mera
+		//Posicionar a camera
 		putLights((GLfloat*)white_light);
 		glLoadIdentity();
 		glRotatef(graus(-M_PI/2.0), 1, 0, 0);
 		glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
+		//glRotatef(graus(M_PI/2.0-modelo->getObjecto()->getDir()), 0, 0, 1);
 		glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getZ(), -modelo->getObjecto()->getY());
 		
 	}
