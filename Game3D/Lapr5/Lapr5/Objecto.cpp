@@ -13,7 +13,7 @@ Objecto::Objecto()
 	this->y=0;
 	this->z=10;
 	this->dir=0;
-	this->vel=0.2;
+	this->vel=0.1;
 }
 Objecto::Objecto(float x, float y)
 {
