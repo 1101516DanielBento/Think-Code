@@ -8,7 +8,7 @@
 //#include <GL/glut.h>
 //#endif
 
-#include "WebServices.h" 
+#include "WebServices.h"
 
 #include "XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h" 
 #include "XMLFiles_WS\tempuri.org.xsd.h" 

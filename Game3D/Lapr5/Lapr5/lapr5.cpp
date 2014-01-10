@@ -13,7 +13,7 @@
 #include "Teclas.h"
 #include "Objecto.h"
 //#include "objLoader.h"
-#include "WebService_Request.h"
+//#include "WebService_Request.h"
 #include "User_C.h"
 
 using namespace std;
@@ -252,6 +252,7 @@ void desenhaSolo(){
 		}
 	glEnd();*/
 	glPushMatrix();
+	material(brass);
 	glTranslatef(-275,-275,-5);
 	glBegin(GL_QUADS);
 		glNormal3f(0,0,1);
@@ -1185,6 +1186,11 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
 	for(int i = 0; i < numNos; i++)
 	{
 		dist = pointDistance(noCam,lnos[i]);
+		//cout<<"#######";
+		//cout<<"\ndist:" <<dist;
+		//cout<<"\nraios::"<<(r1+r2);
+		//cout<<"#######";
+		
 		if(dist <= (r1+r2))
 		{
 			float a = sqrt(dist) - (r1+r2);
@@ -1206,6 +1212,35 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
 	return 0;
 }
 
+bool colisaoArco(Nos& noCamara, /*Arco* arco,*/ Nos* Lnos)
+{
+	Nos vec;
+	float dist,dist2;
+	for(int i = 0; i < numNos; i++)
+	{
+		dist = pointDistance(noCamara,Lnos[i]);
+		dist2= (DIMENSAO_CAMARA+(K_ESFERA*Lnos[i].largura));
+		if(dist <= dist2)
+		{
+			float a = sqrt(dist) - (DIMENSAO_CAMARA+(K_ESFERA*Lnos[i].largura/2.0));
+
+			vec.x = Lnos[i].x - noCamara.x;
+			vec.y = Lnos[i].y - noCamara.y;
+			vec.z = Lnos[i].z - noCamara.z;
+			float len = sqrt((vec.x*vec.x + vec.y*vec.y + vec.z*vec.z));
+			vec.x/=len;
+			vec.y/=len;
+			vec.z/=len;
+			
+			noCamara.x = noCamara.x + vec.x*a;
+			noCamara.y = noCamara.y + vec.y*a;
+			noCamara.z = noCamara.z + vec.z*a;
+			return 1;//true
+		}
+	}
+	return 0;//false
+	
+}
 
 void moveTo(Nos c)
 {
@@ -1221,7 +1256,6 @@ Nos camPos()
 	camNewPos.y = estado->getCamera()->getCenterY();
 	camNewPos.z = estado->getCamera()->getCenterZ();
 	return camNewPos;
-	//return (coordinate(estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ())); 
 }
 
 
@@ -1306,15 +1340,15 @@ void Timer(int value)
 			if(teclas->getUP())
 			{
 				Nos cameraPos = camPos();
-				
+				//condições para os nós
 				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
 					{
-						//cout<<"Colisao\n";
+						//cout<<"Nao ha Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						moveTo(cameraPos);
 					}else{
-						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
+						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0) || (modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[arcos[1].noi].largura/2.0) ))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
 						{
 							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
 							//cout<<"colisao subir\n";
@@ -1326,6 +1360,13 @@ void Timer(int value)
 							}
 						}
 					}
+				if(!colisaoArco(cameraPos, nos))
+				{
+					cout<<"Nao ha Colisao no ramo\n";
+				}
+				else{
+					cout<<"Ha Colisao no ramo\n";
+				}
 			}
 
 			if(teclas->getDOWN())
@@ -1498,9 +1539,9 @@ void display(void)
 
 int main(int argc, char **argv)
 {
-	WebService_Request *ws= new WebService_Request();
+	/*WebService_Request *ws= new WebService_Request();
 	int id=ws->login("Quim","qwerty");
-	vector<User_C> *userList = ws->getNetworkById(id);
+	vector<User_C> *userList = ws->getNetworkById(id);*/
 
 
      glutInit(&argc, argv);
