@@ -11,6 +11,7 @@
       <xs:element minOccurs="0" name="FriendshipList" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FriendshipRequestList" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IdUser" type="xs:int" />
+      <xs:element minOccurs="0" name="MoodState" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Points" type="xs:int" />
       <xs:element minOccurs="0" name="RelationshipRequestNegociation" nillable="true" type="xs:string" />

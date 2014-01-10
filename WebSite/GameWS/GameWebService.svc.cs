@@ -149,6 +149,7 @@ namespace GameWS
             ut.Name = u.Name;
             ut.Points = u.Points;
             ut.Username = u.Username;
+            ut.MoodState = u.Mood;
             string userTags = "";
             for (int i = 0; i < u.UserTags.Count; i++)
             {
@@ -337,6 +338,41 @@ namespace GameWS
             return false;
         }
 
-       
+
+        public bool changeUserPoints(int id, int pointsToAdd, string securityPass)
+        {
+            if (!validateSecurityPass(securityPass))
+            {
+                return false;
+            }
+
+            UserBLL bll = new UserBLL();
+            return bll.changeUserPoins(id, pointsToAdd);
+        }
+
+        public bool changeMoodState(int idUser, int mood, string securityPass)
+        {
+            if (!validateSecurityPass(securityPass))
+            {
+                return false;
+            }
+            UserBLL bll = new UserBLL();
+            return bll.editUserMood(idUser, mood);
+        }
+
+        public UserType doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty, string securityPass)
+        {
+            if (!validateSecurityPass(securityPass))
+            {
+                return null;
+            }
+
+            UserBLL bll = new UserBLL();
+            User usr = bll.doNegociationGameComplete(UserIdB, userId_ONPLAY, idGame, difficulty);
+            return convertUserToUserType(usr);
+           
+        }
+
+
     }
 }

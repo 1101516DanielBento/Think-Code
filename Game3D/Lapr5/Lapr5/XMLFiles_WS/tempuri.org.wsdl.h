@@ -126,10 +126,11 @@ extern "C" {
 
 //     BasicHttpBinding_IGameWebService_login
 //     BasicHttpBinding_IGameWebService_loadUserNetwork
-//     BasicHttpBinding_IGameWebService_loadUserNetwork_2
-//     BasicHttpBinding_IGameWebService_loadUserNetwork_3
 //     BasicHttpBinding_IGameWebService_loadUserNetwork_NR
 //     BasicHttpBinding_IGameWebService_loadUserById
+//     BasicHttpBinding_IGameWebService_changeUserPoints
+//     BasicHttpBinding_IGameWebService_changeMoodState
+//     BasicHttpBinding_IGameWebService_doNegociationGameComplete
 
 // The following server function tables were generated:
 
@@ -143,9 +144,7 @@ extern "C" {
 // The following header files must be included in this order before this one
 
 // #include <WebServices.h>
-// #include "System.xsd.h"
 // #include "GameWS.xsd.h"
-// #include "DataModel.Model.xsd.h"
 // #include "tempuri.org.xsd.h"
 
 ////////////////////////////////////////////////
@@ -206,31 +205,6 @@ HRESULT WINAPI BasicHttpBinding_IGameWebService_loadUserNetwork(
     _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
     _In_opt_ WS_ERROR* _error);
 
-// operation: BasicHttpBinding_IGameWebService_loadUserNetwork_2
-HRESULT WINAPI BasicHttpBinding_IGameWebService_loadUserNetwork_2(
-    _In_ WS_SERVICE_PROXY* _serviceProxy,
-    _In_ int idUser, 
-    _In_opt_z_ WCHAR* securityPass, 
-    _Out_ unsigned int* loadUserNetwork_2ResultCount, 
-    _Outptr_opt_result_buffer_(*loadUserNetwork_2ResultCount) User*** loadUserNetwork_2Result, 
-    _In_ WS_HEAP* _heap,
-    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
-    _In_ const ULONG _callPropertyCount,
-    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
-    _In_opt_ WS_ERROR* _error);
-
-// operation: BasicHttpBinding_IGameWebService_loadUserNetwork_3
-HRESULT WINAPI BasicHttpBinding_IGameWebService_loadUserNetwork_3(
-    _In_ WS_SERVICE_PROXY* _serviceProxy,
-    _In_ int idUser, 
-    _In_opt_z_ WCHAR* securityPass, 
-    _Outptr_opt_result_z_ WCHAR** loadUserNetwork_3Result, 
-    _In_ WS_HEAP* _heap,
-    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
-    _In_ const ULONG _callPropertyCount,
-    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
-    _In_opt_ WS_ERROR* _error);
-
 // operation: BasicHttpBinding_IGameWebService_loadUserNetwork_NR
 HRESULT WINAPI BasicHttpBinding_IGameWebService_loadUserNetwork_NR(
     _In_ WS_SERVICE_PROXY* _serviceProxy,
@@ -249,6 +223,47 @@ HRESULT WINAPI BasicHttpBinding_IGameWebService_loadUserById(
     _In_ int id, 
     _In_opt_z_ WCHAR* securityPass, 
     _Outptr_opt_ UserType** loadUserByIdResult, 
+    _In_ WS_HEAP* _heap,
+    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
+    _In_ const ULONG _callPropertyCount,
+    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_opt_ WS_ERROR* _error);
+
+// operation: BasicHttpBinding_IGameWebService_changeUserPoints
+HRESULT WINAPI BasicHttpBinding_IGameWebService_changeUserPoints(
+    _In_ WS_SERVICE_PROXY* _serviceProxy,
+    _In_ int id, 
+    _In_ int pointsToAdd, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ BOOL* changeUserPointsResult, 
+    _In_ WS_HEAP* _heap,
+    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
+    _In_ const ULONG _callPropertyCount,
+    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_opt_ WS_ERROR* _error);
+
+// operation: BasicHttpBinding_IGameWebService_changeMoodState
+HRESULT WINAPI BasicHttpBinding_IGameWebService_changeMoodState(
+    _In_ WS_SERVICE_PROXY* _serviceProxy,
+    _In_ int idUser, 
+    _In_ int mood, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ BOOL* changeMoodStateResult, 
+    _In_ WS_HEAP* _heap,
+    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
+    _In_ const ULONG _callPropertyCount,
+    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_opt_ WS_ERROR* _error);
+
+// operation: BasicHttpBinding_IGameWebService_doNegociationGameComplete
+HRESULT WINAPI BasicHttpBinding_IGameWebService_doNegociationGameComplete(
+    _In_ WS_SERVICE_PROXY* _serviceProxy,
+    _In_ int userId_ONPLAY, 
+    _In_ int UserIdB, 
+    _In_ int idGame, 
+    _In_ int difficulty, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Outptr_opt_ UserType** doNegociationGameCompleteResult, 
     _In_ WS_HEAP* _heap,
     _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
     _In_ const ULONG _callPropertyCount,
@@ -277,23 +292,6 @@ typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_loadUserNetworkCallb
     _In_ const WS_ASYNC_CONTEXT* _asyncContext,
     _In_ WS_ERROR* _error);
 
-typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_loadUserNetwork_2Callback) (
-    _In_ const WS_OPERATION_CONTEXT* _context,
-    _In_ int idUser, 
-    _In_opt_z_ WCHAR* securityPass, 
-    _Out_ unsigned int* loadUserNetwork_2ResultCount, 
-    _Outptr_opt_result_buffer_(*loadUserNetwork_2ResultCount) User*** loadUserNetwork_2Result, 
-    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
-    _In_ WS_ERROR* _error);
-
-typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_loadUserNetwork_3Callback) (
-    _In_ const WS_OPERATION_CONTEXT* _context,
-    _In_ int idUser, 
-    _In_opt_z_ WCHAR* securityPass, 
-    _Outptr_opt_result_z_ WCHAR** loadUserNetwork_3Result, 
-    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
-    _In_ WS_ERROR* _error);
-
 typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_loadUserNetwork_NRCallback) (
     _In_ const WS_OPERATION_CONTEXT* _context,
     _In_ int idUser, 
@@ -310,15 +308,45 @@ typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_loadUserByIdCallback
     _In_ const WS_ASYNC_CONTEXT* _asyncContext,
     _In_ WS_ERROR* _error);
 
+typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_changeUserPointsCallback) (
+    _In_ const WS_OPERATION_CONTEXT* _context,
+    _In_ int id, 
+    _In_ int pointsToAdd, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ BOOL* changeUserPointsResult, 
+    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_ WS_ERROR* _error);
+
+typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_changeMoodStateCallback) (
+    _In_ const WS_OPERATION_CONTEXT* _context,
+    _In_ int idUser, 
+    _In_ int mood, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ BOOL* changeMoodStateResult, 
+    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_ WS_ERROR* _error);
+
+typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_doNegociationGameCompleteCallback) (
+    _In_ const WS_OPERATION_CONTEXT* _context,
+    _In_ int userId_ONPLAY, 
+    _In_ int UserIdB, 
+    _In_ int idGame, 
+    _In_ int difficulty, 
+    _In_opt_z_ WCHAR* securityPass, 
+    _Outptr_opt_ UserType** doNegociationGameCompleteResult, 
+    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_ WS_ERROR* _error);
+
 // binding: BasicHttpBinding_IGameWebService
 typedef struct BasicHttpBinding_IGameWebServiceFunctionTable 
 {
     BasicHttpBinding_IGameWebService_loginCallback BasicHttpBinding_IGameWebService_login;
     BasicHttpBinding_IGameWebService_loadUserNetworkCallback BasicHttpBinding_IGameWebService_loadUserNetwork;
-    BasicHttpBinding_IGameWebService_loadUserNetwork_2Callback BasicHttpBinding_IGameWebService_loadUserNetwork_2;
-    BasicHttpBinding_IGameWebService_loadUserNetwork_3Callback BasicHttpBinding_IGameWebService_loadUserNetwork_3;
     BasicHttpBinding_IGameWebService_loadUserNetwork_NRCallback BasicHttpBinding_IGameWebService_loadUserNetwork_NR;
     BasicHttpBinding_IGameWebService_loadUserByIdCallback BasicHttpBinding_IGameWebService_loadUserById;
+    BasicHttpBinding_IGameWebService_changeUserPointsCallback BasicHttpBinding_IGameWebService_changeUserPoints;
+    BasicHttpBinding_IGameWebService_changeMoodStateCallback BasicHttpBinding_IGameWebService_changeMoodState;
+    BasicHttpBinding_IGameWebService_doNegociationGameCompleteCallback BasicHttpBinding_IGameWebService_doNegociationGameComplete;
 } BasicHttpBinding_IGameWebServiceFunctionTable;
 
 ////////////////////////////////////////////////
@@ -353,30 +381,6 @@ typedef struct _tempuri_org_wsdl
         // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserNetwork_OutputMessage
         WS_MESSAGE_DESCRIPTION IGameWebService_loadUserNetwork_OutputMessage;
         
-        // message: IGameWebService_loadUserNetwork_2_InputMessage
-        // c type: _loadUserNetwork_2
-        // action: "http://tempuri.org/IGameWebService/loadUserNetwork_2"
-        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserNetwork_2_InputMessage
-        WS_MESSAGE_DESCRIPTION IGameWebService_loadUserNetwork_2_InputMessage;
-        
-        // message: IGameWebService_loadUserNetwork_2_OutputMessage
-        // c type: _loadUserNetwork_2Response
-        // action: "http://tempuri.org/IGameWebService/loadUserNetwork_2Response"
-        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserNetwork_2_OutputMessage
-        WS_MESSAGE_DESCRIPTION IGameWebService_loadUserNetwork_2_OutputMessage;
-        
-        // message: IGameWebService_loadUserNetwork_3_InputMessage
-        // c type: _loadUserNetwork_3
-        // action: "http://tempuri.org/IGameWebService/loadUserNetwork_3"
-        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserNetwork_3_InputMessage
-        WS_MESSAGE_DESCRIPTION IGameWebService_loadUserNetwork_3_InputMessage;
-        
-        // message: IGameWebService_loadUserNetwork_3_OutputMessage
-        // c type: _loadUserNetwork_3Response
-        // action: "http://tempuri.org/IGameWebService/loadUserNetwork_3Response"
-        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserNetwork_3_OutputMessage
-        WS_MESSAGE_DESCRIPTION IGameWebService_loadUserNetwork_3_OutputMessage;
-        
         // message: IGameWebService_loadUserNetwork_NR_InputMessage
         // c type: _loadUserNetwork_NR
         // action: "http://tempuri.org/IGameWebService/loadUserNetwork_NR"
@@ -401,6 +405,42 @@ typedef struct _tempuri_org_wsdl
         // messageDescription: tempuri_org_wsdl.messages.IGameWebService_loadUserById_OutputMessage
         WS_MESSAGE_DESCRIPTION IGameWebService_loadUserById_OutputMessage;
         
+        // message: IGameWebService_changeUserPoints_InputMessage
+        // c type: _changeUserPoints
+        // action: "http://tempuri.org/IGameWebService/changeUserPoints"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_changeUserPoints_InputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_changeUserPoints_InputMessage;
+        
+        // message: IGameWebService_changeUserPoints_OutputMessage
+        // c type: _changeUserPointsResponse
+        // action: "http://tempuri.org/IGameWebService/changeUserPointsResponse"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_changeUserPoints_OutputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_changeUserPoints_OutputMessage;
+        
+        // message: IGameWebService_changeMoodState_InputMessage
+        // c type: _changeMoodState
+        // action: "http://tempuri.org/IGameWebService/changeMoodState"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_changeMoodState_InputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_changeMoodState_InputMessage;
+        
+        // message: IGameWebService_changeMoodState_OutputMessage
+        // c type: _changeMoodStateResponse
+        // action: "http://tempuri.org/IGameWebService/changeMoodStateResponse"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_changeMoodState_OutputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_changeMoodState_OutputMessage;
+        
+        // message: IGameWebService_doNegociationGameComplete_InputMessage
+        // c type: _doNegociationGameComplete
+        // action: "http://tempuri.org/IGameWebService/doNegociationGameComplete"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_doNegociationGameComplete_InputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_doNegociationGameComplete_InputMessage;
+        
+        // message: IGameWebService_doNegociationGameComplete_OutputMessage
+        // c type: _doNegociationGameCompleteResponse
+        // action: "http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_doNegociationGameComplete_OutputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_doNegociationGameComplete_OutputMessage;
+        
     } messages;
     struct // contracts
     {
@@ -412,18 +452,21 @@ typedef struct _tempuri_org_wsdl
         // operation: BasicHttpBinding_IGameWebService_loadUserNetwork
         //     input message: IGameWebService_loadUserNetwork_InputMessage
         //     output message: IGameWebService_loadUserNetwork_OutputMessage
-        // operation: BasicHttpBinding_IGameWebService_loadUserNetwork_2
-        //     input message: IGameWebService_loadUserNetwork_2_InputMessage
-        //     output message: IGameWebService_loadUserNetwork_2_OutputMessage
-        // operation: BasicHttpBinding_IGameWebService_loadUserNetwork_3
-        //     input message: IGameWebService_loadUserNetwork_3_InputMessage
-        //     output message: IGameWebService_loadUserNetwork_3_OutputMessage
         // operation: BasicHttpBinding_IGameWebService_loadUserNetwork_NR
         //     input message: IGameWebService_loadUserNetwork_NR_InputMessage
         //     output message: IGameWebService_loadUserNetwork_NR_OutputMessage
         // operation: BasicHttpBinding_IGameWebService_loadUserById
         //     input message: IGameWebService_loadUserById_InputMessage
         //     output message: IGameWebService_loadUserById_OutputMessage
+        // operation: BasicHttpBinding_IGameWebService_changeUserPoints
+        //     input message: IGameWebService_changeUserPoints_InputMessage
+        //     output message: IGameWebService_changeUserPoints_OutputMessage
+        // operation: BasicHttpBinding_IGameWebService_changeMoodState
+        //     input message: IGameWebService_changeMoodState_InputMessage
+        //     output message: IGameWebService_changeMoodState_OutputMessage
+        // operation: BasicHttpBinding_IGameWebService_doNegociationGameComplete
+        //     input message: IGameWebService_doNegociationGameComplete_InputMessage
+        //     output message: IGameWebService_doNegociationGameComplete_OutputMessage
         // contractDescription: tempuri_org_wsdl.contracts.BasicHttpBinding_IGameWebService
         WS_CONTRACT_DESCRIPTION BasicHttpBinding_IGameWebService;
         

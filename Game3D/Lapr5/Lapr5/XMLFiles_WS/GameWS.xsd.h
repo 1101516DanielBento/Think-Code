@@ -67,6 +67,7 @@ typedef struct UserType
     WCHAR* FriendshipList; // optional
     WCHAR* FriendshipRequestList; // optional
     int IdUser;
+    int MoodState;
     WCHAR* Name; // optional
     int Points;
     WCHAR* RelationshipRequestNegociation; // optional

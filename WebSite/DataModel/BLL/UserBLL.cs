@@ -548,12 +548,12 @@ namespace DataModel.BLL
         /// <summary>
         /// Edit User Mood information, only (0-5).
         /// List of Moods:
-        /// 0->Empty
-        /// 1->
-        /// 2->
-        /// 3->
-        /// 4->
-        /// 5->
+        /// 0->Normal
+        /// 1->Angry
+        /// 2->Depressed
+        /// 3->Happy
+        /// 4->Enthusiastic
+        /// 5->Optimistic
         /// </summary>
         /// <param name="idUser">idUser</param>
         /// <param name="moodValue">Mood Value (0-5) ONLY</param>

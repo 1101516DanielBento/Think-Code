@@ -15,12 +15,13 @@ typedef struct _GameWS_xsdLocalDefinitions
                 WS_FIELD_DESCRIPTION FriendshipList;
                 WS_FIELD_DESCRIPTION FriendshipRequestList;
                 WS_FIELD_DESCRIPTION IdUser;
+                WS_FIELD_DESCRIPTION MoodState;
                 WS_FIELD_DESCRIPTION Name;
                 WS_FIELD_DESCRIPTION Points;
                 WS_FIELD_DESCRIPTION RelationshipRequestNegociation;
                 WS_FIELD_DESCRIPTION UserTags;
                 WS_FIELD_DESCRIPTION Username;
-                WS_FIELD_DESCRIPTION* UserTypeFields [8]; 
+                WS_FIELD_DESCRIPTION* UserTypeFields [9]; 
             } UserTypedescs; // end of UserType
             WS_FIELD_DESCRIPTION UserType;
             WS_FIELD_DESCRIPTION* ArrayOfUserTypeFields [1]; 
@@ -36,6 +37,7 @@ typedef struct _GameWS_xsdLocalDefinitions
             WS_XML_STRING UserTypeFriendshipListLocalName;  // FriendshipList
             WS_XML_STRING UserTypeFriendshipRequestListLocalName;  // FriendshipRequestList
             WS_XML_STRING UserTypeIdUserLocalName;  // IdUser
+            WS_XML_STRING UserTypeMoodStateLocalName;  // MoodState
             WS_XML_STRING UserTypeNameLocalName;  // Name
             WS_XML_STRING UserTypePointsLocalName;  // Points
             WS_XML_STRING UserTypeRelationshipRequestNegociationLocalName;  // RelationshipRequestNegociation
@@ -85,6 +87,17 @@ const static _GameWS_xsdLocalDefinitions GameWS_xsdLocalDefinitions =
                 0,
                 0xffffffff
                 },    // end of field description for IdUser
+                {  // field description for MoodState
+                WS_ELEMENT_FIELD_MAPPING,
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.UserTypeMoodStateLocalName, // MoodState
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+                WS_INT32_TYPE,
+                0,
+                WsOffsetOf(UserType, MoodState),
+                 WS_FIELD_OPTIONAL,
+                0,
+                0xffffffff
+                },    // end of field description for MoodState
                 {  // field description for Name
                 WS_ELEMENT_FIELD_MAPPING,
                 (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.UserTypeNameLocalName, // Name
@@ -144,6 +157,7 @@ const static _GameWS_xsdLocalDefinitions GameWS_xsdLocalDefinitions =
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.FriendshipList,
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.FriendshipRequestList,
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.IdUser,
+                (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.MoodState,
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.Name,
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.Points,
                 (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserTypedescs.RelationshipRequestNegociation,
@@ -178,18 +192,19 @@ const static _GameWS_xsdLocalDefinitions GameWS_xsdLocalDefinitions =
             WS_XML_STRING_DICTIONARY_VALUE("FriendshipList",&GameWS_xsdLocalDefinitions.dictionary.dict, 3),
             WS_XML_STRING_DICTIONARY_VALUE("FriendshipRequestList",&GameWS_xsdLocalDefinitions.dictionary.dict, 4),
             WS_XML_STRING_DICTIONARY_VALUE("IdUser",&GameWS_xsdLocalDefinitions.dictionary.dict, 5),
-            WS_XML_STRING_DICTIONARY_VALUE("Name",&GameWS_xsdLocalDefinitions.dictionary.dict, 6),
-            WS_XML_STRING_DICTIONARY_VALUE("Points",&GameWS_xsdLocalDefinitions.dictionary.dict, 7),
-            WS_XML_STRING_DICTIONARY_VALUE("RelationshipRequestNegociation",&GameWS_xsdLocalDefinitions.dictionary.dict, 8),
-            WS_XML_STRING_DICTIONARY_VALUE("UserTags",&GameWS_xsdLocalDefinitions.dictionary.dict, 9),
-            WS_XML_STRING_DICTIONARY_VALUE("Username",&GameWS_xsdLocalDefinitions.dictionary.dict, 10),
+            WS_XML_STRING_DICTIONARY_VALUE("MoodState",&GameWS_xsdLocalDefinitions.dictionary.dict, 6),
+            WS_XML_STRING_DICTIONARY_VALUE("Name",&GameWS_xsdLocalDefinitions.dictionary.dict, 7),
+            WS_XML_STRING_DICTIONARY_VALUE("Points",&GameWS_xsdLocalDefinitions.dictionary.dict, 8),
+            WS_XML_STRING_DICTIONARY_VALUE("RelationshipRequestNegociation",&GameWS_xsdLocalDefinitions.dictionary.dict, 9),
+            WS_XML_STRING_DICTIONARY_VALUE("UserTags",&GameWS_xsdLocalDefinitions.dictionary.dict, 10),
+            WS_XML_STRING_DICTIONARY_VALUE("Username",&GameWS_xsdLocalDefinitions.dictionary.dict, 11),
         },  // end of xmlStrings
         
         {  // GameWS_xsddictionary
-          // 6d2c04c0-ebe2-419e-8260-60fc74e86359 
-        { 0x6d2c04c0, 0xebe2, 0x419e, { 0x82, 0x60, 0x60,0xfc, 0x74, 0xe8, 0x63, 0x59 } },
+          // b03651ee-a8b8-45c5-a944-99a388d0b7e7 
+        { 0xb03651ee, 0xa8b8, 0x45c5, { 0xa9, 0x44, 0x99,0xa3, 0x88, 0xd0, 0xb7, 0xe7 } },
         (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings,
-        11,
+        12,
         TRUE,
         },
     },  //  end of dictionary
