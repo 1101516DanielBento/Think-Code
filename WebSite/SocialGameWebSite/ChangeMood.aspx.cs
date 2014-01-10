@@ -12,16 +12,26 @@ using DataModel.Model;
 public partial class ChangeMood : System.Web.UI.Page
 {
     int idUser;
+    int requestOk = 0;
 
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["id"] == null)
             Response.Redirect("Login.aspx");
 
+        BindGridView();
+
+        if (Session["id"] == null)
+            Response.Redirect("Login.aspx");
+
         if (Request.QueryString["usr"] != null)
             idUser = Convert.ToInt32(Request.QueryString["usr"]);
 
-        BindGridView();
+        if (Request.QueryString["request"] != null)
+            requestOk = Convert.ToInt32(Request.QueryString["request"]);
+
+        if (requestOk == 1) //Sucesso
+            lblMensagem.Text = "Your mood was changed successfully !";
 
     }
 
@@ -31,6 +41,7 @@ public partial class ChangeMood : System.Web.UI.Page
         DataTable dataTable = new DataTable();
         dataTable.Columns.Add("Image");
         dataTable.Columns.Add("Suggestion");
+        dataTable.Columns.Add("IdMood");
         dataTable.Columns.Add("Addlink");
         dataTable.Columns.Add("IdUser");
 
@@ -52,13 +63,28 @@ public partial class ChangeMood : System.Web.UI.Page
 
         String actualMood = listaSugestoes[actualMoodID+1]; //Estado de espirito actual !
 
+        int posMood = -1;
+
         foreach (String sug in listaSugestoes)
         {
             DataRow dr = dataTable.NewRow();
+
+            dr["IdMood"] = posMood;
+            posMood++;
+
             if (sug.Equals("MinhaMood"))
             {
-                dr["Suggestion"] = "Actual Mood";
-                dr["Image"] = actualMood+".png";
+                if (actualMoodID == 0)
+                {
+                    dr["Suggestion"] = "Actual Mood";
+                    dr["Image"] = "semEstado.png";
+                    
+                }
+                else
+                {
+                    dr["Suggestion"] = "Actual Mood";
+                    dr["Image"] = actualMood + ".png";
+                }
             }
             else
             {
