@@ -19,6 +19,16 @@ public partial class TagsManagement : System.Web.UI.Page
         {
             BindGridView();
 
+            int requestOk = 0;
+
+            if (Request.QueryString["request"] != null)
+                requestOk = Convert.ToInt32(Request.QueryString["request"]);
+
+            if (requestOk == 1) //Success Removed
+            {
+                lblMensagem.Text = "The tag was removed successfully !";
+            }
+
 
         }
 

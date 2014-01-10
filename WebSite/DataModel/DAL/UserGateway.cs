@@ -460,5 +460,29 @@ namespace DataModel.DAL
                 throw new ApplicationException("Erro BD", ex);
             }
         }
+
+        public bool doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
+        {
+            string cmd = "UPDATE [GameDataBase].[dbo].[RequestNegociation] SET [status] = 1 WHERE [status]=0 and [idUserA] = " + userIdA + " and [idUserB]=" + UserIdB + " and [idGame]=" + idGame + " and [difficulty]=" + difficulty;
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
+
+        public bool addPointsToUser(int id, int pointsToAdd)
+        {
+            string cmd = "UPDATE [GameDataBase].[dbo].[User] SET [points] = ([points] + " + pointsToAdd + ") WHERE idUser=" + id;
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
     }
 }

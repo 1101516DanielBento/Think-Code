@@ -1,0 +1,9 @@
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GameManager.Properties.Resources.resources
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\bin\Release\GameManager.exe
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\bin\Release\GameManager.pdb
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GameManager.Forsm_Maps.resources
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GameManager.exe
+C:\Users\Bino\documents\visual studio 2010\Projects\GameManager\GameManager\obj\x86\Release\GameManager.pdb

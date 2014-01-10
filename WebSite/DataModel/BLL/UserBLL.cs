@@ -648,5 +648,16 @@ namespace DataModel.BLL
             return games;
         }
 
+        public bool changeUserPoins(int id, int pointsToAdd)
+        {
+            return userGateway.addPointsToUser(id, pointsToAdd);
+        }
+
+        public User doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
+        {
+            while (!userGateway.doNegociationGameComplete(userIdA, UserIdB, idGame, difficulty)) ;
+
+            return loadUserById(userIdA);
+        }
     }
 }
