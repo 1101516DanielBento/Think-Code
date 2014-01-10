@@ -328,7 +328,95 @@ namespace DataModel.DAL
             return idT;
         }
 
+        public IList<int> getTagsByDictionaryIdWord(int idWord)
+        {
+            IList<int> idTags = new List<int>();
 
+            //"select * from [GameDataBase].[dbo].[TagList] where type=0 and idDictWord="+idWord
+
+            string query = "select * from [GameDataBase].[dbo].[TagList] where type=0 and idDictWord="+idWord;
+
+            DataSet ds = ExecuteQuery(GetConnection(false), query);
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                idTags.Add( (int)r["idTag"]);
+            }
+
+            return idTags;
+
+        }
+
+        public IList<Dictionary> loadAllDictionarys()
+        {
+            IList<Dictionary> dict = new List<Dictionary>();
+
+            string query = "select * from [GameDataBase].[dbo].[Dictionary]";
+
+            DataSet ds = ExecuteQuery(GetConnection(false), query);
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                Dictionary d = new Dictionary();
+                d.IdWord = (int)r["idDicWord"];
+                d.Word = (string)r["TagName"];
+                d.ListTagsWord = getTagsByDictionaryIdWord(d.IdWord);
+
+                dict.Add(d);
+            }
+
+            return dict;
+        }
+
+        public int addNewWordDictionary(string word)
+        {
+            int idW=-1;
+            string query = "INSERT INTO [GameDataBase].[dbo].[Dictionary]([TagName]) VALUES ('"+word+"');SELECT SCOPE_IDENTITY() as idW";
+
+            DataSet ds = ExecuteQuery(GetConnection(true), query);
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                idW = Convert.ToInt32(r["idW"]);
+            }
+
+            return idW;
+
+        }
+
+
+
+        public Dictionary loadAllDictionaryByIdWord(int idWord)
+        {
+            Dictionary d = new Dictionary();
+
+            string query = "select * from [GameDataBase].[dbo].[Dictionary] where idDicWord="+idWord;
+
+            DataSet ds = ExecuteQuery(GetConnection(false), query);
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {          
+                d.IdWord = (int)r["idDicWord"];
+                d.Word = (string)r["TagName"];
+                d.ListTagsWord = getTagsByDictionaryIdWord(d.IdWord);
+            }
+
+            return d;
+        }
+
+        public bool changeTagToDictionary(int idDict, int idTag)
+        {
+
+
+            string cmd = "UPDATE [GameDataBase].[dbo].[TagList] SET [idDictWord] = " + idDict + " WHERE [idTag]=" + idTag;
+
+            int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+            if (res != 0)
+                return true;
+
+            return false;
+        }
     }
 }
 
