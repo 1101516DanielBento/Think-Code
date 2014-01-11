@@ -998,8 +998,6 @@ void desenhaMinimapa(int width, int height)
 
 void display(void)
 {
-	
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
@@ -1039,7 +1037,7 @@ int picking(/*int x, int y*/){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-	//setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
+	setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
 	
 	//colisao
 	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
@@ -1095,13 +1093,14 @@ bool picking2(){
 	glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
 	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
 	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
-	//setCamera();
-	//desenhaSolo();
 	
-	//desenhaEixos();
-	//desenhaLabirinto();
-	//glutPostRedisplay();
-	display();
+	//setCamera();
+	desenhaSolo();
+	
+	desenhaEixos();
+	desenhaLabirinto();
+	glutPostRedisplay();
+	//display();
 	//glPushMatrix();
 	
 	n = glRenderMode(GL_RENDER);
