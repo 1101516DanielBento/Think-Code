@@ -226,11 +226,27 @@ namespace DataModel.DAL
             }
         }
 
-        public DataTable getUsersFriendsRequestNegGame(int id)
+        /*
+         * public DataTable getUsersFriendsRequestNegGame(int id)
         {
             try
             {
                 DataSet ds = ExecuteQuery(GetConnection(false), "select ng.idGame, ng.difficulty, ng.[status], gl.gameName from [GameDataBase].[dbo].[RequestNegociation] ng join [GameDataBase].[dbo].[GameList] gl on ng.idGame=gl.idGame where idUserB in (select idUserB from [GameDataBase].[dbo].[RequestNegociation] where idUserA = " + id + ") or  idUserA in (select idUserA from [GameDataBase].[dbo].[RequestNegociation] where idUserB =" + id + ")");
+
+                return ds.Tables[0];
+            }
+            catch (SqlException ex)
+            {
+                throw new ApplicationException("Erro BD", ex);
+            }
+        }
+         */
+
+        public DataTable getUsersFriendsRequestNegGame(int idUserR, int idUserOrd)
+        {
+            try
+            {
+                DataSet ds = ExecuteQuery(GetConnection(false), "select ng.idGame, ng.difficulty, ng.[status], gl.gameName from [GameDataBase].[dbo].[RequestNegociation] ng join [GameDataBase].[dbo].[GameList] gl on ng.idGame=gl.idGame where ng.idUserB=" + idUserR + " and ng.idUserA=" + idUserOrd);
 
                 return ds.Tables[0];
             }

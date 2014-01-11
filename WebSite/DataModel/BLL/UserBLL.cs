@@ -202,7 +202,7 @@ namespace DataModel.BLL
 
 
 
-                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id, idFriend));
 
                 friends.Add(t);
 
@@ -304,7 +304,7 @@ namespace DataModel.BLL
 
 
 
-                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id, idFriend));
 
                 friends.Add(t);
 
@@ -353,11 +353,12 @@ namespace DataModel.BLL
         /// Get gameList of Pending Negociation TESTAR SE FUNCIONA BEM
         /// </summary>
         /// <param name="idUser">id user to search</param>
+        /// <param name="idUserOrd">Id user how submit request steps</param>
         /// <returns>List of games</returns>
-        public IList<GameRequest> getGameList(int idUser)
+        public IList<GameRequest> getGameList(int idUser, int idUserOrd)
         {
             IList<GameRequest> games = new List<GameRequest>();
-            DataTable dt = userGateway.getUsersFriendsRequestNegGame(idUser);
+            DataTable dt = userGateway.getUsersFriendsRequestNegGame(idUser, idUserOrd);
 
             foreach (DataRow r in dt.Rows)
             {
@@ -657,7 +658,7 @@ namespace DataModel.BLL
         {
             while (!userGateway.doNegociationGameComplete(userIdA, UserIdB, idGame, difficulty)) ;
 
-            return loadUserById(userIdA);
+            return loadUserById(UserIdB);
         }
     }
 }
