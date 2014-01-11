@@ -55,6 +55,8 @@ extern "C" {
 //     struct _changeMoodStateResponse;
 //     struct _doNegociationGameComplete;
 //     struct _doNegociationGameCompleteResponse;
+//     struct _getDictionarys;
+//     struct _getDictionarysResponse;
 
 // The following header files must be included in this order before this one
 
@@ -160,8 +162,22 @@ typedef struct _doNegociationGameComplete
 // typeDescription: n/a
 typedef struct _doNegociationGameCompleteResponse 
 {
-    struct UserType* doNegociationGameCompleteResult; // optional
+    unsigned int doNegociationGameCompleteResultCount;
+    _Field_size_opt_(doNegociationGameCompleteResultCount)struct UserType** doNegociationGameCompleteResult; // optional
 } _doNegociationGameCompleteResponse;
+
+// typeDescription: n/a
+typedef struct _getDictionarys 
+{
+    WCHAR* securityPass; // optional
+} _getDictionarys;
+
+// typeDescription: n/a
+typedef struct _getDictionarysResponse 
+{
+    unsigned int getDictionarysResultCount;
+    _Field_size_opt_(getDictionarysResultCount)struct Dict** getDictionarysResult; // optional
+} _getDictionarysResponse;
 
 ////////////////////////////////////////////////
 // Global web service descriptions.
@@ -241,6 +257,16 @@ typedef struct _tempuri_org_xsd
         // elementDescription: tempuri_org_xsd.globalElements.doNegociationGameCompleteResponse
         WS_ELEMENT_DESCRIPTION doNegociationGameCompleteResponse;
         
+        // xml element: getDictionarys ("http://tempuri.org/")
+        // c type: _getDictionarys
+        // elementDescription: tempuri_org_xsd.globalElements.getDictionarys
+        WS_ELEMENT_DESCRIPTION getDictionarys;
+        
+        // xml element: getDictionarysResponse ("http://tempuri.org/")
+        // c type: _getDictionarysResponse
+        // elementDescription: tempuri_org_xsd.globalElements.getDictionarysResponse
+        WS_ELEMENT_DESCRIPTION getDictionarysResponse;
+        
     } globalElements;
     struct // externallyReferencedTypes
     {
@@ -258,6 +284,8 @@ typedef struct _tempuri_org_xsd
         WS_STRUCT_DESCRIPTION changeMoodStateResponse;
         WS_STRUCT_DESCRIPTION doNegociationGameComplete;
         WS_STRUCT_DESCRIPTION doNegociationGameCompleteResponse;
+        WS_STRUCT_DESCRIPTION getDictionarys;
+        WS_STRUCT_DESCRIPTION getDictionarysResponse;
     } externallyReferencedTypes;
 } _tempuri_org_xsd;
 

@@ -131,6 +131,7 @@ extern "C" {
 //     BasicHttpBinding_IGameWebService_changeUserPoints
 //     BasicHttpBinding_IGameWebService_changeMoodState
 //     BasicHttpBinding_IGameWebService_doNegociationGameComplete
+//     BasicHttpBinding_IGameWebService_getDictionarys
 
 // The following server function tables were generated:
 
@@ -263,7 +264,20 @@ HRESULT WINAPI BasicHttpBinding_IGameWebService_doNegociationGameComplete(
     _In_ int idGame, 
     _In_ int difficulty, 
     _In_opt_z_ WCHAR* securityPass, 
-    _Outptr_opt_ UserType** doNegociationGameCompleteResult, 
+    _Out_ unsigned int* doNegociationGameCompleteResultCount, 
+    _Outptr_opt_result_buffer_(*doNegociationGameCompleteResultCount) UserType*** doNegociationGameCompleteResult, 
+    _In_ WS_HEAP* _heap,
+    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
+    _In_ const ULONG _callPropertyCount,
+    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_opt_ WS_ERROR* _error);
+
+// operation: BasicHttpBinding_IGameWebService_getDictionarys
+HRESULT WINAPI BasicHttpBinding_IGameWebService_getDictionarys(
+    _In_ WS_SERVICE_PROXY* _serviceProxy,
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ unsigned int* getDictionarysResultCount, 
+    _Outptr_opt_result_buffer_(*getDictionarysResultCount) Dict*** getDictionarysResult, 
     _In_ WS_HEAP* _heap,
     _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
     _In_ const ULONG _callPropertyCount,
@@ -333,7 +347,16 @@ typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_doNegociationGameCom
     _In_ int idGame, 
     _In_ int difficulty, 
     _In_opt_z_ WCHAR* securityPass, 
-    _Outptr_opt_ UserType** doNegociationGameCompleteResult, 
+    _Out_ unsigned int* doNegociationGameCompleteResultCount, 
+    _Outptr_opt_result_buffer_(*doNegociationGameCompleteResultCount) UserType*** doNegociationGameCompleteResult, 
+    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_ WS_ERROR* _error);
+
+typedef HRESULT (CALLBACK* BasicHttpBinding_IGameWebService_getDictionarysCallback) (
+    _In_ const WS_OPERATION_CONTEXT* _context,
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ unsigned int* getDictionarysResultCount, 
+    _Outptr_opt_result_buffer_(*getDictionarysResultCount) Dict*** getDictionarysResult, 
     _In_ const WS_ASYNC_CONTEXT* _asyncContext,
     _In_ WS_ERROR* _error);
 
@@ -347,6 +370,7 @@ typedef struct BasicHttpBinding_IGameWebServiceFunctionTable
     BasicHttpBinding_IGameWebService_changeUserPointsCallback BasicHttpBinding_IGameWebService_changeUserPoints;
     BasicHttpBinding_IGameWebService_changeMoodStateCallback BasicHttpBinding_IGameWebService_changeMoodState;
     BasicHttpBinding_IGameWebService_doNegociationGameCompleteCallback BasicHttpBinding_IGameWebService_doNegociationGameComplete;
+    BasicHttpBinding_IGameWebService_getDictionarysCallback BasicHttpBinding_IGameWebService_getDictionarys;
 } BasicHttpBinding_IGameWebServiceFunctionTable;
 
 ////////////////////////////////////////////////
@@ -441,6 +465,18 @@ typedef struct _tempuri_org_wsdl
         // messageDescription: tempuri_org_wsdl.messages.IGameWebService_doNegociationGameComplete_OutputMessage
         WS_MESSAGE_DESCRIPTION IGameWebService_doNegociationGameComplete_OutputMessage;
         
+        // message: IGameWebService_getDictionarys_InputMessage
+        // c type: _getDictionarys
+        // action: "http://tempuri.org/IGameWebService/getDictionarys"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_getDictionarys_InputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_getDictionarys_InputMessage;
+        
+        // message: IGameWebService_getDictionarys_OutputMessage
+        // c type: _getDictionarysResponse
+        // action: "http://tempuri.org/IGameWebService/getDictionarysResponse"
+        // messageDescription: tempuri_org_wsdl.messages.IGameWebService_getDictionarys_OutputMessage
+        WS_MESSAGE_DESCRIPTION IGameWebService_getDictionarys_OutputMessage;
+        
     } messages;
     struct // contracts
     {
@@ -467,6 +503,9 @@ typedef struct _tempuri_org_wsdl
         // operation: BasicHttpBinding_IGameWebService_doNegociationGameComplete
         //     input message: IGameWebService_doNegociationGameComplete_InputMessage
         //     output message: IGameWebService_doNegociationGameComplete_OutputMessage
+        // operation: BasicHttpBinding_IGameWebService_getDictionarys
+        //     input message: IGameWebService_getDictionarys_InputMessage
+        //     output message: IGameWebService_getDictionarys_OutputMessage
         // contractDescription: tempuri_org_wsdl.contracts.BasicHttpBinding_IGameWebService
         WS_CONTRACT_DESCRIPTION BasicHttpBinding_IGameWebService;
         

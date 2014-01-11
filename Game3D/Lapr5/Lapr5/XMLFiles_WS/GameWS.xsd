@@ -20,4 +20,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserType" nillable="true" type="tns:UserType" />
+  <xs:complexType name="ArrayOfDict">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Dict" nillable="true" type="tns:Dict" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDict" nillable="true" type="tns:ArrayOfDict" />
+  <xs:complexType name="Dict">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IdDict" type="xs:int" />
+      <xs:element minOccurs="0" name="TagsUsed" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Word" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Dict" nillable="true" type="tns:Dict" />
 </xs:schema>

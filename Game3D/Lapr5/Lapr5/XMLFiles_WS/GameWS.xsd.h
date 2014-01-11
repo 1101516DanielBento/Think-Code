@@ -43,8 +43,12 @@ extern "C" {
 
 //     struct ArrayOfUserType;
 //     struct UserType;
+//     struct ArrayOfDict;
+//     struct Dict;
 //     struct ArrayOfUserType;
 //     struct UserType;
+//     struct ArrayOfDict;
+//     struct Dict;
 
 // The following header files must be included in this order before this one
 
@@ -75,6 +79,21 @@ typedef struct UserType
     WCHAR* Username; // optional
 } UserType;
 
+// typeDescription: GameWS_xsd.globalTypes.ArrayOfDict
+typedef struct ArrayOfDict 
+{
+    unsigned int DictCount;
+    _Field_size_(DictCount)struct Dict** Dict; // optional
+} ArrayOfDict;
+
+// typeDescription: GameWS_xsd.globalTypes.Dict
+typedef struct Dict 
+{
+    int IdDict;
+    WCHAR* TagsUsed; // optional
+    WCHAR* Word; // optional
+} Dict;
+
 ////////////////////////////////////////////////
 // Global web service descriptions.
 ////////////////////////////////////////////////
@@ -95,6 +114,18 @@ typedef struct _GameWS_xsd
         // typeDescription: GameWS_xsd.globalTypes.UserType
         WS_STRUCT_DESCRIPTION UserType;
         
+        // xml type: ArrayOfDict ("http://schemas.datacontract.org/2004/07/GameWS")
+        // c type: ArrayOfDict
+        // WS_TYPE: WS_STRUCT_TYPE
+        // typeDescription: GameWS_xsd.globalTypes.ArrayOfDict
+        WS_STRUCT_DESCRIPTION ArrayOfDict;
+        
+        // xml type: Dict ("http://schemas.datacontract.org/2004/07/GameWS")
+        // c type: Dict
+        // WS_TYPE: WS_STRUCT_TYPE
+        // typeDescription: GameWS_xsd.globalTypes.Dict
+        WS_STRUCT_DESCRIPTION Dict;
+        
     } globalTypes;
     struct // globalElements
     {
@@ -107,6 +138,16 @@ typedef struct _GameWS_xsd
         // c type: UserType
         // elementDescription: GameWS_xsd.globalElements.UserType
         WS_ELEMENT_DESCRIPTION UserType;
+        
+        // xml element: ArrayOfDict ("http://schemas.datacontract.org/2004/07/GameWS")
+        // c type: ArrayOfDict
+        // elementDescription: GameWS_xsd.globalElements.ArrayOfDict
+        WS_ELEMENT_DESCRIPTION ArrayOfDict;
+        
+        // xml element: Dict ("http://schemas.datacontract.org/2004/07/GameWS")
+        // c type: Dict
+        // elementDescription: GameWS_xsd.globalElements.Dict
+        WS_ELEMENT_DESCRIPTION Dict;
         
     } globalElements;
 } _GameWS_xsd;
