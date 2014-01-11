@@ -3,7 +3,7 @@
 #include <fstream>
 
 #ifdef __APPLE__
-#define __GRAFO__FILE__ "/Users/pedrosimoes/Think-Code/Game3D/Lapr5/Lapr5/exemplo.grafo"
+#define __GRAFO__FILE__ "/Users/simoes/Documents/Bitbucket/LAPR5/Game3D/Lapr5/Lapr5/a.grafo"
 #else
 #define __GRAFO__FILE__ "exemplo.grafo"
 #endif
