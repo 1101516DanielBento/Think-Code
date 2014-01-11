@@ -548,12 +548,12 @@ namespace DataModel.BLL
         /// <summary>
         /// Edit User Mood information, only (0-5).
         /// List of Moods:
-        /// 0->Empty
-        /// 1->
-        /// 2->
-        /// 3->
-        /// 4->
-        /// 5->
+        /// 0->Normal
+        /// 1->Angry
+        /// 2->Depressed
+        /// 3->Happy
+        /// 4->Enthusiastic
+        /// 5->Optimistic
         /// </summary>
         /// <param name="idUser">idUser</param>
         /// <param name="moodValue">Mood Value (0-5) ONLY</param>
@@ -648,5 +648,16 @@ namespace DataModel.BLL
             return games;
         }
 
+        public bool changeUserPoins(int id, int pointsToAdd)
+        {
+            return userGateway.addPointsToUser(id, pointsToAdd);
+        }
+
+        public User doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
+        {
+            while (!userGateway.doNegociationGameComplete(userIdA, UserIdB, idGame, difficulty)) ;
+
+            return loadUserById(userIdA);
+        }
     }
 }

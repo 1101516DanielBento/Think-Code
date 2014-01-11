@@ -25,6 +25,7 @@ private:
 	//tuple<idUser, list<tuple<idGame, dif, status>>>
 	vector<tuple<int,vector<tuple<int,int,bool>>>> *reqNeg;
 	int points;
+	int moodState;
 
 
 public:
@@ -37,6 +38,7 @@ public:
 	vector<int>* getRequest();
 	vector<tuple<int,vector<tuple<int,int,bool>>>>* getReqNeg();
 	int getPoints();
+	int getMoodState();
 	string getUsername();
 
 	void setUsername(string username);
@@ -46,6 +48,7 @@ public:
 	void setRequest(vector<int> *lst);
 	void setReqNeg(vector<tuple<int,vector<tuple<int,int,bool>>>> *lst);
 	void setPoints(int points);
+	void setMoodState(int mood);
 
 
 

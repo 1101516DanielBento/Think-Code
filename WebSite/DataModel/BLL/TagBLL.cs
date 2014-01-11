@@ -210,10 +210,17 @@ namespace DataModel.BLL
         /// <param name="idUser">id user</param>
         /// <param name="tagName">tag name</param>
         /// <returns>result</returns>
-        public bool delTagsUser(int idUser, string tagName)
+        public bool delTagsUser(int idUser, int tagID)
         {
-            return tagGateway.delTagUser(idUser, tagName) ;
+            return tagGateway.delTagUser(idUser, tagID) ;
         }
+
+        /// <summary>
+        /// Get Tag between Friendships using UserIds
+        /// </summary>
+        /// <param name="idUserA">Id User 1 </param>
+        /// <param name="idUserB">Id User 2</param>
+        /// <returns>Tag</returns>
 
         public Tag getRelTagFromFriendshipByIds(int idUserA, int idUserB) { 
             
@@ -221,5 +228,48 @@ namespace DataModel.BLL
             return bll.loadTagsFromFriendship(tagGateway.getRelTagFromFriendshipByIds(idUserA, idUserB));
         }
 
+        /// <summary>
+        /// Load all dictionarys from DB
+        /// </summary>
+        /// <returns>List of Dictionarys</returns>
+        public IList<Dictionary> loadAllDictionarys()
+        {
+            return tagGateway.loadAllDictionarys();
+        }
+
+        /// <summary>
+        /// Load Dictionary by idDicWord
+        /// </summary>
+        /// <param name="idWord">idDicWord</param>
+        /// <returns>Dictionary</returns>
+        public Dictionary loadDictionaryByIdWord(int idWord)
+        {
+            return tagGateway.loadAllDictionaryByIdWord(idWord);
+        }
+
+        /// <summary>
+        /// Create new dictionary
+        /// </summary>
+        /// <param name="word">Word Name</param>
+        /// <returns>id of dictionary created</returns>
+        public int addNewWordDictionary(string word)
+        {
+            return tagGateway.addNewWordDictionary(word);
+        }
+
+        /// <summary>
+        /// Change tag dictionary option, default 1 are NULL
+        /// </summary>
+        /// <param name="idDict">idDictionary</param>
+        /// <param name="idTag">id tag</param>
+        /// <returns>Tuple, with answer of operation, and dictionary</returns>
+
+        public Tuple<bool,Dictionary> changeTagToDictionary(int idDict, int idTag){
+            if (tagGateway.changeTagToDictionary(idDict, idTag))
+            {
+                return new Tuple<bool,Dictionary>(true,loadDictionaryByIdWord(idDict));
+            }
+            return new Tuple<bool,Dictionary>(false,loadDictionaryByIdWord(idDict)); 
+        }
     }
 }

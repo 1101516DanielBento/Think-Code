@@ -45,21 +45,21 @@ extern "C" {
 //     struct _loginResponse;
 //     struct _loadUserNetwork;
 //     struct _loadUserNetworkResponse;
-//     struct _loadUserNetwork_2;
-//     struct _loadUserNetwork_2Response;
-//     struct _loadUserNetwork_3;
-//     struct _loadUserNetwork_3Response;
 //     struct _loadUserNetwork_NR;
 //     struct _loadUserNetwork_NRResponse;
 //     struct _loadUserById;
 //     struct _loadUserByIdResponse;
+//     struct _changeUserPoints;
+//     struct _changeUserPointsResponse;
+//     struct _changeMoodState;
+//     struct _changeMoodStateResponse;
+//     struct _doNegociationGameComplete;
+//     struct _doNegociationGameCompleteResponse;
 
 // The following header files must be included in this order before this one
 
 // #include <WebServices.h>
-// #include "System.xsd.h"
 // #include "GameWS.xsd.h"
-// #include "DataModel.Model.xsd.h"
 
 ////////////////////////////////////////////////
 // C structure definitions for generated types
@@ -94,33 +94,6 @@ typedef struct _loadUserNetworkResponse
 } _loadUserNetworkResponse;
 
 // typeDescription: n/a
-typedef struct _loadUserNetwork_2 
-{
-    int idUser;
-    WCHAR* securityPass; // optional
-} _loadUserNetwork_2;
-
-// typeDescription: n/a
-typedef struct _loadUserNetwork_2Response 
-{
-    unsigned int loadUserNetwork_2ResultCount;
-    _Field_size_opt_(loadUserNetwork_2ResultCount)struct User** loadUserNetwork_2Result; // optional
-} _loadUserNetwork_2Response;
-
-// typeDescription: n/a
-typedef struct _loadUserNetwork_3 
-{
-    int idUser;
-    WCHAR* securityPass; // optional
-} _loadUserNetwork_3;
-
-// typeDescription: n/a
-typedef struct _loadUserNetwork_3Response 
-{
-    WCHAR* loadUserNetwork_3Result; // optional
-} _loadUserNetwork_3Response;
-
-// typeDescription: n/a
 typedef struct _loadUserNetwork_NR 
 {
     int idUser;
@@ -145,6 +118,50 @@ typedef struct _loadUserByIdResponse
 {
     struct UserType* loadUserByIdResult; // optional
 } _loadUserByIdResponse;
+
+// typeDescription: n/a
+typedef struct _changeUserPoints 
+{
+    int id;
+    int pointsToAdd;
+    WCHAR* securityPass; // optional
+} _changeUserPoints;
+
+// typeDescription: n/a
+typedef struct _changeUserPointsResponse 
+{
+    BOOL changeUserPointsResult;
+} _changeUserPointsResponse;
+
+// typeDescription: n/a
+typedef struct _changeMoodState 
+{
+    int idUser;
+    int mood;
+    WCHAR* securityPass; // optional
+} _changeMoodState;
+
+// typeDescription: n/a
+typedef struct _changeMoodStateResponse 
+{
+    BOOL changeMoodStateResult;
+} _changeMoodStateResponse;
+
+// typeDescription: n/a
+typedef struct _doNegociationGameComplete 
+{
+    int userId_ONPLAY;
+    int UserIdB;
+    int idGame;
+    int difficulty;
+    WCHAR* securityPass; // optional
+} _doNegociationGameComplete;
+
+// typeDescription: n/a
+typedef struct _doNegociationGameCompleteResponse 
+{
+    struct UserType* doNegociationGameCompleteResult; // optional
+} _doNegociationGameCompleteResponse;
 
 ////////////////////////////////////////////////
 // Global web service descriptions.
@@ -174,26 +191,6 @@ typedef struct _tempuri_org_xsd
         // elementDescription: tempuri_org_xsd.globalElements.loadUserNetworkResponse
         WS_ELEMENT_DESCRIPTION loadUserNetworkResponse;
         
-        // xml element: loadUserNetwork_2 ("http://tempuri.org/")
-        // c type: _loadUserNetwork_2
-        // elementDescription: tempuri_org_xsd.globalElements.loadUserNetwork_2
-        WS_ELEMENT_DESCRIPTION loadUserNetwork_2;
-        
-        // xml element: loadUserNetwork_2Response ("http://tempuri.org/")
-        // c type: _loadUserNetwork_2Response
-        // elementDescription: tempuri_org_xsd.globalElements.loadUserNetwork_2Response
-        WS_ELEMENT_DESCRIPTION loadUserNetwork_2Response;
-        
-        // xml element: loadUserNetwork_3 ("http://tempuri.org/")
-        // c type: _loadUserNetwork_3
-        // elementDescription: tempuri_org_xsd.globalElements.loadUserNetwork_3
-        WS_ELEMENT_DESCRIPTION loadUserNetwork_3;
-        
-        // xml element: loadUserNetwork_3Response ("http://tempuri.org/")
-        // c type: _loadUserNetwork_3Response
-        // elementDescription: tempuri_org_xsd.globalElements.loadUserNetwork_3Response
-        WS_ELEMENT_DESCRIPTION loadUserNetwork_3Response;
-        
         // xml element: loadUserNetwork_NR ("http://tempuri.org/")
         // c type: _loadUserNetwork_NR
         // elementDescription: tempuri_org_xsd.globalElements.loadUserNetwork_NR
@@ -214,6 +211,36 @@ typedef struct _tempuri_org_xsd
         // elementDescription: tempuri_org_xsd.globalElements.loadUserByIdResponse
         WS_ELEMENT_DESCRIPTION loadUserByIdResponse;
         
+        // xml element: changeUserPoints ("http://tempuri.org/")
+        // c type: _changeUserPoints
+        // elementDescription: tempuri_org_xsd.globalElements.changeUserPoints
+        WS_ELEMENT_DESCRIPTION changeUserPoints;
+        
+        // xml element: changeUserPointsResponse ("http://tempuri.org/")
+        // c type: _changeUserPointsResponse
+        // elementDescription: tempuri_org_xsd.globalElements.changeUserPointsResponse
+        WS_ELEMENT_DESCRIPTION changeUserPointsResponse;
+        
+        // xml element: changeMoodState ("http://tempuri.org/")
+        // c type: _changeMoodState
+        // elementDescription: tempuri_org_xsd.globalElements.changeMoodState
+        WS_ELEMENT_DESCRIPTION changeMoodState;
+        
+        // xml element: changeMoodStateResponse ("http://tempuri.org/")
+        // c type: _changeMoodStateResponse
+        // elementDescription: tempuri_org_xsd.globalElements.changeMoodStateResponse
+        WS_ELEMENT_DESCRIPTION changeMoodStateResponse;
+        
+        // xml element: doNegociationGameComplete ("http://tempuri.org/")
+        // c type: _doNegociationGameComplete
+        // elementDescription: tempuri_org_xsd.globalElements.doNegociationGameComplete
+        WS_ELEMENT_DESCRIPTION doNegociationGameComplete;
+        
+        // xml element: doNegociationGameCompleteResponse ("http://tempuri.org/")
+        // c type: _doNegociationGameCompleteResponse
+        // elementDescription: tempuri_org_xsd.globalElements.doNegociationGameCompleteResponse
+        WS_ELEMENT_DESCRIPTION doNegociationGameCompleteResponse;
+        
     } globalElements;
     struct // externallyReferencedTypes
     {
@@ -221,14 +248,16 @@ typedef struct _tempuri_org_xsd
         WS_STRUCT_DESCRIPTION loginResponse;
         WS_STRUCT_DESCRIPTION loadUserNetwork;
         WS_STRUCT_DESCRIPTION loadUserNetworkResponse;
-        WS_STRUCT_DESCRIPTION loadUserNetwork_2;
-        WS_STRUCT_DESCRIPTION loadUserNetwork_2Response;
-        WS_STRUCT_DESCRIPTION loadUserNetwork_3;
-        WS_STRUCT_DESCRIPTION loadUserNetwork_3Response;
         WS_STRUCT_DESCRIPTION loadUserNetwork_NR;
         WS_STRUCT_DESCRIPTION loadUserNetwork_NRResponse;
         WS_STRUCT_DESCRIPTION loadUserById;
         WS_STRUCT_DESCRIPTION loadUserByIdResponse;
+        WS_STRUCT_DESCRIPTION changeUserPoints;
+        WS_STRUCT_DESCRIPTION changeUserPointsResponse;
+        WS_STRUCT_DESCRIPTION changeMoodState;
+        WS_STRUCT_DESCRIPTION changeMoodStateResponse;
+        WS_STRUCT_DESCRIPTION doNegociationGameComplete;
+        WS_STRUCT_DESCRIPTION doNegociationGameCompleteResponse;
     } externallyReferencedTypes;
 } _tempuri_org_xsd;
 

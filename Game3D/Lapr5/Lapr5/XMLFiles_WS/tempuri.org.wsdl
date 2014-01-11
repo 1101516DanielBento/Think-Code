@@ -5,8 +5,6 @@
       <xsd:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/GameWS" />
-      <xsd:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataModel.Model" />
-      <xsd:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IGameWebService_login_InputMessage">
@@ -21,18 +19,6 @@
   <wsdl:message name="IGameWebService_loadUserNetwork_OutputMessage">
     <wsdl:part name="parameters" element="tns:loadUserNetworkResponse" />
   </wsdl:message>
-  <wsdl:message name="IGameWebService_loadUserNetwork_2_InputMessage">
-    <wsdl:part name="parameters" element="tns:loadUserNetwork_2" />
-  </wsdl:message>
-  <wsdl:message name="IGameWebService_loadUserNetwork_2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:loadUserNetwork_2Response" />
-  </wsdl:message>
-  <wsdl:message name="IGameWebService_loadUserNetwork_3_InputMessage">
-    <wsdl:part name="parameters" element="tns:loadUserNetwork_3" />
-  </wsdl:message>
-  <wsdl:message name="IGameWebService_loadUserNetwork_3_OutputMessage">
-    <wsdl:part name="parameters" element="tns:loadUserNetwork_3Response" />
-  </wsdl:message>
   <wsdl:message name="IGameWebService_loadUserNetwork_NR_InputMessage">
     <wsdl:part name="parameters" element="tns:loadUserNetwork_NR" />
   </wsdl:message>
@@ -45,6 +31,24 @@
   <wsdl:message name="IGameWebService_loadUserById_OutputMessage">
     <wsdl:part name="parameters" element="tns:loadUserByIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameWebService_changeUserPoints_InputMessage">
+    <wsdl:part name="parameters" element="tns:changeUserPoints" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_changeUserPoints_OutputMessage">
+    <wsdl:part name="parameters" element="tns:changeUserPointsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_changeMoodState_InputMessage">
+    <wsdl:part name="parameters" element="tns:changeMoodState" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_changeMoodState_OutputMessage">
+    <wsdl:part name="parameters" element="tns:changeMoodStateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_doNegociationGameComplete_InputMessage">
+    <wsdl:part name="parameters" element="tns:doNegociationGameComplete" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_doNegociationGameComplete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:doNegociationGameCompleteResponse" />
+  </wsdl:message>
   <wsdl:portType name="IGameWebService">
     <wsdl:operation name="login">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/login" message="tns:IGameWebService_login_InputMessage" />
@@ -54,14 +58,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork" message="tns:IGameWebService_loadUserNetwork_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetworkResponse" message="tns:IGameWebService_loadUserNetwork_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="loadUserNetwork_2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_2" message="tns:IGameWebService_loadUserNetwork_2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_2Response" message="tns:IGameWebService_loadUserNetwork_2_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="loadUserNetwork_3">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_3" message="tns:IGameWebService_loadUserNetwork_3_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_3Response" message="tns:IGameWebService_loadUserNetwork_3_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="loadUserNetwork_NR">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_NR" message="tns:IGameWebService_loadUserNetwork_NR_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/loadUserNetwork_NRResponse" message="tns:IGameWebService_loadUserNetwork_NR_OutputMessage" />
@@ -69,6 +65,18 @@
     <wsdl:operation name="loadUserById">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/loadUserById" message="tns:IGameWebService_loadUserById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/loadUserByIdResponse" message="tns:IGameWebService_loadUserById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="changeUserPoints">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/changeUserPoints" message="tns:IGameWebService_changeUserPoints_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/changeUserPointsResponse" message="tns:IGameWebService_changeUserPoints_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="changeMoodState">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/changeMoodState" message="tns:IGameWebService_changeMoodState_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/changeMoodStateResponse" message="tns:IGameWebService_changeMoodState_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="doNegociationGameComplete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/doNegociationGameComplete" message="tns:IGameWebService_doNegociationGameComplete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse" message="tns:IGameWebService_doNegociationGameComplete_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IGameWebService" type="tns:IGameWebService">
@@ -91,24 +99,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="loadUserNetwork_2">
-      <soap:operation soapAction="http://tempuri.org/IGameWebService/loadUserNetwork_2" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="loadUserNetwork_3">
-      <soap:operation soapAction="http://tempuri.org/IGameWebService/loadUserNetwork_3" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="loadUserNetwork_NR">
       <soap:operation soapAction="http://tempuri.org/IGameWebService/loadUserNetwork_NR" style="document" />
       <wsdl:input>
@@ -120,6 +110,33 @@
     </wsdl:operation>
     <wsdl:operation name="loadUserById">
       <soap:operation soapAction="http://tempuri.org/IGameWebService/loadUserById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="changeUserPoints">
+      <soap:operation soapAction="http://tempuri.org/IGameWebService/changeUserPoints" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="changeMoodState">
+      <soap:operation soapAction="http://tempuri.org/IGameWebService/changeMoodState" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="doNegociationGameComplete">
+      <soap:operation soapAction="http://tempuri.org/IGameWebService/doNegociationGameComplete" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

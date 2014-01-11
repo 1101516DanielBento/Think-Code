@@ -22,6 +22,8 @@ public partial class TESTING_DM : System.Web.UI.Page
         UserBLL userBll = new UserBLL();
         TagBLL tg = new TagBLL();
 
+        IList<Dictionary> dt=tg.loadAllDictionarys();
+        Tuple<bool, Dictionary> op = tg.changeTagToDictionary(2,9);
         Tag t1 = new Tag();
         t1.TagName = "Isep";
         t1.IdTag = 3;

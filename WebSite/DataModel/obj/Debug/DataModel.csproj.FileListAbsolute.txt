@@ -7,4 +7,3 @@ C:\Users\Luis\Desktop\Trabalhos\Think-Code\WebSite\DataModel\bin\Debug\DataModel
 C:\Users\Luis\Desktop\Trabalhos\Think-Code\WebSite\DataModel\bin\Debug\DataModel.pdb
 C:\Users\Luis\Desktop\Trabalhos\Think-Code\WebSite\DataModel\obj\Debug\DataModel.dll
 C:\Users\Luis\Desktop\Trabalhos\Think-Code\WebSite\DataModel\obj\Debug\DataModel.pdb
-C:\Users\Luis\Desktop\Trabalhos\Think-Code\WebSite\DataModel\obj\Debug\DataModel.csprojResolveAssemblyReference.cache

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/GameWS" />
-  <xs:import schemaLocation="http://wvm023.dei.isep.ipp.pt/GameWS/GameWebService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataModel.Model" />
   <xs:element name="login">
     <xs:complexType>
       <xs:sequence>
@@ -33,36 +32,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="loadUserNetwork_2">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="idUser" type="xs:int" />
-        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="loadUserNetwork_2Response">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataModel.Model" minOccurs="0" name="loadUserNetwork_2Result" nillable="true" type="q2:ArrayOfUser" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="loadUserNetwork_3">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="idUser" type="xs:int" />
-        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="loadUserNetwork_3Response">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="loadUserNetwork_3Result" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="loadUserNetwork_NR">
     <xs:complexType>
       <xs:sequence>
@@ -89,7 +58,57 @@
   <xs:element name="loadUserByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="loadUserByIdResult" nillable="true" type="q3:UserType" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="loadUserByIdResult" nillable="true" type="q2:UserType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeUserPoints">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="id" type="xs:int" />
+        <xs:element minOccurs="0" name="pointsToAdd" type="xs:int" />
+        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeUserPointsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="changeUserPointsResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeMoodState">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idUser" type="xs:int" />
+        <xs:element minOccurs="0" name="mood" type="xs:int" />
+        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeMoodStateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="changeMoodStateResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="doNegociationGameComplete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userId_ONPLAY" type="xs:int" />
+        <xs:element minOccurs="0" name="UserIdB" type="xs:int" />
+        <xs:element minOccurs="0" name="idGame" type="xs:int" />
+        <xs:element minOccurs="0" name="difficulty" type="xs:int" />
+        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="doNegociationGameCompleteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="doNegociationGameCompleteResult" nillable="true" type="q3:UserType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

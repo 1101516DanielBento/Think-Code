@@ -39,6 +39,8 @@
                 
                 <a href="TagsManagement.aspx" class="link_normal_formularios"> Edit my user tags</a></p>
             <p class="p_texto_campo_formulario_geral">
+                <a href="ChangeMood.aspx" class="link_normal_formularios"> Change my mood</a></p>
+            <p class="p_texto_campo_formulario_geral">
                 <br />
             <br />
             <asp:Label ID="Label2" runat="server" Font-Bold="True" CssClass="p_sucesso"> Friends management :</asp:Label>
@@ -48,7 +50,6 @@
 
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriends.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriendRelations.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
-            <p class="p_texto_campo_formulario_geral"><a href="ShowTagCloudUser.aspx" class="link_normal_formularios">Send friend requests</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="PendingRequest.aspx" class="link_normal_formularios">Show pending friend requests</a></p>
             <br />
             <br />
