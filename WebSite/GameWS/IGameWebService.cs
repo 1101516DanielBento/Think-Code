@@ -58,7 +58,7 @@ namespace GameWS
         /// <returns>UserType-> User information</returns>
         [OperationContract]
         UserType loadUserById(int id, string securityPass);
-     
+
         /// <summary>
         /// Change user Points. 
         /// </summary>
@@ -96,7 +96,15 @@ namespace GameWS
         /// <param name="securityPass">SecurityPass to access WS</param>
         /// <returns>Return UserType updated</returns>
         [OperationContract]
-        UserType doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty, string securityPass);
+        List<UserType> doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty, string securityPass);
+
+        /// <summary>
+        /// Get dictionarys from DB
+        /// </summary>
+        /// <param name="securityPass">SecurityPass to access WS</param>
+        /// <returns>List of tuples(idDict, word, listIdTags)</returns>
+        [OperationContract]
+        List<Dict> getDictionarys(string securityPass);
 
         //[OperationContract]
         //CompositeType GetDataUsingDataContract(CompositeType composite);
@@ -104,20 +112,36 @@ namespace GameWS
         // TODO: Add your service operations here
     }
     // Use a data contract as illustrated in the sample below to add composite types to service operations.
-    //[DataContract]
-    //public class UserListType
-    //{
-    //    List<User> _userList = new List<User>();
+    [DataContract]
+    public class Dict
+    {
+        int _idDict;
 
-    //    [DataMember]
-    //    public List<User> UserList
-    //    {
-    //        get { return _userList; }
-    //        set { _userList = value; }
-    //    }
+        [DataMember]
+        public int IdDict
+        {
+            get { return _idDict; }
+            set { _idDict = value; }
+        }
+        string _word;
+
+        [DataMember]
+        public string Word
+        {
+            get { return _word; }
+            set { _word = value; }
+        }
+        string _tagsUsed;
+
+        [DataMember]
+        public string TagsUsed
+        {
+            get { return _tagsUsed; }
+            set { _tagsUsed = value; }
+        }
 
 
-    //}
+    }
 
     [DataContract]
     public class UserType

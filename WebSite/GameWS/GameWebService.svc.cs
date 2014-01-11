@@ -360,7 +360,7 @@ namespace GameWS
             return bll.editUserMood(idUser, mood);
         }
 
-        public UserType doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty, string securityPass)
+        public List<UserType> doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty, string securityPass)
         {
             if (!validateSecurityPass(securityPass))
             {
@@ -369,10 +369,43 @@ namespace GameWS
 
             UserBLL bll = new UserBLL();
             User usr = bll.doNegociationGameComplete(UserIdB, userId_ONPLAY, idGame, difficulty);
-            return convertUserToUserType(usr);
+
+            List<UserType> ret = new List<UserType>();
+            ret.Add(convertUserToUserType(usr));
+            return ret;
            
         }
 
+
+        public List<Dict> getDictionarys(string securityPass)
+        {
+
+            if (!validateSecurityPass(securityPass))
+            {
+                return null;
+            }
+
+            TagBLL bll = new TagBLL();
+            IList<Dictionary> ds = bll.loadAllDictionarys();
+            List<Dict> ret = new List<Dict>();
+            for (int i = 0; i < ds.Count; i++)
+            {
+                Dict d = new Dict();
+                d.IdDict=ds[i].IdWord;
+                d.Word=ds[i].Word;
+                string tagsNr = "";
+                for (int j = 0; j < ds[i].ListTagsWord.Count; j++)
+                {
+                    tagsNr+=ds[i].ListTagsWord[j]+";";
+                }
+                d.TagsUsed = tagsNr;
+                
+                ret.Add(d);
+
+            }
+
+            return ret;
+        }
 
     }
 }
