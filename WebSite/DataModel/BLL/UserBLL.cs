@@ -649,10 +649,25 @@ namespace DataModel.BLL
             return games;
         }
 
+        /// <summary>
+        /// Change user points in DB
+        /// </summary>
+        /// <param name="id">id user</param>
+        /// <param name="pointsToAdd">Points to add</param>
+        /// <returns>result</returns>
         public bool changeUserPoins(int id, int pointsToAdd)
         {
             return userGateway.addPointsToUser(id, pointsToAdd);
         }
+
+        /// <summary>
+        /// Check game request with done status
+        /// </summary>
+        /// <param name="userIdA">Id User 1</param>
+        /// <param name="UserIdB">idUser 2</param>
+        /// <param name="idGame">id game</param>
+        /// <param name="difficulty">dificulty</param>
+        /// <returns>User object, to update existing user</returns>
 
         public User doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
         {
