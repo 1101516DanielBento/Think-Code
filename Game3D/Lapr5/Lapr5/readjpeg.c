@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #include "jpeglib.h"
 #else
-#include <jpeglib.h>
+#include "jpeglib.h"
 #endif
 
 #include <setjmp.h>
