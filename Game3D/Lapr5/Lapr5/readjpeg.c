@@ -1,4 +1,4 @@
-#include <stdio.h>
+/*#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -10,7 +10,7 @@
 
 #include <setjmp.h>
 
-#pragma comment (lib, "libjpeg.lib")    /* link with Win32 libjpeg lib */
+#pragma comment (lib, "libjpeg.lib")    // link with Win32 libjpeg lib
 #ifdef _DEBUG
 #pragma comment(linker, "/nodefaultlib:\"libc.lib\"")
 #endif
@@ -19,8 +19,8 @@
 #endif
 
 struct my_error_mgr {
-  struct jpeg_error_mgr pub; /* "public" fields */
-  jmp_buf setjmp_buffer; /* for return to caller */
+  struct jpeg_error_mgr pub; // "public" fields
+  jmp_buf setjmp_buffer; // for return to caller
 };
 
 typedef struct my_error_mgr *my_error_ptr;
@@ -29,7 +29,7 @@ METHODDEF(void)
 my_error_exit(j_common_ptr cinfo)
 {
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
-  /* Return control to the setjmp point */
+  // Return control to the setjmp point
   longjmp(myerr->setjmp_buffer, 1);
 }
 
@@ -61,7 +61,7 @@ read_JPEG_file(const char *filename, char **fbuffer,
   *height = cinfo.image_height;
   *bpp = cinfo.num_components;
 
-  /* Allocate the framebuffer */
+  // Allocate the framebuffer
   *fbuffer = (char *) malloc((size_t) (row_stride * cinfo.image_height));
   if (*fbuffer == NULL) {
     fclose(infile);
@@ -81,4 +81,4 @@ read_JPEG_file(const char *filename, char **fbuffer,
   jpeg_destroy_decompress(&cinfo);
   fclose(infile);
   return 1;
-}
+}*/

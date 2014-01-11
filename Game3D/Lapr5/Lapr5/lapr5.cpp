@@ -1038,7 +1038,7 @@ void minimapaView()
 	estadominimapa->getCamera()->setCenterX(0);
 	estadominimapa->getCamera()->setCenterY(0);
 	
-	estadominimapa->getCamera()->setEyeZ(200);
+	estadominimapa->getCamera()->setEyeZ(100);
 	estadominimapa->getCamera()->setEyeX(0);
 	estadominimapa->getCamera()->setEyeY(0);
 	
@@ -1073,6 +1073,117 @@ void desenhaMinimapa(int width, int height)
 	glFlush();
 	Reshape(width,height);
 }
+
+void desenhaSkyBox()
+{
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	float width  = 256;
+	float height = 256;
+	float length = 256;
+	
+	
+	glEnable(GL_TEXTURE_2D);
+	
+	glEnable(GL_COLOR_MATERIAL);
+	// centra o cubo
+	x = x - width  / 2;
+	y = y - height / 2;
+	z = z - length / 2;
+	
+	//BOTTOM
+	glBindTexture(GL_TEXTURE_2D, txtBOTTOM.TextureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
+	glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+	//TOP
+	
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture(GL_TEXTURE_2D, txtTOP.TextureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+	
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	
+	//RIGHT +
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture(GL_TEXTURE_2D, txtRIGHT.TextureID);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	//LEFT
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture(GL_TEXTURE_2D, txtLEFT.TextureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	
+	//BACK
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture(GL_TEXTURE_2D, txtBACK.TextureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
+	
+	
+	
+	
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	//FRONT
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+	glBindTexture(GL_TEXTURE_2D, txtFRONT.TextureID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
+	glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
+	glDisable(GL_TEXTURE_2D);
+	
+}
+
+
 
 void display(void)
 {
@@ -1115,7 +1226,7 @@ int picking(/*int x, int y*/){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-	setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
+	//setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
 	
 	//colisao
 	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
