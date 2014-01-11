@@ -13,7 +13,7 @@
 #include "Teclas.h"
 #include "Objecto.h"
 //#include "objLoader.h"
-#include "WebService_Request.h"
+//#include "WebService_Request.h"
 #include "User_C.h"
 
 using namespace std;
@@ -30,10 +30,6 @@ using namespace std;
 
 #define graus(X) (double)((X)*180/M_PI)
 #define rad(X)   (double)((X)*M_PI/180)
-
-#define NF 20
-#define NP 20
-
 
 #define K_ESFERA 2.1
 #define VELv 0.5
@@ -105,7 +101,6 @@ Estado *estadominimapa = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 int obj = 0;
-int contadorTeste = 0;
 
 void initModelo()
 {
@@ -126,6 +121,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
+
 }
 
 
@@ -150,8 +146,6 @@ void myInit()
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	
 	//glShadeModel(GL_FLAT);
-	leGrafo();
-
 	initModelo();
 	//initEstado();
 	
@@ -161,11 +155,11 @@ void myInit()
 	
 	
 	//le o grafo exemplo
+	leGrafo();
 	
-	
-	//modelo->getObjecto()->setX(nos[0].x);
-	//modelo->getObjecto()->setY(nos[0].z + K_ESFERA*nos[0].largura/2.0+1.0);
-	//modelo->getObjecto()->setZ(nos[0].y);
+	modelo->getObjecto()->setX(nos[0].x);
+	modelo->getObjecto()->setY(nos[0].z + K_ESFERA*nos[0].largura/2.0+1.0);
+	modelo->getObjecto()->setZ(nos[0].y);
 
 	//por varaiaveis de teste
 }
@@ -329,95 +323,6 @@ void desenhaNormal(GLdouble x, GLdouble y, GLdouble z, GLdouble normal[], tipo_m
 	glEnable(GL_LIGHTING);
 }
 
-void desenhaNos()
-{
-	for(int i = 0; i < numNos; i++)
-	{
-		glPushMatrix();
-		material(red_plastic);
-		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
-		//glPushName(100+i);
-		glutSolidSphere((K_ESFERA*nos[i].largura/2.0),NF,NP);
-		//glutSpher
-		
-		glPopMatrix();
-	}
-}
-
-
-void desenhaNos(GLdouble x, GLdouble y, GLdouble z,GLdouble raio)
-{
-	///GLdouble raio;
-	//for(int i = 0; i < numNos; i++)
-	//{
-	//	raio = K_ESFERA*nos[i].largura/2.0;
-		glPushMatrix();
-			material(red_plastic);
-			glTranslatef(x,y,z);
-			glutSolidSphere(raio,NF,NP);
-			//glTranslatef(nos[i].x,nos[i].y,nos[i].z);
-			//glPushName(100+i);
-			//glutSolidSphere((K_ESFERA*nos[i].largura/2.0),NF,NP);
-			//glutSpher
-			contadorTeste++;
-		glPopMatrix();
-		
-	//}
-}
-
-void distribuiNos2()//funcional
-{
-	GLdouble x,y,z,raio;
-	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
-	GLdouble lng = 0.0;
-
-	GLdouble inc_lat = M_PI/(GLdouble) NP;
-	
-	
-	for(int j = 0; j < numNos; j++){
-		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
-
-		
-				raio = (K_ESFERA*nos[j].largura)/2.0;
-				nos[j].x = 30 * cos(lng)*sin(lat);
-				nos[j].z = 30 * sin(lng)*sin(lat);
-				//nos[j].y = nos[j].y * cos(lat);
-				desenhaNos(nos[j].x,nos[j].y,nos[j].z,raio);
-				lat+=inc_lat;
-		
-		lng+=inc_lng;
-	}
-}
-
-void distribuiNos()
-{
-	GLdouble x,y,z,raio;
-	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
-	GLdouble lng = 0.0;
-
-	GLdouble inc_lat = M_PI/(GLdouble) NP;
-	
-	for(int i = 0; i < NF; i++)//percorre o num de fatias
-	{
-		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
-
-		for(int j = 0; j < NP; j++)//percorre o num de partiçoes
-		{
-			if(j < numNos)//desenha esfera
-			{
-				raio = (K_ESFERA*nos[j].largura)/2.0;
-				nos[j].x = 30 * cos(lng)*sin(lat);
-				nos[j].z = 30 * sin(lng)*sin(lat);
-				nos[j].y = 30 * cos(lat);
-				desenhaNos(nos[j].x,nos[j].z,nos[j].y,raio);
-				lat+=inc_lat;
-			}
-		}
-		lng+=inc_lng;
-	}
-
-}
-
 
 
 void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLfloat zf,GLfloat raio)
@@ -455,7 +360,7 @@ void desenhaCilindro(GLfloat xi,GLfloat yi,GLfloat zi,GLfloat xf,GLfloat yf, GLf
 	}
 	glRotatef(ax, rx, ry, rz);
 	gluQuadricOrientation(modelo->getQuad(),GLU_OUTSIDE);
-	gluCylinder(modelo->getQuad(), raio_c, raio_c, comp, NF, NP);//normal é desenhada automaticamente pela funcao
+	gluCylinder(modelo->getQuad(), raio_c, raio_c, comp, 20, 1);//normal é desenhada automaticamente pela funcao
 	glPopMatrix();
 	
 }
@@ -477,7 +382,6 @@ void desenhaLigacao(Arco arco)
 		glLoadName(obj++);
 		material(red_plastic);
 		desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-		//desenhaCilindro(noi->x,noi->z,noi->y,nof->x,nof->z,nof->y,noi->largura);
 		
 	}else{
 		if(nos[arco.noi].y==nos[arco.nof].y){
@@ -491,15 +395,29 @@ void desenhaLigacao(Arco arco)
 			}
 			glLoadName(obj++);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-			//desenhaCilindro(noi->x,noi->z,noi->y,nof->x,nof->z,nof->y,noi->largura);
 		}else{
 			noi=&nos[arco.noi];
 			nof=&nos[arco.nof];
 			material(red_plastic);
 			glLoadName(obj++);
 			desenhaCilindro(noi->x,noi->y,noi->z,nof->x,nof->y,nof->z,noi->largura);
-			//desenhaCilindro(noi->x,noi->z,noi->y,nof->x,nof->z,nof->y,noi->largura);
 		}
+	}
+}
+
+
+void desenhaNos()
+{
+	for(int i = 0; i < numNos; i++)
+	{
+		glPushMatrix();
+		material(red_plastic);
+		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
+		//glPushName(100+i);
+		glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+		//glutSpher
+		
+		glPopMatrix();
 	}
 }
 
@@ -519,16 +437,12 @@ void desenhaLabirinto(){
 		glPopMatrix();
 		//desenhaNo(i);
 	*/
-		//desenhaNos();
-	//distribuiNos();
-	distribuiNos2();
-	
+		desenhaNos();
 	//material(emerald);
 	for(int i=0; i<numArcos; i++){
 		desenhaLigacao(arcos[i]);
 		//Caminho();
 	}
-	
 	glPopMatrix();
 }
 
@@ -1084,25 +998,21 @@ void desenhaMinimapa(int width, int height)
 
 void display(void)
 {
-	
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glLoadIdentity();
 	
 	setCamera();
-	//material(slate);
+	material(slate);
 	
-	//desenhaSolo();
+	desenhaSolo();
 	
 	desenhaEixos();
 	
 	desenhaLabirinto();
 	
-	//selectObjects();
+	//aselectObjects();
 	
-	
-
 	if(estado->getEixoTrans()) {
 		//desenha plano de translacção
 		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
@@ -1115,37 +1025,7 @@ void display(void)
 	
 }
 
-void display2(void)
-{
-	
-	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glLoadIdentity();
-	
-	setCamera();
-	//material(slate);
-
-	desenhaSolo();
-	
-	desenhaEixos();
-	
-	desenhaLabirinto();
-	
-	//selectObjects();
-	
-	if(estado->getEixoTrans()) {
-		//desenha plano de translacção
-		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
-		desenhaPlanoDrag(estado->getEixoTrans());
-		
-	//}
-	glFlush();
-	glutSwapBuffers();
-	
-	}
-}
-int picking(int x, int y){
+int picking(/*int x, int y*/){
 	int i, n, objid=0;
 	double zmin = 10.0;
 	GLuint buffer[100], *ptr;
@@ -1157,17 +1037,21 @@ int picking(int x, int y){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-	setProjection(x,y,GL_TRUE);
-	//glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
+	
+	//colisao
+	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
-	//glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
-	//glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
+	//colisao
+	glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
+	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
+
 	//setCamera();
-	desenhaEixos();
-	
-	//display();
+	display();
+
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
 	{
@@ -1203,22 +1087,20 @@ bool picking2(){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-
-	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*modelo->getObjecto()->getVel());
+	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
 	glMatrixMode(GL_MODELVIEW);
-	setProjection(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),GL_TRUE);
 	glLoadIdentity();
 	glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
 	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
 	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
-	setCamera();
-	//desenhaSolo();
 	
-	//desenhaEixos();
-	//desenhaLabirinto();
-	//glutPostRedisplay();
-	display2();
-	//glutDisplayFunc(display2);
+	//setCamera();
+	desenhaSolo();
+	
+	desenhaEixos();
+	desenhaLabirinto();
+	glutPostRedisplay();
+	//display();
 	//glPushMatrix();
 	
 	n = glRenderMode(GL_RENDER);
@@ -1546,7 +1428,7 @@ void Timer(int value)
 				Nos cameraPos = camPos();
 
 				//condições para os nós
-				if(picking2()){
+				if(picking()){
 					cout <<"\n\tCOLISAO!";
 				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
 					{
@@ -1574,7 +1456,6 @@ void Timer(int value)
 
 			if(teclas->getDOWN())
 			{
-		
 				Nos cameraPos = camPos();
 				GLfloat nx, nz;
 				nx = modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
