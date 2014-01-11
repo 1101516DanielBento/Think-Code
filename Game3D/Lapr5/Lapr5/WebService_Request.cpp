@@ -36,7 +36,7 @@ User_C WebService_Request::convertObjWStoUser(UserType *usr){
 	u->setIdUser(usr->IdUser);
 	u->setUsername(convertWcharToString(usr->Username));
 	u->setPoints(usr->Points);
-	u->setMoodState(usr->MoodState);
+	//u->setMoodState(usr->MoodState);
 	
 	vector<string>::iterator it;
 	

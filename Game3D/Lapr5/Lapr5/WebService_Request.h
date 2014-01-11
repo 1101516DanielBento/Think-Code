@@ -13,7 +13,7 @@
 #include "XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h" 
 #include "XMLFiles_WS\tempuri.org.xsd.h" 
 #include "XMLFiles_WS\tempuri.org.wsdl.h" 
-#include "XMLFiles_WS\DataModel.Model.xsd.h"
+//#include "XMLFiles_WS\DataModel.Model.xsd.h"
 #include "XMLFiles_WS\GameWS.xsd.h"
 
 #include <string> 
