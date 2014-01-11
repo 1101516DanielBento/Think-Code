@@ -1005,7 +1005,7 @@ void display(void)
 	glLoadIdentity();
 	
 	setCamera();
-	//material(slate);
+	material(slate);
 	
 	desenhaSolo();
 	
@@ -1013,7 +1013,7 @@ void display(void)
 	
 	desenhaLabirinto();
 	
-	//selectObjects();
+	//aselectObjects();
 	
 	if(estado->getEixoTrans()) {
 		//desenha plano de translacção
@@ -1027,37 +1027,7 @@ void display(void)
 	
 }
 
-void display2(void)
-{
-	
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glLoadIdentity();
-	
-	setCamera();
-	//material(slate);
-
-	desenhaSolo();
-	
-	desenhaEixos();
-	
-	//desenhaLabirinto();
-	
-	//selectObjects();
-	
-	if(estado->getEixoTrans()) {
-		//desenha plano de translacção
-		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
-		desenhaPlanoDrag(estado->getEixoTrans());
-		
-	}
-	glFlush();
-	glutSwapBuffers();
-	
-}
-
-int picking(int x, int y){
+int picking(/*int x, int y*/){
 	int i, n, objid=0;
 	double zmin = 10.0;
 	GLuint buffer[100], *ptr;
@@ -1069,17 +1039,21 @@ int picking(int x, int y){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-	setProjection(x,y,GL_TRUE);
-	//glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	//setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
+	
+	//colisao
+	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
-	//glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
-	//glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
+	//colisao
+	glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
+	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
+	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
+
 	//setCamera();
-	desenhaEixos();
-	
-	//display();
+	display();
+
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
 	{
@@ -1122,12 +1096,12 @@ bool picking2(){
 	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
 	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
 	//setCamera();
-	desenhaSolo();
+	//desenhaSolo();
 	
-	desenhaEixos();
-	desenhaLabirinto();
+	//desenhaEixos();
+	//desenhaLabirinto();
 	//glutPostRedisplay();
-	//display();
+	display();
 	//glPushMatrix();
 	
 	n = glRenderMode(GL_RENDER);
@@ -1455,10 +1429,11 @@ void Timer(int value)
 				Nos cameraPos = camPos();
 
 				//condições para os nós
-				//if(!picking2()){
+				if(picking()){
+					cout <<"\n\tCOLISAO!";
 				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
 					{
-						cout<<"Nao ha Colisao\n";
+						cout<<"\nNao ha Colisao na esfera\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						//moveTo(cameraPos);
@@ -1476,10 +1451,12 @@ void Timer(int value)
 						}
 					}//colisaoArco(cameraPos, nos)
 				}
+				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+			}
 
 			if(teclas->getDOWN())
 			{
-		
 				Nos cameraPos = camPos();
 				GLfloat nx, nz;
 				nx = modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
