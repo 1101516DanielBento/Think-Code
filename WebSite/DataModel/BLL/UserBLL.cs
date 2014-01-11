@@ -202,7 +202,7 @@ namespace DataModel.BLL
 
 
 
-                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id, idFriend));
 
                 friends.Add(t);
 
@@ -304,7 +304,7 @@ namespace DataModel.BLL
 
 
 
-                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id));
+                Tuple<int, IList<GameRequest>> t = new Tuple<int, IList<GameRequest>>(idFriend, getGameList(id, idFriend));
 
                 friends.Add(t);
 
@@ -353,11 +353,12 @@ namespace DataModel.BLL
         /// Get gameList of Pending Negociation TESTAR SE FUNCIONA BEM
         /// </summary>
         /// <param name="idUser">id user to search</param>
+        /// <param name="idUserOrd">Id user how submit request steps</param>
         /// <returns>List of games</returns>
-        public IList<GameRequest> getGameList(int idUser)
+        public IList<GameRequest> getGameList(int idUser, int idUserOrd)
         {
             IList<GameRequest> games = new List<GameRequest>();
-            DataTable dt = userGateway.getUsersFriendsRequestNegGame(idUser);
+            DataTable dt = userGateway.getUsersFriendsRequestNegGame(idUser, idUserOrd);
 
             foreach (DataRow r in dt.Rows)
             {
@@ -648,16 +649,31 @@ namespace DataModel.BLL
             return games;
         }
 
+        /// <summary>
+        /// Change user points in DB
+        /// </summary>
+        /// <param name="id">id user</param>
+        /// <param name="pointsToAdd">Points to add</param>
+        /// <returns>result</returns>
         public bool changeUserPoins(int id, int pointsToAdd)
         {
             return userGateway.addPointsToUser(id, pointsToAdd);
         }
 
+        /// <summary>
+        /// Check game request with done status
+        /// </summary>
+        /// <param name="userIdA">Id User 1</param>
+        /// <param name="UserIdB">idUser 2</param>
+        /// <param name="idGame">id game</param>
+        /// <param name="difficulty">dificulty</param>
+        /// <returns>User object, to update existing user</returns>
+
         public User doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
         {
             while (!userGateway.doNegociationGameComplete(userIdA, UserIdB, idGame, difficulty)) ;
 
-            return loadUserById(userIdA);
+            return loadUserById(UserIdB);
         }
     }
 }

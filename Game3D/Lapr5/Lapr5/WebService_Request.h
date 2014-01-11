@@ -10,11 +10,11 @@
 
 #include "WebServices.h"
 
-#include "XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h" 
+#include "XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h"
 #include "XMLFiles_WS\tempuri.org.xsd.h" 
 #include "XMLFiles_WS\tempuri.org.wsdl.h" 
-//#include "XMLFiles_WS\DataModel.Model.xsd.h"
 #include "XMLFiles_WS\GameWS.xsd.h"
+
 
 #include <string> 
 #include "wchar.h"
@@ -22,6 +22,7 @@
 #include <iostream> 
 #include <vector>
 #include "User_C.h"
+#include "Dictionary.h"
 #include <tuple> 
 
 #include <stdlib.h> 
@@ -52,6 +53,11 @@ public:
 
 	int login(string UserName, string Password);
 	vector<User_C> *getNetworkById(int idUser);
+	bool changeUserPoints(int id, int pointsToAdd);
+	bool changeMoodState(int idUser, int mood); 
+	User_C doNegociationGameComplete(int userId_ONPLAY, int UserIdB, int idGame, int difficulty);
+	vector<Dictionary> *getDictionarys();
+
 
 
 	

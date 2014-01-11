@@ -22,6 +22,7 @@ User_C& User_C::operator=(const User_C& user)
 	friends=user.friends;
 	reqNeg=user.reqNeg;
 	request=user.request;
+	moodState=user.moodState;
 
 	return *this;
 }
@@ -51,6 +52,9 @@ vector<tuple<int,vector<tuple<int,int,bool>>>> *User_C::getReqNeg(){
 int User_C::getPoints(){
 	return points;
 }
+int User_C::getMoodState(){
+	return moodState;
+}
 string User_C::getUsername(){
 	return username;
 }
@@ -76,4 +80,7 @@ void User_C::setPoints(int points){
 	this->points=points;
 }
 
+void User_C::setMoodState(int mood){
+	this->moodState=mood;
+}
 

@@ -92,6 +92,16 @@ typedef struct _tempuri_org_xsdLocalDefinitions
             WS_FIELD_DESCRIPTION doNegociationGameCompleteResult;
             WS_FIELD_DESCRIPTION* _doNegociationGameCompleteResponseFields [1]; 
         } _doNegociationGameCompleteResponsedescs; // end of _doNegociationGameCompleteResponse
+        struct  // _getDictionarys
+        {
+            WS_FIELD_DESCRIPTION securityPass;
+            WS_FIELD_DESCRIPTION* _getDictionarysFields [1]; 
+        } _getDictionarysdescs; // end of _getDictionarys
+        struct  // _getDictionarysResponse
+        {
+            WS_FIELD_DESCRIPTION getDictionarysResult;
+            WS_FIELD_DESCRIPTION* _getDictionarysResponseFields [1]; 
+        } _getDictionarysResponsedescs; // end of _getDictionarysResponse
     } globalElements;  // end of global elements
     struct  // XML dictionary
     {
@@ -131,7 +141,11 @@ typedef struct _tempuri_org_xsdLocalDefinitions
             WS_XML_STRING _doNegociationGameCompleteidGameLocalName;  // idGame
             WS_XML_STRING _doNegociationGameCompletedifficultyLocalName;  // difficulty
             WS_XML_STRING _doNegociationGameCompleteResponseTypeName;  // doNegociationGameCompleteResponse
-            WS_XML_STRING _doNegociationGameCompleteResponsedoNegociationGameCompleteResultLocalName;  // doNegociationGameCompleteResult
+            WS_XML_STRING _doNegociationGameCompleteResponsedoNegociationGameCompleteResultWrapperName;  // doNegociationGameCompleteResult
+            WS_XML_STRING _getDictionarysTypeName;  // getDictionarys
+            WS_XML_STRING _getDictionarysResponseTypeName;  // getDictionarysResponse
+            WS_XML_STRING _getDictionarysResponsegetDictionarysResultLocalName;  // Dict
+            WS_XML_STRING _getDictionarysResponsegetDictionarysResultWrapperName;  // getDictionarysResult
         } xmlStrings;  // end of XML string list
         WS_XML_DICTIONARY dict;
     } dictionary;  // end of XML dictionary
@@ -510,20 +524,58 @@ const static _tempuri_org_xsdLocalDefinitions tempuri_org_xsdLocalDefinitions =
         },    // _doNegociationGameComplete
         {  // _doNegociationGameCompleteResponse
             {  // field description for doNegociationGameCompleteResult
-            WS_ELEMENT_FIELD_MAPPING,
-            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._doNegociationGameCompleteResponsedoNegociationGameCompleteResultLocalName, // doNegociationGameCompleteResult
+            WS_REPEATING_ELEMENT_FIELD_MAPPING,
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._doNegociationGameCompleteResponsedoNegociationGameCompleteResultWrapperName, // doNegociationGameCompleteResult
             (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
             WS_STRUCT_TYPE,
             (void*)&GameWS_xsd.globalTypes.UserType,
             WsOffsetOf(_doNegociationGameCompleteResponse, doNegociationGameCompleteResult),
-            WS_FIELD_POINTER| WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE,
+            WS_FIELD_POINTER| WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE| WS_FIELD_NILLABLE_ITEM,
             0,
-            0xffffffff
+            WsOffsetOf(_doNegociationGameCompleteResponse, doNegociationGameCompleteResultCount),
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loadUserNetworkResponseloadUserNetworkResultLocalName, // UserType
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loadUserNetworkResponseloadUserNetworkResultNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+            0,
             },    // end of field description for doNegociationGameCompleteResult
             {  // fields description for _doNegociationGameCompleteResponse
             (WS_FIELD_DESCRIPTION*)&tempuri_org_xsdLocalDefinitions.globalElements._doNegociationGameCompleteResponsedescs.doNegociationGameCompleteResult,
             },
         },    // _doNegociationGameCompleteResponse
+        {  // _getDictionarys
+            {  // field description for securityPass
+            WS_ELEMENT_FIELD_MAPPING,
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginsecurityPassLocalName, // securityPass
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+            WS_WSZ_TYPE,
+            0,
+            WsOffsetOf(_getDictionarys, securityPass),
+             WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE,
+            0,
+            0xffffffff
+            },    // end of field description for securityPass
+            {  // fields description for _getDictionarys
+            (WS_FIELD_DESCRIPTION*)&tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysdescs.securityPass,
+            },
+        },    // _getDictionarys
+        {  // _getDictionarysResponse
+            {  // field description for getDictionarysResult
+            WS_REPEATING_ELEMENT_FIELD_MAPPING,
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysResponsegetDictionarysResultWrapperName, // getDictionarysResult
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+            WS_STRUCT_TYPE,
+            (void*)&GameWS_xsd.globalTypes.Dict,
+            WsOffsetOf(_getDictionarysResponse, getDictionarysResult),
+            WS_FIELD_POINTER| WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE| WS_FIELD_NILLABLE_ITEM,
+            0,
+            WsOffsetOf(_getDictionarysResponse, getDictionarysResultCount),
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysResponsegetDictionarysResultLocalName, // Dict
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loadUserNetworkResponseloadUserNetworkResultNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+            0,
+            },    // end of field description for getDictionarysResult
+            {  // fields description for _getDictionarysResponse
+            (WS_FIELD_DESCRIPTION*)&tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysResponsedescs.getDictionarysResult,
+            },
+        },    // _getDictionarysResponse
     }, // end of global elements
     {  // dictionary 
         {  // xmlStrings
@@ -562,13 +614,17 @@ const static _tempuri_org_xsdLocalDefinitions tempuri_org_xsdLocalDefinitions =
             WS_XML_STRING_DICTIONARY_VALUE("difficulty",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 32),
             WS_XML_STRING_DICTIONARY_VALUE("doNegociationGameCompleteResponse",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 33),
             WS_XML_STRING_DICTIONARY_VALUE("doNegociationGameCompleteResult",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 34),
+            WS_XML_STRING_DICTIONARY_VALUE("getDictionarys",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 35),
+            WS_XML_STRING_DICTIONARY_VALUE("getDictionarysResponse",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 36),
+            WS_XML_STRING_DICTIONARY_VALUE("Dict",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 37),
+            WS_XML_STRING_DICTIONARY_VALUE("getDictionarysResult",&tempuri_org_xsdLocalDefinitions.dictionary.dict, 38),
         },  // end of xmlStrings
         
         {  // tempuri_org_xsddictionary
-          // 94cab1e2-b266-4b7a-8d39-c689bf6d01ed 
-        { 0x94cab1e2, 0xb266, 0x4b7a, { 0x8d, 0x39, 0xc6,0x89, 0xbf, 0x6d, 0x01, 0xed } },
+          // 57dee46d-6152-4a15-be82-551be87704be 
+        { 0x57dee46d, 0x6152, 0x4a15, { 0xbe, 0x82, 0x55,0x1b, 0xe8, 0x77, 0x04, 0xbe } },
         (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings,
-        35,
+        39,
         TRUE,
         },
     },  //  end of dictionary
@@ -660,6 +716,18 @@ const _tempuri_org_xsd tempuri_org_xsd =
             (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
             WS_STRUCT_TYPE,
             (void*)&tempuri_org_xsd.externallyReferencedTypes.doNegociationGameCompleteResponse,
+        },
+        {
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysTypeName, // getDictionarys
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+            WS_STRUCT_TYPE,
+            (void*)&tempuri_org_xsd.externallyReferencedTypes.getDictionarys,
+        },
+        {
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysResponseTypeName, // getDictionarysResponse
+            (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+            WS_STRUCT_TYPE,
+            (void*)&tempuri_org_xsd.externallyReferencedTypes.getDictionarysResponse,
         },
     },  // globalElements
     {  // begin of externallyReferencedTypes
@@ -817,5 +885,27 @@ const _tempuri_org_xsd tempuri_org_xsd =
         0,
         0,
         },   // end of struct description for _doNegociationGameCompleteResponse
+        {
+        sizeof(_getDictionarys),
+        __alignof(_getDictionarys),
+        (WS_FIELD_DESCRIPTION**)&tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysdescs._getDictionarysFields,
+        WsCountOf(tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysdescs._getDictionarysFields),
+        (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysTypeName, // getDictionarys
+        (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+        0,
+        0,
+        0,
+        },   // end of struct description for _getDictionarys
+        {
+        sizeof(_getDictionarysResponse),
+        __alignof(_getDictionarysResponse),
+        (WS_FIELD_DESCRIPTION**)&tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysResponsedescs._getDictionarysResponseFields,
+        WsCountOf(tempuri_org_xsdLocalDefinitions.globalElements._getDictionarysResponsedescs._getDictionarysResponseFields),
+        (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._getDictionarysResponseTypeName, // getDictionarysResponse
+        (WS_XML_STRING*)&tempuri_org_xsdLocalDefinitions.dictionary.xmlStrings._loginTypeNamespace, // http://tempuri.org/
+        0,
+        0,
+        0,
+        },   // end of struct description for _getDictionarysResponse
     },  // end of externallyReferencedTypes;
 }; // end of _tempuri_org_xsd

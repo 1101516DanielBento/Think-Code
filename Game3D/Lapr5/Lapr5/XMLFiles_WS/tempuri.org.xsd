@@ -108,7 +108,21 @@
   <xs:element name="doNegociationGameCompleteResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="doNegociationGameCompleteResult" nillable="true" type="q3:UserType" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="doNegociationGameCompleteResult" nillable="true" type="q3:ArrayOfUserType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDictionarys">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="securityPass" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDictionarysResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/GameWS" minOccurs="0" name="getDictionarysResult" nillable="true" type="q4:ArrayOfDict" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

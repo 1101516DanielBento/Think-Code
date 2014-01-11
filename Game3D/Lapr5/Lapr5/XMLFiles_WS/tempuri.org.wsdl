@@ -49,6 +49,12 @@
   <wsdl:message name="IGameWebService_doNegociationGameComplete_OutputMessage">
     <wsdl:part name="parameters" element="tns:doNegociationGameCompleteResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameWebService_getDictionarys_InputMessage">
+    <wsdl:part name="parameters" element="tns:getDictionarys" />
+  </wsdl:message>
+  <wsdl:message name="IGameWebService_getDictionarys_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getDictionarysResponse" />
+  </wsdl:message>
   <wsdl:portType name="IGameWebService">
     <wsdl:operation name="login">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/login" message="tns:IGameWebService_login_InputMessage" />
@@ -77,6 +83,10 @@
     <wsdl:operation name="doNegociationGameComplete">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/doNegociationGameComplete" message="tns:IGameWebService_doNegociationGameComplete_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse" message="tns:IGameWebService_doNegociationGameComplete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getDictionarys">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameWebService/getDictionarys" message="tns:IGameWebService_getDictionarys_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameWebService/getDictionarysResponse" message="tns:IGameWebService_getDictionarys_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IGameWebService" type="tns:IGameWebService">
@@ -137,6 +147,15 @@
     </wsdl:operation>
     <wsdl:operation name="doNegociationGameComplete">
       <soap:operation soapAction="http://tempuri.org/IGameWebService/doNegociationGameComplete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDictionarys">
+      <soap:operation soapAction="http://tempuri.org/IGameWebService/getDictionarys" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

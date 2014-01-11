@@ -23,6 +23,8 @@ typedef struct _tempuri_org_wsdlLocalDefinitions
         WS_MESSAGE_DESCRIPTION IGameWebService_changeMoodState_OutputMessage;
         WS_MESSAGE_DESCRIPTION IGameWebService_doNegociationGameComplete_InputMessage;
         WS_MESSAGE_DESCRIPTION IGameWebService_doNegociationGameComplete_OutputMessage;
+        WS_MESSAGE_DESCRIPTION IGameWebService_getDictionarys_InputMessage;
+        WS_MESSAGE_DESCRIPTION IGameWebService_getDictionarys_OutputMessage;
     } messages;  // end of messages
     struct  // contracts
     {
@@ -60,10 +62,15 @@ typedef struct _tempuri_org_wsdlLocalDefinitions
             } BasicHttpBinding_IGameWebService_changeMoodState;
             struct  // BasicHttpBinding_IGameWebService_doNegociationGameComplete
             {
-                WS_PARAMETER_DESCRIPTION params[6];
+                WS_PARAMETER_DESCRIPTION params[7];
                 WS_OPERATION_DESCRIPTION BasicHttpBinding_IGameWebService_doNegociationGameComplete;
             } BasicHttpBinding_IGameWebService_doNegociationGameComplete;
-            WS_OPERATION_DESCRIPTION* operations[7];
+            struct  // BasicHttpBinding_IGameWebService_getDictionarys
+            {
+                WS_PARAMETER_DESCRIPTION params[3];
+                WS_OPERATION_DESCRIPTION BasicHttpBinding_IGameWebService_getDictionarys;
+            } BasicHttpBinding_IGameWebService_getDictionarys;
+            WS_OPERATION_DESCRIPTION* operations[8];
             WS_CONTRACT_DESCRIPTION contractDesc;
         } BasicHttpBinding_IGameWebService;
     } contracts;  // endof contracts 
@@ -95,6 +102,8 @@ typedef struct _tempuri_org_wsdlLocalDefinitions
             WS_XML_STRING IGameWebService_changeMoodState_OutputMessageactionName;  // http://tempuri.org/IGameWebService/changeMoodStateResponse
             WS_XML_STRING IGameWebService_doNegociationGameComplete_InputMessageactionName;  // http://tempuri.org/IGameWebService/doNegociationGameComplete
             WS_XML_STRING IGameWebService_doNegociationGameComplete_OutputMessageactionName;  // http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse
+            WS_XML_STRING IGameWebService_getDictionarys_InputMessageactionName;  // http://tempuri.org/IGameWebService/getDictionarys
+            WS_XML_STRING IGameWebService_getDictionarys_OutputMessageactionName;  // http://tempuri.org/IGameWebService/getDictionarysResponse
         } xmlStrings;  // end of XML string list
         WS_XML_DICTIONARY dict;
     } dictionary;  // end of XML dictionary
@@ -314,7 +323,8 @@ typedef struct BasicHttpBinding_IGameWebService_doNegociationGameCompleteParamSt
     int* idGame;
     int* difficulty;
     WCHAR** securityPass;
-    UserType** doNegociationGameCompleteResult;
+    unsigned int* doNegociationGameCompleteResultCount;
+    UserType*** doNegociationGameCompleteResult;
 } BasicHttpBinding_IGameWebService_doNegociationGameCompleteParamStruct;
 
 #if (_MSC_VER >=1400) 
@@ -337,7 +347,41 @@ HRESULT CALLBACK BasicHttpBinding_IGameWebService_doNegociationGameCompleteOpera
         *(_stack->idGame),
         *(_stack->difficulty),
         *(_stack->securityPass),
+        _stack->doNegociationGameCompleteResultCount,
         (_stack->doNegociationGameCompleteResult),
+        (WS_ASYNC_CONTEXT*)_asyncContext,
+        _error);
+}
+#pragma warning(default: 4055)  // conversion from data pointer to function pointer
+#if (_MSC_VER >=1400) 
+#pragma warning(pop)
+#endif
+
+typedef struct BasicHttpBinding_IGameWebService_getDictionarysParamStruct 
+{
+    WCHAR** securityPass;
+    unsigned int* getDictionarysResultCount;
+    Dict*** getDictionarysResult;
+} BasicHttpBinding_IGameWebService_getDictionarysParamStruct;
+
+#if (_MSC_VER >=1400) 
+#pragma warning(push)
+#endif
+#pragma warning(disable: 4055) // conversion from data pointer to function pointer
+HRESULT CALLBACK BasicHttpBinding_IGameWebService_getDictionarysOperationStub(
+    _In_ const WS_OPERATION_CONTEXT* _context,
+    _In_ void* _stackStruct,
+    _In_ const void* _callback,
+    _In_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_ WS_ERROR* _error)
+{
+    BasicHttpBinding_IGameWebService_getDictionarysCallback _operation = (BasicHttpBinding_IGameWebService_getDictionarysCallback)_callback;
+    BasicHttpBinding_IGameWebService_getDictionarysParamStruct *_stack =(BasicHttpBinding_IGameWebService_getDictionarysParamStruct*)_stackStruct;
+    return _operation( 
+        _context,
+        *(_stack->securityPass),
+        _stack->getDictionarysResultCount,
+        (_stack->getDictionarysResult),
         (WS_ASYNC_CONTEXT*)_asyncContext,
         _error);
 }
@@ -404,6 +448,14 @@ const static _tempuri_org_wsdlLocalDefinitions tempuri_org_wsdlLocalDefinitions 
             (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_doNegociationGameComplete_OutputMessageactionName, // http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse
             (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.doNegociationGameCompleteResponse, 
         },    // message description for IGameWebService_doNegociationGameComplete_OutputMessage
+        {  // message description for IGameWebService_getDictionarys_InputMessage
+            (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_getDictionarys_InputMessageactionName, // http://tempuri.org/IGameWebService/getDictionarys
+            (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.getDictionarys, 
+        },    // message description for IGameWebService_getDictionarys_InputMessage
+        {  // message description for IGameWebService_getDictionarys_OutputMessage
+            (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_getDictionarys_OutputMessageactionName, // http://tempuri.org/IGameWebService/getDictionarysResponse
+            (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.getDictionarysResponse, 
+        },    // message description for IGameWebService_getDictionarys_OutputMessage
     },  // end of messages 
     {  // contracts
         {  // BasicHttpBinding_IGameWebService,
@@ -526,7 +578,8 @@ const static _tempuri_org_wsdlLocalDefinitions tempuri_org_wsdlLocalDefinitions 
                     {WS_PARAMETER_TYPE_NORMAL, (USHORT)2, (USHORT)-1},
                     {WS_PARAMETER_TYPE_NORMAL, (USHORT)3, (USHORT)-1},
                     {WS_PARAMETER_TYPE_NORMAL, (USHORT)4, (USHORT)-1},
-                    {WS_PARAMETER_TYPE_NORMAL, (USHORT)-1, (USHORT)0},
+                    {WS_PARAMETER_TYPE_ARRAY_COUNT, (USHORT)-1, (USHORT)0},
+                    {WS_PARAMETER_TYPE_ARRAY, (USHORT)-1, (USHORT)0},
                 },  // parameter descriptions for BasicHttpBinding_IGameWebService_doNegociationGameComplete
                 {  // operation description for BasicHttpBinding_IGameWebService_doNegociationGameComplete
                     1,
@@ -534,12 +587,30 @@ const static _tempuri_org_wsdlLocalDefinitions tempuri_org_wsdlLocalDefinitions 
                     (WS_MESSAGE_DESCRIPTION*)&tempuri_org_wsdl.messages.IGameWebService_doNegociationGameComplete_OutputMessage, 
                     0,
                     0,
-                    6,
+                    7,
                     (WS_PARAMETER_DESCRIPTION*)tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_doNegociationGameComplete.params,
                     BasicHttpBinding_IGameWebService_doNegociationGameCompleteOperationStub,
                     WS_NON_RPC_LITERAL_OPERATION
                 }, //operation description for BasicHttpBinding_IGameWebService_doNegociationGameComplete
             },  // BasicHttpBinding_IGameWebService_doNegociationGameComplete
+            {  // BasicHttpBinding_IGameWebService_getDictionarys
+                {  // parameter descriptions for BasicHttpBinding_IGameWebService_getDictionarys
+                    {WS_PARAMETER_TYPE_NORMAL, (USHORT)0, (USHORT)-1},
+                    {WS_PARAMETER_TYPE_ARRAY_COUNT, (USHORT)-1, (USHORT)0},
+                    {WS_PARAMETER_TYPE_ARRAY, (USHORT)-1, (USHORT)0},
+                },  // parameter descriptions for BasicHttpBinding_IGameWebService_getDictionarys
+                {  // operation description for BasicHttpBinding_IGameWebService_getDictionarys
+                    1,
+                    (WS_MESSAGE_DESCRIPTION*)&tempuri_org_wsdl.messages.IGameWebService_getDictionarys_InputMessage, 
+                    (WS_MESSAGE_DESCRIPTION*)&tempuri_org_wsdl.messages.IGameWebService_getDictionarys_OutputMessage, 
+                    0,
+                    0,
+                    3,
+                    (WS_PARAMETER_DESCRIPTION*)tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_getDictionarys.params,
+                    BasicHttpBinding_IGameWebService_getDictionarysOperationStub,
+                    WS_NON_RPC_LITERAL_OPERATION
+                }, //operation description for BasicHttpBinding_IGameWebService_getDictionarys
+            },  // BasicHttpBinding_IGameWebService_getDictionarys
             {  // array of operations for BasicHttpBinding_IGameWebService
                 (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_login.BasicHttpBinding_IGameWebService_login,
                 (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_loadUserNetwork.BasicHttpBinding_IGameWebService_loadUserNetwork,
@@ -548,9 +619,10 @@ const static _tempuri_org_wsdlLocalDefinitions tempuri_org_wsdlLocalDefinitions 
                 (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_changeUserPoints.BasicHttpBinding_IGameWebService_changeUserPoints,
                 (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_changeMoodState.BasicHttpBinding_IGameWebService_changeMoodState,
                 (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_doNegociationGameComplete.BasicHttpBinding_IGameWebService_doNegociationGameComplete,
+                (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_getDictionarys.BasicHttpBinding_IGameWebService_getDictionarys,
             },  // array of operations for BasicHttpBinding_IGameWebService
             {  // contract description for BasicHttpBinding_IGameWebService
-            7,
+            8,
             (WS_OPERATION_DESCRIPTION**)tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.operations,
             },  // end of contract description for BasicHttpBinding_IGameWebService
         },  // BasicHttpBinding_IGameWebService
@@ -595,13 +667,15 @@ const static _tempuri_org_wsdlLocalDefinitions tempuri_org_wsdlLocalDefinitions 
             WS_XML_STRING_DICTIONARY_VALUE("http://tempuri.org/IGameWebService/changeMoodStateResponse",&tempuri_org_wsdlLocalDefinitions.dictionary.dict, 11),
             WS_XML_STRING_DICTIONARY_VALUE("http://tempuri.org/IGameWebService/doNegociationGameComplete",&tempuri_org_wsdlLocalDefinitions.dictionary.dict, 12),
             WS_XML_STRING_DICTIONARY_VALUE("http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse",&tempuri_org_wsdlLocalDefinitions.dictionary.dict, 13),
+            WS_XML_STRING_DICTIONARY_VALUE("http://tempuri.org/IGameWebService/getDictionarys",&tempuri_org_wsdlLocalDefinitions.dictionary.dict, 14),
+            WS_XML_STRING_DICTIONARY_VALUE("http://tempuri.org/IGameWebService/getDictionarysResponse",&tempuri_org_wsdlLocalDefinitions.dictionary.dict, 15),
         },  // end of xmlStrings
         
         {  // tempuri_org_wsdldictionary
-          // 11c73f97-81c3-4cd2-a938-362f887a2d09 
-        { 0x11c73f97, 0x81c3, 0x4cd2, { 0xa9, 0x38, 0x36,0x2f, 0x88, 0x7a, 0x2d, 0x09 } },
+          // 5d1f5dc6-9fdf-4bed-b17b-417a47585389 
+        { 0x5d1f5dc6, 0x9fdf, 0x4bed, { 0xb1, 0x7b, 0x41,0x7a, 0x47, 0x58, 0x53, 0x89 } },
         (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings,
-        14,
+        16,
         TRUE,
         },
     },  //  end of dictionary
@@ -785,22 +859,50 @@ HRESULT WINAPI BasicHttpBinding_IGameWebService_doNegociationGameComplete(
     _In_ int idGame, 
     _In_ int difficulty, 
     _In_opt_z_ WCHAR* securityPass, 
-    _Outptr_opt_ UserType** doNegociationGameCompleteResult, 
+    _Out_ unsigned int* doNegociationGameCompleteResultCount, 
+    _Outptr_opt_result_buffer_(*doNegociationGameCompleteResultCount) UserType*** doNegociationGameCompleteResult, 
     _In_ WS_HEAP* _heap,
     _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
     _In_ const ULONG _callPropertyCount,
     _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
     _In_opt_ WS_ERROR* _error)
 {
-    void* _argList[6]; 
+    void* _argList[7]; 
     _argList[0] = &userId_ONPLAY;
     _argList[1] = &UserIdB;
     _argList[2] = &idGame;
     _argList[3] = &difficulty;
     _argList[4] = &securityPass;
-    _argList[5] = &doNegociationGameCompleteResult;
+    _argList[5] = &doNegociationGameCompleteResultCount;
+    _argList[6] = &doNegociationGameCompleteResult;
     return WsCall(_serviceProxy,
         (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_doNegociationGameComplete.BasicHttpBinding_IGameWebService_doNegociationGameComplete,
+        (const void **)&_argList,
+        _heap,
+        _callProperties,
+        _callPropertyCount,
+        _asyncContext,
+        _error);
+}
+
+// operation: BasicHttpBinding_IGameWebService_getDictionarys
+HRESULT WINAPI BasicHttpBinding_IGameWebService_getDictionarys(
+    _In_ WS_SERVICE_PROXY* _serviceProxy,
+    _In_opt_z_ WCHAR* securityPass, 
+    _Out_ unsigned int* getDictionarysResultCount, 
+    _Outptr_opt_result_buffer_(*getDictionarysResultCount) Dict*** getDictionarysResult, 
+    _In_ WS_HEAP* _heap,
+    _In_reads_opt_(_callPropertyCount) const WS_CALL_PROPERTY* _callProperties,
+    _In_ const ULONG _callPropertyCount,
+    _In_opt_ const WS_ASYNC_CONTEXT* _asyncContext,
+    _In_opt_ WS_ERROR* _error)
+{
+    void* _argList[3]; 
+    _argList[0] = &securityPass;
+    _argList[1] = &getDictionarysResultCount;
+    _argList[2] = &getDictionarysResult;
+    return WsCall(_serviceProxy,
+        (WS_OPERATION_DESCRIPTION*)&tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.BasicHttpBinding_IGameWebService_getDictionarys.BasicHttpBinding_IGameWebService_getDictionarys,
         (const void **)&_argList,
         _heap,
         _callProperties,
@@ -871,10 +973,18 @@ const _tempuri_org_wsdl tempuri_org_wsdl =
             (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_doNegociationGameComplete_OutputMessageactionName, // http://tempuri.org/IGameWebService/doNegociationGameCompleteResponse
             (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.doNegociationGameCompleteResponse, 
         },    // message description for IGameWebService_doNegociationGameComplete_OutputMessage
+        {  // message description for IGameWebService_getDictionarys_InputMessage
+            (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_getDictionarys_InputMessageactionName, // http://tempuri.org/IGameWebService/getDictionarys
+            (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.getDictionarys, 
+        },    // message description for IGameWebService_getDictionarys_InputMessage
+        {  // message description for IGameWebService_getDictionarys_OutputMessage
+            (WS_XML_STRING*)&tempuri_org_wsdlLocalDefinitions.dictionary.xmlStrings.IGameWebService_getDictionarys_OutputMessageactionName, // http://tempuri.org/IGameWebService/getDictionarysResponse
+            (WS_ELEMENT_DESCRIPTION*)&tempuri_org_xsd.globalElements.getDictionarysResponse, 
+        },    // message description for IGameWebService_getDictionarys_OutputMessage
     },  // messages
     {  // contracts
         {  // BasicHttpBinding_IGameWebService
-            7,
+            8,
             (WS_OPERATION_DESCRIPTION**)tempuri_org_wsdlLocalDefinitions.contracts.BasicHttpBinding_IGameWebService.operations,
         },  // end of BasicHttpBinding_IGameWebService
     },  // contracts

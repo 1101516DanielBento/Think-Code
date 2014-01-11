@@ -26,6 +26,18 @@ typedef struct _GameWS_xsdLocalDefinitions
             WS_FIELD_DESCRIPTION UserType;
             WS_FIELD_DESCRIPTION* ArrayOfUserTypeFields [1]; 
         } ArrayOfUserTypedescs; // end of ArrayOfUserType
+        struct  // ArrayOfDict
+        {
+            struct  // Dict
+            {
+                WS_FIELD_DESCRIPTION IdDict;
+                WS_FIELD_DESCRIPTION TagsUsed;
+                WS_FIELD_DESCRIPTION Word;
+                WS_FIELD_DESCRIPTION* DictFields [3]; 
+            } Dictdescs; // end of Dict
+            WS_FIELD_DESCRIPTION Dict;
+            WS_FIELD_DESCRIPTION* ArrayOfDictFields [1]; 
+        } ArrayOfDictdescs; // end of ArrayOfDict
     } globalTypes;  // end of global types
     struct  // XML dictionary
     {
@@ -43,6 +55,11 @@ typedef struct _GameWS_xsdLocalDefinitions
             WS_XML_STRING UserTypeRelationshipRequestNegociationLocalName;  // RelationshipRequestNegociation
             WS_XML_STRING UserTypeUserTagsLocalName;  // UserTags
             WS_XML_STRING UserTypeUsernameLocalName;  // Username
+            WS_XML_STRING ArrayOfDictTypeName;  // ArrayOfDict
+            WS_XML_STRING DictTypeName;  // Dict
+            WS_XML_STRING DictIdDictLocalName;  // IdDict
+            WS_XML_STRING DictTagsUsedLocalName;  // TagsUsed
+            WS_XML_STRING DictWordLocalName;  // Word
         } xmlStrings;  // end of XML string list
         WS_XML_DICTIONARY dict;
     } dictionary;  // end of XML dictionary
@@ -183,6 +200,65 @@ const static _GameWS_xsdLocalDefinitions GameWS_xsdLocalDefinitions =
             (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfUserTypedescs.UserType,
             },
         },    // ArrayOfUserType
+        {  // ArrayOfDict
+            {  // Dict
+                {  // field description for IdDict
+                WS_ELEMENT_FIELD_MAPPING,
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictIdDictLocalName, // IdDict
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+                WS_INT32_TYPE,
+                0,
+                WsOffsetOf(Dict, IdDict),
+                 WS_FIELD_OPTIONAL,
+                0,
+                0xffffffff
+                },    // end of field description for IdDict
+                {  // field description for TagsUsed
+                WS_ELEMENT_FIELD_MAPPING,
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictTagsUsedLocalName, // TagsUsed
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+                WS_WSZ_TYPE,
+                0,
+                WsOffsetOf(Dict, TagsUsed),
+                 WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE,
+                0,
+                0xffffffff
+                },    // end of field description for TagsUsed
+                {  // field description for Word
+                WS_ELEMENT_FIELD_MAPPING,
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictWordLocalName, // Word
+                (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+                WS_WSZ_TYPE,
+                0,
+                WsOffsetOf(Dict, Word),
+                 WS_FIELD_OPTIONAL| WS_FIELD_NILLABLE,
+                0,
+                0xffffffff
+                },    // end of field description for Word
+                {  // fields description for Dict
+                (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dictdescs.IdDict,
+                (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dictdescs.TagsUsed,
+                (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dictdescs.Word,
+                },
+            },    // Dict
+            {  // field description for Dict
+            WS_REPEATING_ELEMENT_FIELD_MAPPING,
+            0,
+            0,
+            WS_STRUCT_TYPE,
+            (void*)&GameWS_xsd.globalTypes.Dict,
+            WsOffsetOf(ArrayOfDict, Dict),
+            WS_FIELD_POINTER| WS_FIELD_NILLABLE_ITEM,
+            0,
+            WsOffsetOf(ArrayOfDict, DictCount),
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictTypeName, // Dict
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+            0,
+            },    // end of field description for Dict
+            {  // fields description for ArrayOfDict
+            (WS_FIELD_DESCRIPTION*)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dict,
+            },
+        },    // ArrayOfDict
     }, // end of global types
     {  // dictionary 
         {  // xmlStrings
@@ -198,13 +274,18 @@ const static _GameWS_xsdLocalDefinitions GameWS_xsdLocalDefinitions =
             WS_XML_STRING_DICTIONARY_VALUE("RelationshipRequestNegociation",&GameWS_xsdLocalDefinitions.dictionary.dict, 9),
             WS_XML_STRING_DICTIONARY_VALUE("UserTags",&GameWS_xsdLocalDefinitions.dictionary.dict, 10),
             WS_XML_STRING_DICTIONARY_VALUE("Username",&GameWS_xsdLocalDefinitions.dictionary.dict, 11),
+            WS_XML_STRING_DICTIONARY_VALUE("ArrayOfDict",&GameWS_xsdLocalDefinitions.dictionary.dict, 12),
+            WS_XML_STRING_DICTIONARY_VALUE("Dict",&GameWS_xsdLocalDefinitions.dictionary.dict, 13),
+            WS_XML_STRING_DICTIONARY_VALUE("IdDict",&GameWS_xsdLocalDefinitions.dictionary.dict, 14),
+            WS_XML_STRING_DICTIONARY_VALUE("TagsUsed",&GameWS_xsdLocalDefinitions.dictionary.dict, 15),
+            WS_XML_STRING_DICTIONARY_VALUE("Word",&GameWS_xsdLocalDefinitions.dictionary.dict, 16),
         },  // end of xmlStrings
         
         {  // GameWS_xsddictionary
-          // b03651ee-a8b8-45c5-a944-99a388d0b7e7 
-        { 0xb03651ee, 0xa8b8, 0x45c5, { 0xa9, 0x44, 0x99,0xa3, 0x88, 0xd0, 0xb7, 0xe7 } },
+          // ca8d4e9e-de0c-4f1e-9bce-5e30406137fe 
+        { 0xca8d4e9e, 0xde0c, 0x4f1e, { 0x9b, 0xce, 0x5e,0x30, 0x40, 0x61, 0x37, 0xfe } },
         (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings,
-        12,
+        17,
         TRUE,
         },
     },  //  end of dictionary
@@ -235,6 +316,28 @@ const _GameWS_xsd GameWS_xsd =
         0,
         0,
         },   // end of struct description for UserType
+        {
+        sizeof(ArrayOfDict),
+        __alignof(ArrayOfDict),
+        (WS_FIELD_DESCRIPTION**)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.ArrayOfDictFields,
+        WsCountOf(GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.ArrayOfDictFields),
+        (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfDictTypeName, // ArrayOfDict
+        (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+        0,
+        0,
+        0,
+        },   // end of struct description for ArrayOfDict
+        {
+        sizeof(Dict),
+        __alignof(Dict),
+        (WS_FIELD_DESCRIPTION**)&GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dictdescs.DictFields,
+        WsCountOf(GameWS_xsdLocalDefinitions.globalTypes.ArrayOfDictdescs.Dictdescs.DictFields),
+        (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictTypeName, // Dict
+        (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+        0,
+        0,
+        0,
+        },   // end of struct description for Dict
     },  // globalTypes
     {  // globalElements
         {
@@ -248,6 +351,18 @@ const _GameWS_xsd GameWS_xsd =
             (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
             WS_STRUCT_TYPE,
             (void*)&GameWS_xsd.globalTypes.UserType,
+        },
+        {
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfDictTypeName, // ArrayOfDict
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+            WS_STRUCT_TYPE,
+            (void*)&GameWS_xsd.globalTypes.ArrayOfDict,
+        },
+        {
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.DictTypeName, // Dict
+            (WS_XML_STRING*)&GameWS_xsdLocalDefinitions.dictionary.xmlStrings.ArrayOfUserTypeTypeNamespace, // http://schemas.datacontract.org/2004/07/GameWS
+            WS_STRUCT_TYPE,
+            (void*)&GameWS_xsd.globalTypes.Dict,
         },
     },  // globalElements
 }; // end of _GameWS_xsd
