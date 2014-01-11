@@ -6,6 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <GL/glaux.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
@@ -47,13 +48,13 @@ using namespace std;
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
 
-#define NOME_FUNDO_SOLO "solo.jpg"
+#define NOME_FUNDO_SOLO "texturas/solo.jpg"
 
-#define NOME_FUNDO_FRONT "frente.jpg"
-#define NOME_FUNDO_BACK "tras.jpg"
-#define NOME_FUNDO_LEFT "esquerda.jpg"
-#define NOME_FUNDO_RIGHT "direita.jpg"
-#define NOME_FUNDO_UP "cima.jpg"
+#define NOME_FUNDO_FRONT "texturas/frente.jpg"
+#define NOME_FUNDO_BACK "texturas/tras.jpg"
+#define NOME_FUNDO_LEFT "texturas/esquerda.jpg"
+#define NOME_FUNDO_RIGHT "texturas/direita.jpg"
+#define NOME_FUNDO_UP "texturas/cima.jpg"
 //#define NOME_FUNDO_DOWN "baixo.jpg" o cubo so tem 5 faces
 
 
@@ -135,7 +136,7 @@ glTexture txtBACK;
 
 void CriarTexturas(GLuint texID[])
 {
-	/*
+	
 	
 	AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
 	glGenTextures(NUM_TEXTURAS,texID);
@@ -144,19 +145,19 @@ void CriarTexturas(GLuint texID[])
 	apTexLoad->SetHighQualityTextures(TRUE);
 	apTexLoad->SetTextureFilter(txTrilinear);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_RIGHT, &txtRIGHT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
-	apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
+	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 	
-	glBindTexture(GL_TEXTURE_2D, NULL);*/
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 
@@ -179,7 +180,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-
+	CriarTexturas(modelo->getTexID());
 }
 
 
@@ -489,6 +490,7 @@ void desenhaNos(GLdouble x, GLdouble y, GLdouble z,GLdouble raio)
 		glPushMatrix();
 			material(red_plastic);
 			glTranslatef(x,y,z);
+			material(azul);
 			glutSolidSphere(raio,NF,NP);
 			//glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 			//glPushName(100+i);
@@ -1211,13 +1213,10 @@ void desenhaSkyBox()
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtBACK.TextureID);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
-	
-	
-	
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
 	
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
@@ -1251,7 +1250,7 @@ void display(void)
 	material(slate);
 	
 	//desenhaSolo();
-	
+	desenhaSkyBox();
 	desenhaEixos();
 	
 	desenhaLabirinto();
