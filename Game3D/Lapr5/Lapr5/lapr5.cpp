@@ -12,6 +12,7 @@
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
+#include "TextureLoader.h"
 //#include "objLoader.h"
 //#include "WebService_Request.h"
 #include "User_C.h"
@@ -45,6 +46,16 @@ using namespace std;
 
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
+
+#define NOME_FUNDO_SOLO "solo.jpg"
+
+#define NOME_FUNDO_FRONT "frente.jpg"
+#define NOME_FUNDO_BACK "tras.jpg"
+#define NOME_FUNDO_LEFT "esquerda.jpg"
+#define NOME_FUNDO_RIGHT "direita.jpg"
+#define NOME_FUNDO_UP "cima.jpg"
+//#define NOME_FUNDO_DOWN "baixo.jpg" o cubo so tem 5 faces
+
 
 #define EIXO_X		1
 #define EIXO_Y		2
@@ -103,6 +114,51 @@ Estado *estadominimapa = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 int obj = 0;
+
+
+
+//######################TEXTURAS############
+
+TextureLoader *apTexLoad = new TextureLoader();
+glTexture txtSolo;
+glTexture txtChateado;
+glTexture txtApaixonado;
+glTexture txtTriste;
+glTexture txtContente;
+glTexture txtBOTTOM;
+glTexture txtTOP;
+glTexture txtLEFT;
+glTexture txtRIGHT;
+glTexture txtFRONT;
+glTexture txtBACK;
+
+
+void CriarTexturas(GLuint texID[])
+{
+	/*
+	
+	AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
+	glGenTextures(NUM_TEXTURAS,texID);
+	memset(TextureImage,0,sizeof(void *)*1);            // Set The Pointer To NULL
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	apTexLoad->SetHighQualityTextures(TRUE);
+	apTexLoad->SetTextureFilter(txTrilinear);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_RIGHT, &txtRIGHT);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
+	apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
+	
+	glBindTexture(GL_TEXTURE_2D, NULL);*/
+}
+
 
 void initModelo()
 {
