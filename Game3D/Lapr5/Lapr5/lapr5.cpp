@@ -39,6 +39,8 @@ using namespace std;
 #define WINDOW_SIZE_HEIGHT 600
 #define WINDOW_SIZE_WIDTH 800
 #define INFINITESIMO 0,0000000000000001
+#define NF 20
+#define NP 20
 
 
 #define CAMERA_LIVRE 1
@@ -414,11 +416,85 @@ void desenhaNos()
 		material(red_plastic);
 		glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 		//glPushName(100+i);
-		glutSolidSphere((K_ESFERA*nos[i].largura/2.0),20,20);
+		glutSolidSphere((K_ESFERA*nos[i].largura/2.0),NF,NP);
 		//glutSpher
 		
 		glPopMatrix();
 	}
+}
+
+
+void desenhaNos(GLdouble x, GLdouble y, GLdouble z,GLdouble raio)
+{
+	///GLdouble raio;
+	//for(int i = 0; i < numNos; i++)
+	//{
+	//	raio = K_ESFERA*nos[i].largura/2.0;
+		glPushMatrix();
+			material(red_plastic);
+			glTranslatef(x,y,z);
+			glutSolidSphere(raio,NF,NP);
+			//glTranslatef(nos[i].x,nos[i].y,nos[i].z);
+			//glPushName(100+i);
+			//glutSolidSphere((K_ESFERA*nos[i].largura/2.0),NF,NP);
+			//glutSpher
+			//contadorTeste++;
+		glPopMatrix();
+		
+	//}
+}
+
+void distribuiNos2()//funcional
+{
+	GLdouble x,y,z,raio;
+	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
+	GLdouble lng = 0.0;
+
+	GLdouble inc_lat = M_PI/(GLdouble) NP;
+	
+	
+	for(int j = 0; j < numNos; j++){
+		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
+
+		
+				raio = (K_ESFERA*nos[j].largura)/2.0;
+				nos[j].x = 30 * cos(lng)*sin(lat);
+				nos[j].z = 30 * sin(lng)*sin(lat);
+				//nos[j].y = nos[j].y * cos(lat);
+				desenhaNos(nos[j].x,nos[j].y,nos[j].z,raio);
+				lat+=inc_lat;
+		
+		lng+=inc_lng;
+	}
+}
+
+void distribuiNos()
+{
+	GLdouble x,y,z,raio;
+	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
+	GLdouble lng = 0.0;
+
+	GLdouble inc_lat = M_PI/(GLdouble) NP;
+	
+	for(int i = 0; i < NF; i++)//percorre o num de fatias
+	{
+		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
+
+		for(int j = 0; j < NP; j++)//percorre o num de partiçoes
+		{
+			if(j < numNos)//desenha esfera
+			{
+				raio = (K_ESFERA*nos[j].largura)/2.0;
+				nos[j].x = 30 * cos(lng)*sin(lat);
+				nos[j].z = 30 * sin(lng)*sin(lat);
+				nos[j].y = 30 * cos(lat);
+				desenhaNos(nos[j].x,nos[j].z,nos[j].y,raio);
+				lat+=inc_lat;
+			}
+		}
+		lng+=inc_lng;
+	}
+
 }
 
 
@@ -437,7 +513,9 @@ void desenhaLabirinto(){
 		glPopMatrix();
 		//desenhaNo(i);
 	*/
-		desenhaNos();
+	distribuiNos2();
+
+		//desenhaNos();
 	//material(emerald);
 	for(int i=0; i<numArcos; i++){
 		desenhaLigacao(arcos[i]);
@@ -1005,7 +1083,7 @@ void display(void)
 	setCamera();
 	material(slate);
 	
-	desenhaSolo();
+	//desenhaSolo();
 	
 	desenhaEixos();
 	
