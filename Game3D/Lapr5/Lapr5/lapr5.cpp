@@ -35,7 +35,7 @@ using namespace std;
 
 #define K_ESFERA 2.1
 #define VELv 0.5
-#define DIMENSAO_CAMARA 2
+#define DIMENSAO_CAMARA 5
 #define BUFSIZE 512
 #define DISTANCIA_SOLO 1.0
 #define WINDOW_SIZE_HEIGHT 600
@@ -505,7 +505,7 @@ void desenhaNos(GLdouble x, GLdouble y, GLdouble z,GLdouble raio)
 
 void distribuiNos2()//funcional
 {
-	GLdouble x,y,z,raio;
+	GLdouble raio;
 	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
 	GLdouble lng = 0.0;
 
@@ -529,7 +529,7 @@ void distribuiNos2()//funcional
 
 void distribuiNos()
 {
-	GLdouble x,y,z,raio;
+	GLdouble raio;
 	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
 	GLdouble lng = 0.0;
 
@@ -555,8 +555,13 @@ void distribuiNos()
 	}
 
 }
-
-
+void desenhaArcos()
+{
+	for(int i = 0; i < numArcos; i++)
+	{
+		desenhaLigacao(arcos[i]);
+	}
+}
 void desenhaLabirinto(){
 	
 	glPushMatrix();
@@ -573,13 +578,13 @@ void desenhaLabirinto(){
 		//desenhaNo(i);
 	*/
 	distribuiNos2();
-
+	desenhaArcos();
 		//desenhaNos();
 	//material(emerald);
-	for(int i=0; i<numArcos; i++){
-		desenhaLigacao(arcos[i]);
+	//for(int i=0; i<numArcos; i++){
+		//desenhaLigacao(arcos[i]);
 		//Caminho();
-	}
+	//}
 	glPopMatrix();
 }
 
@@ -1250,8 +1255,8 @@ void display(void)
 	material(slate);
 	
 	//desenhaSolo();
-	desenhaSkyBox();
-	desenhaEixos();
+	//desenhaSkyBox();
+	//desenhaEixos();
 	
 	desenhaLabirinto();
 	
@@ -1268,6 +1273,41 @@ void display(void)
 	glutSwapBuffers();
 	
 }
+
+void display2(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glLoadIdentity();
+	
+	setCamera();
+	material(slate);
+	
+	//desenhaSolo();
+	//desenhaSkyBox();
+	//desenhaEixos();
+	
+	desenhaLabirinto();
+	
+	//aselectObjects();
+	
+	if(estado->getEixoTrans()) {
+		//desenha plano de translacção
+		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
+		desenhaPlanoDrag(estado->getEixoTrans());
+		
+	}
+	desenhaMinimapa(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_INIT_WINDOW_HEIGHT));
+
+	//glDepthMask(GL_TRUE);
+	//glDisable(GL_BLEND);
+
+	glFlush();
+	glutSwapBuffers();
+	
+}
+
+
 
 int picking(/*int x, int y*/){
 	int i, n, objid=0;
@@ -1293,6 +1333,8 @@ int picking(/*int x, int y*/){
 	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
 	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
 
+	//distribuiNos2();
+	//desenhaArcos();
 	//setCamera();
 	display();
 
@@ -1342,8 +1384,10 @@ bool picking2(){
 	desenhaSolo();
 	
 	desenhaEixos();
-	desenhaLabirinto();
-	glutPostRedisplay();
+	//desenhaLabirinto();
+	distribuiNos2();
+	desenhaArcos();
+	//glutPostRedisplay();
 	//display();
 	//glPushMatrix();
 	
@@ -1507,11 +1551,10 @@ bool colisaoEsferaEsfera(Nos& noCam , float r1, Nos nod , float r2)
 	}
 	return 0;
 }
-
-bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
+bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos, Arco* larcos)
 {
 	Nos vec;
-	float dist;
+	float dist, r2;
 	for(int i = 0; i < numNos; i++)
 	{
 		dist = pointDistance(noCam,lnos[i]);
@@ -1519,7 +1562,7 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
 		//cout<<"\ndist:" <<dist;
 		//cout<<"\nraios::"<<(r1+r2);
 		//cout<<"#######";
-		
+		r2 =  ( K_ESFERA*lnos[i].largura/2.0) ;
 		if(dist <= (r1+r2))
 		{
 			float a = sqrt(dist) - (r1+r2);
@@ -1539,6 +1582,20 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos , float r2)
 		}
 	}
 	return 0;
+}
+
+bool detetaColisaoEsferaSubir(Nos &noCam,Nos* lnos)
+{
+	for(int i = 0; i < numNos; i++)
+	{
+		float r2 =  ( K_ESFERA*lnos[i].largura/2.0) + 1 ;
+		if(noCam.y < lnos[i].y + r2)
+		{
+			return true;
+		}
+
+	}
+	return false;
 }
 
 bool colisaoArco(Nos& noCamara, /*Arco* arco,*/ Arco* Larco, Nos* Lnos)
@@ -1695,30 +1752,16 @@ void Timer(int value)
 				//condições para os nós
 				if(picking()){
 					cout <<"\n\tCOLISAO!";
-				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
-						cout<<"\nNao ha Colisao na esfera\n";
-						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						//moveTo(cameraPos);
-					}else{
-						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0) || (modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[arcos[1].noi].largura/2.0) ))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
-						{
-							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-							cout<<"colisao subir\n";
-						}else{
-							if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
-							{
-								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-								cout<<"colisao descer\n";
-							}
-						}
-					}//colisaoArco(cameraPos, nos)
+						cout<<"Não ha colisao na esfera\n";
+					}
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				}else{
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				}
-				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 			}
-
 			if(teclas->getDOWN())
 			{
 				Nos cameraPos = camPos();
@@ -1726,7 +1769,7 @@ void Timer(int value)
 				nx = modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
 				nz = modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
 																//alterar para mudar dinamicamente o raio da esfera
-					if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
 						//cout<<"Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
@@ -1771,7 +1814,7 @@ void Timer(int value)
 			{
 				Nos cameraPos = camPos();
 				
-				if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
 						//cout<<"Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
@@ -1797,7 +1840,7 @@ void Timer(int value)
 		
 				Nos cameraPos = camPos();
 				
-					if(!colisaoEsferaEsfera2(cameraPos,5.0,nos,(K_ESFERA*nos[1].largura/2.0)))
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
 						//cout<<"Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
