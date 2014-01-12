@@ -1255,8 +1255,8 @@ void display(void)
 	material(slate);
 	
 	//desenhaSolo();
-	//desenhaSkyBox();
-	//desenhaEixos();
+	desenhaSkyBox();
+	desenhaEixos();
 	
 	desenhaLabirinto();
 	
@@ -1284,8 +1284,8 @@ void display2(void)
 	material(slate);
 	
 	//desenhaSolo();
-	//desenhaSkyBox();
-	//desenhaEixos();
+	desenhaSkyBox();
+	desenhaEixos();
 	
 	desenhaLabirinto();
 	
@@ -1723,26 +1723,33 @@ void Timer(int value)
 
 			if(teclas->getQ())
 			{
-				modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv);
-				teclas->setQ(GL_FALSE);
+				Nos cameraPos = camPos();
+				if(!picking())
+				{
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + modelo->getObjecto()->getVel());
+					teclas->setQ(GL_FALSE);
+				}
 			}
 
 			if(teclas->getA())
 			{
-				modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv);
-				teclas->setA(GL_FALSE);
+				if(!picking())
+				{
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() - modelo->getObjecto()->getVel());
+					teclas->setA(GL_FALSE);
+				}
 			}
 
 			if(teclas->getLEFT())
 			{
-				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
 				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
 			}
 	
 			if(teclas->getRIGHT())
 			{
-				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
-				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() + 0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() + 0.1);
 			}
 	
 			if(teclas->getUP())
@@ -1750,14 +1757,11 @@ void Timer(int value)
 				Nos cameraPos = camPos();
 
 				//condições para os nós
-				if(picking()){
-					cout <<"\n\tCOLISAO!";
+				if(!picking()){
+					//cout <<"\n\tCOLISAO!";
 					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-					{
-						cout<<"Não ha colisao na esfera\n";
-					}
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-				}else{
+						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				
 					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				}
@@ -1765,34 +1769,14 @@ void Timer(int value)
 			if(teclas->getDOWN())
 			{
 				Nos cameraPos = camPos();
-				GLfloat nx, nz;
-				nx = modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-				nz = modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-																//alterar para mudar dinamicamente o raio da esfera
-				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-					{
-						//cout<<"Colisao\n";
-						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						//moveTo(cameraPos);
-					}else{
-						if((modelo->getObjecto()->getX() < nx) && (modelo->getObjecto()->getZ() < nz))
-						{
-							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-							//cout<<"colisao subir\n";
-						}else
-						{//(modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))
-							if((modelo->getObjecto()->getX() >= nx) && (modelo->getObjecto()->getZ() >= nz))
-							{
-								while(modelo->getObjecto()->getY() >= nos[0].y)
-								{
-									modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-									
-								}
-								//cout<<"colisao descer\n";
-							}
-						}
-					}
+				if(!picking())
+				{
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+				}
 			}
 
 			break;
@@ -1890,6 +1874,10 @@ int main(int argc, char **argv)
 	WebService_Request *ws= new WebService_Request();
 	int id=ws->login("Quim","qwerty");
 	vector<User_C> *userList = ws->getNetworkById(id);
+
+	// tuplo -> conjunto de dados separados
+	// get<> la dentro 0 corresponde a posiçao do int , string ou boolean
+	// 
 
 
      glutInit(&argc, argv);
