@@ -11,17 +11,8 @@ public partial class UserAccountArea : System.Web.UI.Page
     {
         if (Session["id"] == null)
             Response.Redirect("Login.aspx");
+        else
+            if ((int)Session["permission"] == 2) //Tem permissões
+                linkAdmin.Visible = true; 
     }
 }
-
-//tags management
-
-//ver tags que tenho
-//adicionar tags que quero
-//remover tags
-
-
-//ver amigos
-
-//adicionar coluna tags de amizade 
-//adicionar tags de relação

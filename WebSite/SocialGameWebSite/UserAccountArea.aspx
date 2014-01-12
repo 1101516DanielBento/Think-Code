@@ -27,10 +27,13 @@
             <br />
             <asp:Label ID="lblMensagem" runat="server" Font-Bold="True" CssClass="p_sucesso"> Edit personal information :</asp:Label>
             <br />
+                <asp:HyperLink id="linkAdmin" Visible="false" runat="server" Text="Log in Admin Menu" 
+                    NavigateUrl="AdminArea.aspx"/>
+            <br />
             <p class="p_texto_campo_formulario_geral">
                 <a href="ChangePassword.aspx" class="link_normal_formularios"> Change password</a></p>
             
-            <p class="p_texto_campo_formulario_geral">
+            <p class="p_texto_campo_formulario_geral" id="">
                 <a href="ChangeUserInformation.aspx" class="link_normal_formularios"> Change user settings</a></p>
             <br />
             <br />
