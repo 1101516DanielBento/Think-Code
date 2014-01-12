@@ -24,6 +24,7 @@ public partial class Login : System.Web.UI.Page
             {
 
                 Session["id"] = user.IdUser;
+                Session["permission"] = user.IdPermission;
 
                 if (Request.QueryString["RequestedPage"] != null)
                     Response.Redirect(Request.QueryString["RequestedPage"]);
