@@ -15,7 +15,7 @@
 #include "Objecto.h"
 #include "TextureLoader.h"
 //#include "objLoader.h"
-//#include "WebService_Request.h"
+#include "WebService_Request.h"
 #include "User_C.h"
 
 using namespace std;
@@ -48,20 +48,22 @@ using namespace std;
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
 
-#define NOME_FUNDO_SOLO "texturas/solo.jpg"
+//#define NOME_FUNDO_SOLO "texturas/bottom.jpg"
 
-#define NOME_FUNDO_FRONT "texturas/frente.jpg"
-#define NOME_FUNDO_BACK "texturas/tras.jpg"
-#define NOME_FUNDO_LEFT "texturas/esquerda.jpg"
-#define NOME_FUNDO_RIGHT "texturas/direita.jpg"
-#define NOME_FUNDO_UP "texturas/cima.jpg"
-//#define NOME_FUNDO_DOWN "baixo.jpg" o cubo so tem 5 faces
+#define NOME_FUNDO_FRONT "texturas/front.jpg"
+#define NOME_FUNDO_BACK "texturas/back.jpg"
+#define NOME_FUNDO_LEFT "texturas/left.jpg"
+#define NOME_FUNDO_RIGHT "texturas/right.jpg"
+#define NOME_FUNDO_UP "texturas/top.jpg"
+#define NOME_FUNDO_DOWN "texturas/bottom.jpg"
 
 
 #define EIXO_X		1
 #define EIXO_Y		2
 #define EIXO_Z		3
 
+enum {SKY_LEFT=0, SKY_BACK,SKY_FRONT,SKY_TOP,SKY_BOTTOM,SKY_RIGHT};
+unsigned int skybox[6];
 
 //#define RAND_MAX
 
@@ -144,7 +146,7 @@ void CriarTexturas(GLuint texID[])
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	apTexLoad->SetHighQualityTextures(TRUE);
 	apTexLoad->SetTextureFilter(txTrilinear);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
+	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
 	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
 	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
 	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
@@ -154,7 +156,7 @@ void CriarTexturas(GLuint texID[])
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_RIGHT, &txtRIGHT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
+	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
 	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 	
 	glBindTexture(GL_TEXTURE_2D, NULL);
@@ -1137,9 +1139,9 @@ void desenhaSkyBox()
 	float x = 0;
 	float y = 0;
 	float z = 0;
-	float width  = 256;
-	float height = 256;
-	float length = 256;
+	float width  = 512;
+	float height = 512;
+	float length = 512;
 	
 	
 	glEnable(GL_TEXTURE_2D);
@@ -1153,10 +1155,10 @@ void desenhaSkyBox()
 	//BOTTOM
 	glBindTexture(GL_TEXTURE_2D, txtBOTTOM.TextureID);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
-	glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+		glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
+		glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
@@ -1167,11 +1169,10 @@ void desenhaSkyBox()
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtTOP.TextureID);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
-	
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
@@ -1183,11 +1184,10 @@ void desenhaSkyBox()
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtRIGHT.TextureID);
 	glBegin(GL_QUADS);
-	
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
@@ -1198,10 +1198,10 @@ void desenhaSkyBox()
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtLEFT.TextureID);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+		glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
@@ -1217,7 +1217,6 @@ void desenhaSkyBox()
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
-	
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
@@ -1228,15 +1227,17 @@ void desenhaSkyBox()
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtFRONT.TextureID);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
-	glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
+		glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
 	
 }
+
+
 
 
 
@@ -1839,9 +1840,9 @@ void Timer(int value)
 
 int main(int argc, char **argv)
 {
-	/*WebService_Request *ws= new WebService_Request();
+	WebService_Request *ws= new WebService_Request();
 	int id=ws->login("Quim","qwerty");
-	vector<User_C> *userList = ws->getNetworkById(id);*/
+	vector<User_C> *userList = ws->getNetworkById(id);
 
 
      glutInit(&argc, argv);
