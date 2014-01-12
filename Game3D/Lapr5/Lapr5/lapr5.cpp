@@ -62,8 +62,7 @@ using namespace std;
 #define EIXO_Y		2
 #define EIXO_Z		3
 
-enum {SKY_LEFT=0, SKY_BACK,SKY_FRONT,SKY_TOP,SKY_BOTTOM,SKY_RIGHT};
-unsigned int skybox[6];
+
 
 //#define RAND_MAX
 
@@ -681,7 +680,7 @@ void setCamera(){
 	
 	putLights((GLfloat*)white_light);
 	
-	gluLookAt(modelo->getObjecto()->getX() , modelo->getObjecto()->getZ() , modelo->getObjecto()->getY() + 2 ,
+	gluLookAt(modelo->getObjecto()->getX()  , modelo->getObjecto()->getZ() , modelo->getObjecto()->getY() + 2 ,
 			  estado->getCamera()->getCenterX() , estado->getCamera()->getCenterY() , estado->getCamera()->getCenterZ() ,
 			  0,0,1);
 
@@ -1640,6 +1639,27 @@ void Timer(int value)
 	
 	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
+
+	
+
+		/*if(teclas->getV())
+		{
+			modelo->setCameraMode(CAMERA_LIVRE);
+			modelo->setObjecto(new Objecto());
+			estado->getCamera()->setDirLat(0);
+			estado->getCamera()->setDirLong(0);
+			estado->getCamera()->setFov(30);
+			estado->getCamera()->setDistance(100);
+			estado->getCamera()->setEyeX(40);
+			estado->getCamera()->setEyeY(40);
+			estado->getCamera()->setEyeZ(0);
+			estado->getCamera()->setCenterX(nos[0].x);
+			estado->getCamera()->setCenterY(nos[0].y);
+			estado->getCamera()->setCenterZ(nos[0].z);
+		}*/
+
+
+
 	switch(modelo->getCameraMode())
 	{
 		case CAMERA_LIVRE:
@@ -1804,29 +1824,13 @@ void Timer(int value)
 		
 	}
 
-		//if(teclas->getR())
+	//if(teclas->getR())
 		//{
-		//	modelo->setCameraMode(CAMERA_RASANTE);
+			//modelo->setCameraMode(CAMERA_RASANTE);
 			//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
 			//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
 			//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
 		//}
-
-		/*if(teclas->getV())
-		{
-			modelo->setCameraMode(CAMERA_LIVRE);
-			modelo->setObjecto(new Objecto());
-			estado->getCamera()->setDirLat(0);
-			estado->getCamera()->setDirLong(0);
-			estado->getCamera()->setFov(30);
-			estado->getCamera()->setDistance(100);
-			estado->getCamera()->setEyeX(40);
-			estado->getCamera()->setEyeY(40);
-			estado->getCamera()->setEyeZ(0);
-			estado->getCamera()->setCenterX(nos[0].x);
-			estado->getCamera()->setCenterY(nos[0].y);
-			estado->getCamera()->setCenterZ(nos[0].z);
-		}*/
 			
 	if(!estado->getDebug())
 		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
