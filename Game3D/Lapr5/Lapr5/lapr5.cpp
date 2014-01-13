@@ -6,18 +6,20 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-#include <GL/glaux.h>
+//#include <GL/glaux.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-#include "TextureLoader.h"
+//#include "TextureLoader.h"
 //#include "objLoader.h"
 #include "WebService_Request.h"
 #include "User_C.h"
 #include "Dialog.h"
+
+
 using namespace std;
 
 #ifdef __APPLE__
@@ -121,7 +123,7 @@ int obj = 0;
 
 //######################TEXTURAS############
 
-TextureLoader *apTexLoad = new TextureLoader();
+/*TextureLoader *apTexLoad = new TextureLoader();
 glTexture txtSolo;
 glTexture txtChateado;
 glTexture txtApaixonado;
@@ -132,34 +134,34 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;
+glTexture txtBACK;*/
 
 
-void CriarTexturas(GLuint texID[])
+/*void CriarTexturas(GLuint texID[])
 {
 
 
-	AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
-	glGenTextures(NUM_TEXTURAS,texID);
-	memset(TextureImage,0,sizeof(void *)*1);            // Set The Pointer To NULL
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	apTexLoad->SetHighQualityTextures(TRUE);
-	apTexLoad->SetTextureFilter(txTrilinear);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_RIGHT, &txtRIGHT);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
-	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
-	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
+AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
+glGenTextures(NUM_TEXTURAS,texID);
+memset(TextureImage,0,sizeof(void *)*1);            // Set The Pointer To NULL
+glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+apTexLoad->SetHighQualityTextures(TRUE);
+apTexLoad->SetTextureFilter(txTrilinear);
+//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
+//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
+//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
+//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
+//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_RIGHT, &txtRIGHT);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
+apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
+//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 
-	glBindTexture(GL_TEXTURE_2D, NULL);
-}
+glBindTexture(GL_TEXTURE_2D, NULL);
+}*/
 
 
 void initModelo()
@@ -181,7 +183,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	CriarTexturas(modelo->getTexID());
+	//CriarTexturas(modelo->getTexID());
 }
 
 
@@ -1138,109 +1140,109 @@ void desenhaMinimapa(int width, int height)
 	Reshape(width,height);
 }
 
-void desenhaSkyBox()
+/*void desenhaSkyBox()
 {
-	float x = 0;
-	float y = 0;
-	float z = 0;
-	float width  = 512;
-	float height = 512;
-	float length = 512;
+float x = 0;
+float y = 0;
+float z = 0;
+float width  = 512;
+float height = 512;
+float length = 512;
 
 
-	glEnable(GL_TEXTURE_2D);
+glEnable(GL_TEXTURE_2D);
 
-	glEnable(GL_COLOR_MATERIAL);
-	// centra o cubo
-	x = x - width  / 2;
-	y = y - height / 2;
-	z = z - length / 2;
+glEnable(GL_COLOR_MATERIAL);
+// centra o cubo
+x = x - width  / 2;
+y = y - height / 2;
+z = z - length / 2;
 
-	//BOTTOM
-	glBindTexture(GL_TEXTURE_2D, txtBOTTOM.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
-	glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
+//BOTTOM
+glBindTexture(GL_TEXTURE_2D, txtBOTTOM.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
+glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
+glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
 
-	//TOP
+//TOP
 
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
-	glBindTexture(GL_TEXTURE_2D, txtTOP.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
-
-
-
-	//RIGHT +
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
-	glBindTexture(GL_TEXTURE_2D, txtRIGHT.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
-
-
-	//LEFT
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
-	glBindTexture(GL_TEXTURE_2D, txtLEFT.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
+glEnable(GL_TEXTURE_2D);
+glEnable(GL_COLOR_MATERIAL);
+glBindTexture(GL_TEXTURE_2D, txtTOP.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
+glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
 
 
 
-	//BACK
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
-	glBindTexture(GL_TEXTURE_2D, txtBACK.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
+//RIGHT +
+glEnable(GL_TEXTURE_2D);
+glEnable(GL_COLOR_MATERIAL);
+glBindTexture(GL_TEXTURE_2D, txtRIGHT.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
+glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
+glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
 
 
-	//FRONT
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_COLOR_MATERIAL);
-	glBindTexture(GL_TEXTURE_2D, txtFRONT.TextureID);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
-	glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_TEXTURE_2D);
+//LEFT
+glEnable(GL_TEXTURE_2D);
+glEnable(GL_COLOR_MATERIAL);
+glBindTexture(GL_TEXTURE_2D, txtLEFT.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
+glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
+glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
+
+
+
+//BACK
+glEnable(GL_TEXTURE_2D);
+glEnable(GL_COLOR_MATERIAL);
+glBindTexture(GL_TEXTURE_2D, txtBACK.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
+glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
+
+
+//FRONT
+glEnable(GL_TEXTURE_2D);
+glEnable(GL_COLOR_MATERIAL);
+glBindTexture(GL_TEXTURE_2D, txtFRONT.TextureID);
+glBegin(GL_QUADS);
+glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
+glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
+glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+glEnd();
+glDisable(GL_COLOR_MATERIAL);
+glDisable(GL_TEXTURE_2D);
 
 }
-
+*/
 
 
 
@@ -1256,7 +1258,8 @@ void display(void)
 
 	//desenhaSolo();
 	//desenhaSkyBox();
-	//desenhaEixos();
+
+	desenhaEixos();
 
 	desenhaLabirinto();
 
@@ -1283,9 +1286,9 @@ void display2(void)
 	setCamera();
 	material(slate);
 
-	//desenhaSolo();
+	desenhaSolo();
 	//desenhaSkyBox();
-	//desenhaEixos();
+	desenhaEixos();
 
 	desenhaLabirinto();
 
@@ -1696,24 +1699,33 @@ void Timer(int value)
 
 	glutTimerFunc(estado->getTimer(), Timer, 0);
 
-
-
-
-	/*if(teclas->getV())
+	if(teclas->getV())
 	{
-	modelo->setCameraMode(CAMERA_LIVRE);
-	modelo->setObjecto(new Objecto());
-	estado->getCamera()->setDirLat(0);
-	estado->getCamera()->setDirLong(0);
-	estado->getCamera()->setFov(30);
-	estado->getCamera()->setDistance(100);
-	estado->getCamera()->setEyeX(40);
-	estado->getCamera()->setEyeY(40);
-	estado->getCamera()->setEyeZ(0);
-	estado->getCamera()->setCenterX(nos[0].x);
-	estado->getCamera()->setCenterY(nos[0].y);
-	estado->getCamera()->setCenterZ(nos[0].z);
-	}*/
+		cout<<"\nVOO LIVRE!";
+		teclas->setR(GL_FALSE);
+		modelo->setCameraMode(CAMERA_LIVRE);
+		/*modelo->setObjecto(new Objecto());
+		estado->getCamera()->setDirLat(0);
+		estado->getCamera()->setDirLong(0);
+		estado->getCamera()->setFov(30);
+		estado->getCamera()->setDistance(100);
+		estado->getCamera()->setEyeX(40);
+		estado->getCamera()->setEyeY(40);
+		estado->getCamera()->setEyeZ(0);
+		estado->getCamera()->setCenterX(nos[0].x);
+		estado->getCamera()->setCenterY(nos[0].y);
+		estado->getCamera()->setCenterZ(nos[0].z);*/
+	}
+
+	if(teclas->getR())
+	{
+		cout<<"\nVOO RASANTE!";
+		teclas->setV(GL_FALSE);
+		modelo->setCameraMode(CAMERA_RASANTE);
+		//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
+		//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
+		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
+	}
 
 
 
@@ -1723,26 +1735,38 @@ void Timer(int value)
 
 		if(teclas->getQ())
 		{
-			modelo->getObjecto()->setY(modelo->getObjecto()->getY()+VELv);
-			teclas->setQ(GL_FALSE);
+			Nos cameraPos = camPos();
+			if(!picking())
+			{
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY() + modelo->getObjecto()->getVel());
+				teclas->setQ(GL_FALSE);
+			}
 		}
 
 		if(teclas->getA())
 		{
-			modelo->getObjecto()->setY(modelo->getObjecto()->getY()-VELv);
-			teclas->setA(GL_FALSE);
+			if(!picking())
+			{
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY() - modelo->getObjecto()->getVel());
+				teclas->setA(GL_FALSE);
+			}
 		}
 
 		if(teclas->getLEFT())
 		{
-			modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()-0.1);
+
+			modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
 			estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+
+
 		}
 
 		if(teclas->getRIGHT())
 		{
-			modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()+0.1);
-			estado->getCamera()->setDirLong(estado->getCamera()->getDirLong()+0.1);
+
+			modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() + 0.1);
+			estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() + 0.1);
+
 		}
 
 		if(teclas->getUP())
@@ -1760,8 +1784,14 @@ void Timer(int value)
 			}else{
 				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+
 			}
+			modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+		}else{
+			modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+			modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 		}
+
 		if(teclas->getDOWN())
 		{
 			Nos cameraPos = camPos();
@@ -1771,30 +1801,20 @@ void Timer(int value)
 			//alterar para mudar dinamicamente o raio da esfera
 			if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 			{
-				//cout<<"Colisao\n";
-				modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				//moveTo(cameraPos);
-			}else{
-				if((modelo->getObjecto()->getX() < nx) && (modelo->getObjecto()->getZ() < nz))
+				Nos cameraPos = camPos();
+				if(picking())
 				{
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-					//cout<<"colisao subir\n";
-				}else
-				{//(modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))
-					if((modelo->getObjecto()->getX() >= nx) && (modelo->getObjecto()->getZ() >= nz))
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
-						while(modelo->getObjecto()->getY() >= nos[0].y)
-						{
-							modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-
-						}
-						//cout<<"colisao descer\n";
+						cout<<"Não ha colisao na esfera\n";
 					}
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				}else{
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				}
 			}
 		}
-
 		break;
 	case CAMERA_RASANTE:
 
@@ -1812,28 +1832,39 @@ void Timer(int value)
 
 		if(teclas->getUP())
 		{
-			Nos cameraPos = camPos();
-
-			if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+			if(picking())
 			{
-				//cout<<"Colisao\n";
-				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				moveTo(cameraPos);
-			}else{
-				if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
+				cout<<"\ncolidiu";
+				Nos cameraPos = camPos();
+
+				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 				{
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-					//cout<<"colisao subir\n";
-				}else{
-					if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+					//cout<<"Colisao\n";
+					//modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					//modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					//moveTo(cameraPos);
+				}
+
+				else{
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
 					{
-						modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-						//cout<<"colisao descer\n";
+						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+						//cout<<"colisao subir\n";
+					}else{
+						if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+							//cout<<"colisao descer\n";
+						}
 					}
 				}
+
 			}
 		}
+
+
 
 		if(teclas->getDOWN())
 		{
@@ -1842,21 +1873,32 @@ void Timer(int value)
 
 			if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 			{
-				//cout<<"Colisao\n";
-				modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				moveTo(cameraPos);
-			}else{
-				if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
+
+				if(picking())
 				{
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-					//cout<<"colisao subir\n";
-				}else{
-					if((modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+
+					Nos cameraPos = camPos();
+
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
-						modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-						//cout<<"colisao descer\n";
+						//cout<<"Colisao\n";
+						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						//moveTo(cameraPos);
+					}else{
+						if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
+						{
+							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							//cout<<"colisao subir\n";
+						}else{
+							if((modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							{
+								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+								//cout<<"colisao descer\n";
+							}
+						}
 					}
+
 				}
 			}
 		}
@@ -1867,13 +1909,7 @@ void Timer(int value)
 
 	}
 
-	//if(teclas->getR())
-	//{
-	//modelo->setCameraMode(CAMERA_RASANTE);
-	//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
-	//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
-	//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
-	//}
+
 
 	if(!estado->getDebug())
 		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
@@ -1923,11 +1959,13 @@ vector<tuple<int,vector<tuple <int,string>>,User_C>> *geraGrafo(vector<User_C> *
 
 int main(int argc, char **argv)
 {
+
 	WebService_Request *ws= new WebService_Request();
 	int id=ws->login("Quim","qwerty");
 	//vector<User_C> *userList = ws->getNetworkById(id);
 	vector<User_C> *userList = ws->getNetworkById(4);
 	vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = geraGrafo(userList);
+
 
 	glutInit(&argc, argv);
 
