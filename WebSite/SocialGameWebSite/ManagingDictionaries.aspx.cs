@@ -36,7 +36,17 @@ public partial class ManagingDictionaries : System.Web.UI.Page
         if (requestOk == 3) //Erro
             lblMensagem.Text = "We could not put the tag! Problems in the database";
 
+        if (requestOk == 4) //Erro
+            lblMensagem.Text = "Error! You must enter a name in the box !";
 
+        if (requestOk == 5) //Erro
+            lblMensagem.Text = "Dictionary moved successfully !";
+
+        if (requestOk == 6) //Erro
+            lblMensagem.Text = "We could not put the Dictionary! Problems in the database";
+
+        if (requestOk == 7) //Erro remove tag
+            lblMsgErro.Text = "we apologize for the inconvenience but the removal is in maintenance.";
     }
 
     private void BindGridView2() //mostra Tags
@@ -49,6 +59,7 @@ public partial class ManagingDictionaries : System.Web.UI.Page
         dataTable.Columns.Add("Link");
         dataTable.Columns.Add("Addlink");
         dataTable.Columns.Add("IdUser");
+        dataTable.Columns.Add("texto");
 
         TagBLL tagBll = new TagBLL();
         IList<Tag> listaTags = new List<Tag> { };
@@ -67,6 +78,7 @@ public partial class ManagingDictionaries : System.Web.UI.Page
 
             dr["NomeTag"] = tag.TagName;
             dr["IdTag"] = tag.IdTag;
+            dr["texto"] = "Remove dictionary";
 
             foreach (Dictionary dic in listaDicionarios)
             {
@@ -166,14 +178,36 @@ public partial class ManagingDictionaries : System.Web.UI.Page
                 TagBLL tagBll = new TagBLL();
 
                 tagBll.changeTagToDictionary(idDic, idTag);
-                    
-                    //addNewWordDictionary(idTag); //este cria dicionario
 
                 Response.Redirect("ManagingDictionaries.aspx?requestOk=2");
 
             }
 
         Response.Redirect("ManagingDictionaries.aspx?requestOk=3");
+
+    }
+    protected void btInserirNewDic_Click(object sender, EventArgs e)
+    {
+
+        if (textNewDic.Text.Equals(""))
+        {
+            Response.Redirect("ManagingDictionaries.aspx?requestOk=4"); //Se estiver em branco
+        }
+        else
+        {
+            String newDic = textNewDic.Text;
+
+
+            TagBLL tagBll = new TagBLL();
+
+            tagBll.addNewWordDictionary(newDic); //cria novo dicionario
+
+            Response.Redirect("ManagingDictionaries.aspx?requestOk=5"); //sucesso
+
+        }
+
+        Response.Redirect("ManagingDictionaries.aspx?requestOk=6"); //Erro
+
 
     }
 }
