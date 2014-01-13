@@ -1043,7 +1043,7 @@ void KeyUp(unsigned char key, int x, int y)
 			break;
 		case 'V':
 		case 'v':
-			teclas->setR(GL_FALSE);
+			teclas->setV(GL_FALSE);
 			break;
 			
 	}
@@ -1143,18 +1143,6 @@ bool login()
 		return false;
 	}
 	return false;
-}
-
-void loginWindow()
-{
-	bool checkLogin = login();
-	if(checkLogin)
-	{
-		printf("Login efectuado com Sucesso!!\n");
-		myInit();
-		imprime_ajuda();
-	}
-	
 }
 
 void setProjection(int x, int y, GLboolean picking){
@@ -1473,40 +1461,6 @@ void display(void)
 		
 	}
 	desenhaMinimapa(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_INIT_WINDOW_HEIGHT));
-	glFlush();
-	glutSwapBuffers();
-	
-}
-
-void display2(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glLoadIdentity();
-	
-	setCamera();
-	material(slate);
-	
-	desenhaSolo();
-	desenhaSkyBox();
-	desenhaEixos();
-
-
-	desenhaLabirinto(graf);
-
-	//aselectObjects();
-	
-	if(estado->getEixoTrans()) {
-		//desenha plano de translacção
-		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
-		desenhaPlanoDrag(estado->getEixoTrans());
-		
-	}
-	desenhaMinimapa(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_INIT_WINDOW_HEIGHT));
-
-	//glDepthMask(GL_TRUE);
-	//glDisable(GL_BLEND);
-
 	glFlush();
 	glutSwapBuffers();
 	
