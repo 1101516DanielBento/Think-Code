@@ -20,10 +20,10 @@ Camera::Camera()
 
 	setDirLat(0.0);
 	setDirLong(0.0);
-	setFov(30);
+	setFov(60);
 	setDistance(100);
-	setEyeX(40);
-	setEyeY(40);
+	setEyeX(0);
+	setEyeY(0);
 	setEyeZ(0);
 	setCenterX(0);
 	setCenterY(0);

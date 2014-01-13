@@ -79,7 +79,7 @@ User_C WebService_Request::convertObjWStoUser(UserType *usr){
 
 	//REQUESTS
 	vector<int> *req = new vector<int>();
-	vector<string> rTMP = splitString(convertWcharToString(usr->FriendshipList),";");
+	vector<string> rTMP = splitString(convertWcharToString(usr->FriendshipRequestList),";");
 	i=0;
 	for(it=rTMP.begin() ; it < rTMP.end(); it++,i++ ) {
 

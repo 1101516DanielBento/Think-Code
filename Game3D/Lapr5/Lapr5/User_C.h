@@ -28,6 +28,7 @@ private:
 	int moodState;
 
 
+
 public:
 	User_C();
 	~User_C();

@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FD600050-6C2B-47F7-8411-A9BE80AC66C8}</ProjectGuid>
+    <RootNamespace>Lapr5</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\GLUT;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\GLUT;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>GLUT_BUILDING_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>WebServices.lib;glu32.lib;glut32.lib;opengl32.lib;WS2_32.lib;glui32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>WebServices.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="Estado.cpp" />
+    <ClCompile Include="grafos.cpp" />
+    <ClCompile Include="HangMan.cpp" />
+    <ClCompile Include="JogoDoGalo_openGL.cpp" />
+    <ClCompile Include="Labirinto.cpp" />
+    <ClCompile Include="lapr5.cpp" />
+    <ClCompile Include="Modelo.cpp" />
+    <ClCompile Include="Objecto.cpp" />
+    <ClCompile Include="Ponto.cpp" />
+    <ClCompile Include="readjpeg.c" />
+    <ClCompile Include="Relacao.cpp" />
+    <ClCompile Include="Teclas.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="User_C.cpp" />
+    <ClCompile Include="Utilizador.cpp" />
+    <ClCompile Include="WebService_Request.cpp" />
+    <ClCompile Include="XMLFiles_WS\GameWS.xsd.c" />
+    <ClCompile Include="XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.c" />
+    <ClCompile Include="XMLFiles_WS\tempuri.org.wsdl.c" />
+    <ClCompile Include="XMLFiles_WS\tempuri.org.xsd.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicLogin.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Dictionary.h" />
+    <ClInclude Include="Estado.h" />
+    <ClInclude Include="GameWS.h">
+      <DependentUpon>XMLFiles_WS\GameWS.xsd</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="grafos.h" />
+    <ClInclude Include="jconfig.h" />
+    <ClInclude Include="jmorecfg.h" />
+    <ClInclude Include="jpeglib.h" />
+    <ClInclude Include="Lista.h" />
+    <ClInclude Include="ListaIterador.h" />
+    <ClInclude Include="Modelo.h" />
+    <ClInclude Include="No.h" />
+    <ClInclude Include="Objecto.h" />
+    <ClInclude Include="Ponto.h" />
+    <ClInclude Include="Relacao.h" />
+    <ClInclude Include="Teclas.h" />
+    <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="User_C.h" />
+    <ClInclude Include="Utilizador.h" />
+    <ClInclude Include="WebService_Request.h" />
+    <ClInclude Include="XMLFiles_WS\GameWS.xsd.h" />
+    <ClInclude Include="XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h" />
+    <ClInclude Include="XMLFiles_WS\tempuri.org.wsdl.h" />
+    <ClInclude Include="XMLFiles_WS\tempuri.org.xsd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exemplo.grafo" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\README_textures.txt" />
+    <Text Include="exemplo2 grafo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xsd Include="XMLFiles_WS\GameWS.xsd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
