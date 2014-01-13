@@ -17,7 +17,7 @@ Modelo::Modelo(/*int numUsers*/)
 	/*mdls = new StudioModel*[numUsers];
 	for(int i=0;i<numUsers;i++)
 		mdls[i] = new StudioModel();*/
-	
+
 	mod = new Objecto();
 	
 	texID = new GLuint[NUM_TEXTURAS];
