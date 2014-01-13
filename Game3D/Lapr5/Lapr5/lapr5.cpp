@@ -1104,7 +1104,7 @@ void minimapaView()
 	estadominimapa->getCamera()->setCenterX(0);
 	estadominimapa->getCamera()->setCenterY(0);
 	
-	estadominimapa->getCamera()->setEyeZ(100);
+	estadominimapa->getCamera()->setEyeZ(50);
 	estadominimapa->getCamera()->setEyeX(0);
 	estadominimapa->getCamera()->setEyeY(0);
 	
@@ -1130,9 +1130,7 @@ void desenhaMinimapa(int width, int height)
 	glLoadIdentity();
 	glClear(GL_DEPTH_BUFFER_BIT);
 	minimapaView();
-	//desenhaEixos();
-	material(slate);
-	desenhaSolo();
+
 	desenhaLabirinto();
 
 	
