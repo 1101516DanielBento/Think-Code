@@ -57,6 +57,22 @@ using namespace std;
 #define NOME_FUNDO_UP "texturas/top.jpg"
 #define NOME_FUNDO_DOWN "texturas/bottom.jpg"
 
+//texturas humor
+/*
+0 - Sem estado de espírito
+1 - Furioso
+2 - Desanimado
+3 - Contente
+4 - Entusiasmado
+5 - Eufórico
+*/
+
+#define NOME_NEUTRO "texturas/estados/semEstado.jpg"
+#define NOME_FURIOSO "texturas/estados/Angry.jpg"
+#define	NOME_DESANIMADO "texturas/estados/Depressed.jpg"
+#define NOME_CONTENTE "texturas/estados/Happy.jpg"
+#define NOME_ENTUSIASMADO "texturas/estados/Enthusiastic.jpg"
+#define NOME_EUFORICO "texturas/estados/Optimistic.jpg"
 
 #define EIXO_X		1
 #define EIXO_Y		2
@@ -122,11 +138,13 @@ int obj = 0;
 //######################TEXTURAS############
 
 TextureLoader *apTexLoad = new TextureLoader();
-glTexture txtSolo;
-glTexture txtChateado;
-glTexture txtApaixonado;
-glTexture txtTriste;
+glTexture txtNeutro;
+glTexture txtFurioso;
+glTexture txtDesanimado;
+glTexture txtEntusiasmado;
 glTexture txtContente;
+glTexture txtEuforico;
+glTexture txtChateado;
 glTexture txtBOTTOM;
 glTexture txtTOP;
 glTexture txtLEFT;
@@ -137,19 +155,27 @@ glTexture txtBACK;
 
 void CriarTexturas(GLuint texID[])
 {
-	
-	
+	/*
+	#define NOME_NEUTRO "texturas/estados/semEstado.jpg"
+	#define NOME_FURIOSO "texturas/estados/Angry.jpg"
+	#define	NOME_DESANIMADO "texturas/estados/Depressed.jpg"
+	#define NOME_CONTENTE "texturas/estados/Happy.jpg"
+	#define NOME_ENTUSIASMADO "texturas/estados/Enthusiastic.jpg"
+	#define NOME_EUFORICO "texturas/estados/Optimistic.jpg"
+
+	*/
 	AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
 	glGenTextures(NUM_TEXTURAS,texID);
 	memset(TextureImage,0,sizeof(void *)*1);            // Set The Pointer To NULL
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	apTexLoad->SetHighQualityTextures(TRUE);
 	apTexLoad->SetTextureFilter(txTrilinear);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_SOLO, &txtSolo);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHATEADO, &txtChateado);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_APAIXONADO, &txtApaixonado);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CHUVA, &txtTriste);
-	//apTexLoad->LoadTextureFromDisk(NOME_FUNDO_CONTENTE, &txtContente);
+	apTexLoad->LoadTextureFromDisk(NOME_NEUTRO, &txtNeutro);
+	apTexLoad->LoadTextureFromDisk(NOME_FURIOSO, &txtChateado);
+	apTexLoad->LoadTextureFromDisk(NOME_DESANIMADO, &txtDesanimado);
+	apTexLoad->LoadTextureFromDisk(NOME_CONTENTE, &txtContente);
+	apTexLoad->LoadTextureFromDisk(NOME_ENTUSIASMADO, &txtEntusiasmado);
+	apTexLoad->LoadTextureFromDisk(NOME_EUFORICO, &txtEuforico);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
@@ -157,7 +183,7 @@ void CriarTexturas(GLuint texID[])
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_UP, &txtTOP);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
 	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
-	
+
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
@@ -657,6 +683,69 @@ void desenhaEixos(){
 			glPopMatrix();
 		glPopName();
 	glPopMatrix();
+}
+
+void desenhaBillboardEstadohumor(User_C *u)
+{
+	/*
+	0 - Sem estado de espírito (Minha sugestão: começar em estado "Normal")
+	1 - Furioso
+	2 - Desanimado
+	3 - Contente
+	4 - Entusiasmado
+	5 - Eufórico
+	*/
+	//Ponto *p = u->getPonto();
+	glTexture glt;
+	if(u->getMoodState()== 0)//sem estado de espirito
+		glt = txtNeutro;
+	else
+		if(u->getMoodState()== 1)//Furioso
+			glt = txtFurioso;
+		else
+			if(u->getMoodState()== 2)//Desanimado
+				glt = txtDesanimado;
+			else
+				if(u->getMoodState()== 3)//Contente
+					glt = txtContente;
+				else
+					if(u->getMoodState()== 4)//Entusiasmado
+						glt = txtEntusiasmado;
+					else
+						glt = txtEuforico;
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+    glBindTexture(GL_TEXTURE_2D, glt.TextureID);
+    glEnable(GL_TEXTURE_2D);
+	if(modelo->getObjecto()->getX()<0)
+		glTranslatef(u->getNo().x,u->getNo().y + 2,u->getNo().z +11);
+	else
+		glTranslatef(u->getNo().x,u->getNo().y - 2,u->getNo().z + 11);
+	GLdouble deltaz=4;
+	GLdouble angOrientacao = graus(atan2(modelo->getObjecto()->getZ()-u->getNo().z,modelo->getObjecto()->getX()-u->getNo().x));
+	glRotated(angOrientacao,0,0,1);
+
+    glBegin(GL_QUADS);
+    glNormal3f(0,1,0);
+    
+	glTexCoord2f(0,0);
+    glVertex3f(0,0,0);
+    
+	glTexCoord2f(0,1);
+    glVertex3f(0,0,4);
+    
+	glTexCoord2f(1,1);
+    glVertex3f(0,4,4);
+    
+	glTexCoord2f(1,0);
+    glVertex3f(0,4,0);
+	
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_COLOR_MATERIAL);	
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 void setCamera(){
