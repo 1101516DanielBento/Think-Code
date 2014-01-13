@@ -673,6 +673,8 @@ namespace DataModel.BLL
         {
             while (!userGateway.doNegociationGameComplete(userIdA, UserIdB, idGame, difficulty)) ;
 
+            userGateway.checkCompletedGames(userIdA, UserIdB);
+
             return loadUserById(UserIdB);
         }
     }
