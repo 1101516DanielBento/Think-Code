@@ -132,7 +132,7 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;
+glTexture txtBACK;*/
 
 
 void CriarTexturas(GLuint texID[])
@@ -1113,11 +1113,6 @@ void minimapaView()
 	//estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
 	estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getY() + 2 + sin(estadominimapa->getCamera()->getDirLat()));
 	
-	estadominimapa->getCamera()->setCenterX(0);
-	estadominimapa->getCamera()->setCenterZ(0);
-	//estadominimapa->getCamera()->setCenterY(100);
-	
-	
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(estadominimapa->getCamera()->getEyeY(),estadominimapa->getCamera()->getEyeX(),estadominimapa->getCamera()->getEyeZ(),estadominimapa->getCamera()->getCenterX(),estadominimapa->getCamera()->getCenterY(),estadominimapa->getCamera()->getCenterZ(),0,0,1);
@@ -1676,7 +1671,7 @@ void Timer(int value)
 	
 	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
-	float nx, ny,nx2,ny2,desnivel,cproj;
+	float nx, ny,nx2,ny2,nz,desnivel,cproj;
 	
 
 		if(teclas->getV())
@@ -1684,13 +1679,13 @@ void Timer(int value)
 			cout<<"\nVOO LIVRE!";
 			teclas->setR(GL_FALSE);
 			modelo->setCameraMode(CAMERA_LIVRE);
-			/*modelo->setObjecto(new Objecto());
-			estado->getCamera()->setDirLat(0);
+			//modelo->setObjecto(new Objecto());
+			/*estado->getCamera()->setDirLat(0);
 			estado->getCamera()->setDirLong(0);
-			estado->getCamera()->setFov(30);
-			estado->getCamera()->setDistance(100);
-			estado->getCamera()->setEyeX(40);
-			estado->getCamera()->setEyeY(40);
+			estado->getCamera()->setFov(10);
+			estado->getCamera()->setDistance(10);
+			estado->getCamera()->setEyeX(0);
+			estado->getCamera()->setEyeY(0);
 			estado->getCamera()->setEyeZ(0);
 			estado->getCamera()->setCenterX(nos[0].x);
 			estado->getCamera()->setCenterY(nos[0].y);
@@ -1799,11 +1794,26 @@ void Timer(int value)
 	
 			if(teclas->getUP())
 			{
-				if(picking())
+				
+				if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
+				{
+					int tentativas = 200;
+					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					nz = modelo->getObjecto()->getY() + 1;
+					while(!detectaColisoesLigacoes2(nx,nz,ny) && tentativas>0){
+						ny -= 0.01;tentativas--;}
+					modelo->getObjecto()->setX(nx);
+					modelo->getObjecto()->setZ(nz);
+					if(tentativas>0)
+						modelo->getObjecto()->setY(ny);
+				}
+				/*if(picking())
 				{
 					cout<<"\ncolidiu";
 					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					nz = modelo->getObjecto()->getY() + 1;
 					
 					nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
 					
@@ -1831,7 +1841,7 @@ void Timer(int value)
 								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
 								cout<<"colisao descer\n";
 							}
-						}
+						}*
 					
 					
 					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
@@ -1849,12 +1859,28 @@ void Timer(int value)
 					modelo->getObjecto()->setX(nx2);
 					modelo->getObjecto()->setZ(ny2);
 					   }
-				}
+				}*/
 			}
 
 			if(teclas->getDOWN())
 			{
-				if(picking())
+				
+				if(detectaColisoesLigacoes2(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
+				{
+					int tentativas = 200;
+					nx = modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir()) * modelo->getObjecto()->getVel();
+					nz = modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir()) * modelo->getObjecto()->getVel();
+					ny = modelo->getObjecto()->getY() + 1;
+					while(!detectaColisoesLigacoes2(nx,nz,ny) && tentativas>0){
+						ny -= 0.01;tentativas--;}
+					modelo->getObjecto()->setX(nx);
+					modelo->getObjecto()->setZ(nz);
+					if(tentativas>0)
+						modelo->getObjecto()->setY(ny);
+				}
+				
+				
+				/*if(picking())
 				{
 		
 				Nos cameraPos = camPos();
@@ -1879,7 +1905,9 @@ void Timer(int value)
 						}
 					}
 				
-				}
+				}*/
+				
+				
 			}
 		break;
 
