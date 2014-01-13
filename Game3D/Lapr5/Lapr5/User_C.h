@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "grafos.h"
 
 
 using namespace std;
@@ -26,6 +27,7 @@ private:
 	vector<tuple<int,vector<tuple<int,int,bool>>>> *reqNeg;
 	int points;
 	int moodState;
+	Nos no;
 
 
 
@@ -41,6 +43,7 @@ public:
 	int getPoints();
 	int getMoodState();
 	string getUsername();
+	Nos getNo();
 
 	void setUsername(string username);
 	void setIdUser(int idUser);
@@ -50,7 +53,7 @@ public:
 	void setReqNeg(vector<tuple<int,vector<tuple<int,int,bool>>>> *lst);
 	void setPoints(int points);
 	void setMoodState(int mood);
-
+	void setNo(Nos no);
 
 
 	User_C& operator=(const User_C& user);
