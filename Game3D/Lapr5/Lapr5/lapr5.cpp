@@ -215,7 +215,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	//CriarTexturas(modelo->getTexID());
+	CriarTexturas(modelo->getTexID());
 }
 
 
@@ -636,6 +636,7 @@ void distribuiNos()
 
 }
 
+
 bool comparaNos(Nos n1, Nos n2){
 
 	if((n1.x == n2.x) && (n1.y == n2.y) && (n1.z == n2.z))
@@ -675,32 +676,21 @@ vector<tuple<Nos,Nos>> *getLigacoes(vector<tuple<int,vector<tuple <int,string>>,
 	return lig;
 }
 
-
 void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 {
-	//Nos noi,nof;
+	Nos noi,nof;
 
-	//for(int k  = 0; k < graf->size(); k++)
-	//{
-	//	vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
-	//	for(int i = 0; i < tmpU.size(); i++)
-	//	{
-	//		//Arco arcTmp;
-	//		noi = get<2>(graf->at(k)).getNo();
-	//		nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
-	//		desenhaLigacao2(noi,nof);
-	//	}
-	//}
-
-	vector<tuple<Nos,Nos>> *grafo = getLigacoes(graf);
-
-	for(int i=0; i<grafo->size(); i++){
-
-		desenhaLigacao2(get<0>(grafo->at(i)) ,get<1>(grafo->at(i)));
-
+	for(int k  = 0; k < graf->size(); k++)
+	{
+		vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
+		for(int i = 0; i < tmpU.size(); i++)
+		{
+			//Arco arcTmp;
+			noi = get<2>(graf->at(k)).getNo();
+			nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
+			desenhaLigacao2(noi,nof);
+		}
 	}
-
-
 }
 
 
@@ -1022,11 +1012,12 @@ void keyboard(unsigned char key, int x, int y)
 		case 'r':
 		case 'R':
 			teclas->setR(GL_TRUE);
+			teclas->setV(GL_FALSE);
 			break;
 		case 'v':
 		case 'V':
 			teclas->setV(GL_TRUE);
-			//teclas->setQ(GL_FALSE);
+			teclas->setR(GL_FALSE);
 			break;
 	}
 	if(estado->getDebug())
@@ -2046,74 +2037,75 @@ void Timer(int value)
 			}
 	
 			if(teclas->getUP())
-			{
-				
-				if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
-				{
-					int tentativas = 200;
-					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					nz = modelo->getObjecto()->getY() + 1;
-					while(!detectaColisoesLigacoes2(nx,nz,ny) && tentativas>0){
-						ny -= 0.01;tentativas--;}
-					modelo->getObjecto()->setX(nx);
-					modelo->getObjecto()->setZ(nz);
-					if(tentativas>0)
-						modelo->getObjecto()->setY(ny);
-				}
-				/*if(picking())
-				{
-					cout<<"\ncolidiu";
-					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					nz = modelo->getObjecto()->getY() + 1;
-					
-					nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
-					
-					ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
-					
-					cproj=pow((nx-modelo->getObjecto()->getX()),2);
-					desnivel=(ny-modelo->getObjecto()->getZ());
-					
-					if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
-					{
-						modelo->getObjecto()->setX(nx2);
-						modelo->getObjecto()->setZ(ny2);
-					}
-					Nos cameraPos = camPos();
-				
-				
-					
-						if(detetaColisaoEsferaSubir(cameraPos, nos) )
 						{
-							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-							cout<<"colisao subir\n";
-						}else{
-							if( detetaColisaoEsferaDescer(cameraPos,nos) )
+				
+							/*if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
 							{
-								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-								cout<<"colisao descer\n";
-							}
-						}*
+								int tentativas = 200;
+								nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+								ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+								nz = modelo->getObjecto()->getY() + 1;
+								while(!detectaColisoesLigacoes2(nx,nz,ny) && tentativas>0){
+									ny -= 0.01;tentativas--;}
+								modelo->getObjecto()->setX(nx);
+								modelo->getObjecto()->setZ(nz);
 					
-					
-					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-					
-					nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
-					
-					ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
-					
-					cproj=pow((nx-modelo->getObjecto()->getX()),2);
-					desnivel=(ny-modelo->getObjecto()->getZ());
-					
-					if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
-					   {
-					modelo->getObjecto()->setX(nx2);
-					modelo->getObjecto()->setZ(ny2);
-					   }
-				}*/
-			}
+								if(tentativas>0)
+									modelo->getObjecto()->setY(ny);
+							}*/
+							if(picking())
+							 {
+							 cout<<"\ncolidiu";
+							 nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 nz = modelo->getObjecto()->getY() + 1;
+				 
+							 nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+				 
+							 ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+				 
+							 cproj=pow((nx-modelo->getObjecto()->getX()),2);
+							 desnivel=(ny-modelo->getObjecto()->getZ());
+				 
+							 if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+							 {
+							 modelo->getObjecto()->setX(nx2);
+							 modelo->getObjecto()->setZ(ny2);
+							 }
+							 Nos cameraPos = camPos();
+				 
+				 
+				 
+							 if(detetaColisaoEsferaSubir(cameraPos, nos) )
+							 {
+							 modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							 cout<<"colisao subir\n";
+							 }else{
+							 if( detetaColisaoEsferaDescer(cameraPos,nos) )
+							 {
+							 modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+							 cout<<"colisao descer\n";
+							 }
+							 }
+				 
+				 
+							 nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+				 
+							 nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+				 
+							 ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+				 
+							 cproj=pow((nx-modelo->getObjecto()->getX()),2);
+							 desnivel=(ny-modelo->getObjecto()->getZ());
+				 
+							 if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+							 {
+							 modelo->getObjecto()->setX(nx2);
+							 modelo->getObjecto()->setZ(ny2);
+							 }
+							 }
+						}
 
 			if(teclas->getDOWN())
 			{
