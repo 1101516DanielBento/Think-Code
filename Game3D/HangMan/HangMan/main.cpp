@@ -39,7 +39,7 @@
 #endif
 using namespace std;
 
-string word, hint;
+string word, hint, printSucess;
 int wrong=0,sucess=0;
 char* letters[]={"images\\a.bmp","images\\b.bmp","images\\c.bmp","images\\d.bmp",
 				"images\\e.bmp","images\\f.bmp","images\\g.bmp","images\\h.bmp",
@@ -56,7 +56,6 @@ vector<tuple<int, int, char>> references;
 tuple<int,int> mouseCoords;
 char currentLetter;
 bool mouseClicked=false,arrayFilled=false,wordLoaded=false,hintLoaded=false,coordinatesLoaded=false,boardLoaded=false,guessed=false,clickedOnKeyBoard=false,letterAlreadyGuessed=false;
-//vector<tuple<int,int,int,int>> letterCoordinates;
 HangMan* h = new HangMan();
 vector<int> textureIDs,indexes;
 vector<char> wordChars, guessedLetters;
@@ -422,6 +421,24 @@ void mouseCoordinates(int x, int y){
 	get<1>(mouseCoords)=y;
 }
 
+void drawSucesses(int sucesses){
+
+	glRasterPos2i(530, 30);
+
+	printSucess = "Sucesses: ";
+	printSucess+=to_string(sucesses);
+	printSucess+=" out of " + to_string(word.size());
+
+	void * font = GLUT_BITMAP_HELVETICA_18;
+
+	for(unsigned int i=0;i<printSucess.size();i++)
+    {
+		char c = printSucess.at(i);
+        glutBitmapCharacter(font, c);
+    }
+}
+
+
 void checkIfLetterAlreadyGuessed(){
 
 	if(guessedLetters.size()>0){
@@ -467,8 +484,7 @@ void MouseButton(int button, int state, int x, int y)
 }
 
 void Reshape(GLint width, GLint height){
-	window_width=width;
-	window_height=height;
+	glutReshapeWindow(800,600);
 }
 
 void draw(void) {
@@ -493,7 +509,7 @@ void draw(void) {
 	drawHanger();
 
 	glPopMatrix();
-    
+	
 	glPushMatrix();
     glLoadIdentity();
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -542,6 +558,8 @@ void draw(void) {
 				}
 		}
 	}
+
+	drawSucesses(sucess);
 
 	switch(wrong){
 
