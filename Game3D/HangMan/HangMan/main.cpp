@@ -421,15 +421,30 @@ void mouseCoordinates(int x, int y){
 	get<1>(mouseCoords)=y;
 }
 
+void checkLetterGuessed(){
+
+	if(guessedLetters.size()>0){
+		
+		for(unsigned int i=0;i<guessedLetters.size();i++){//checks for already guessed letters
+			
+			if(guessedLetters.at(i)==currentLetter){
+				letterAlreadyGuessed=true;
+				return;
+				}
+		}
+	}
+	return;
+}
+
 bool letterClick(int mouseX,int mouseY){
 	
 	for(unsigned int i=0; i<26 ;i++){
 		if(mouseX<get<0>(references.at(i))+LETTER_WIDTH && mouseX>get<0>(references.at(i)) && mouseY<get<1>(references.at(i))+LETTER_HEIGHT && mouseY>get<1>(references.at(i))){
-			//clickedOnKeyBoard=true;
+			
+			currentLetter=get<2>(references.at(i));//gets char associated with image
+
 			cout<<"You clicked on a letter!"<<endl;
-			currentLetter=get<2>(references.at(i));
 			cout<<"Letter clicked: "<<currentLetter<<endl;
-			//guessedLetters.push_back(currentLetter);
 			return true;
 		}
 	}
@@ -487,26 +502,30 @@ void draw(void) {
 	if(mouseClicked==true){
 
 		clickedOnKeyBoard = letterClick(get<0>(mouseCoords),get<1>(mouseCoords));
-		
-		/*for(unsigned int i=0;i<guessedLetters.size();i++){
-				if(guessedLetters.at(i)==currentLetter){
-					letterAlreadyGuessed=true;
-				}
-			}
-*/
+
 		if(clickedOnKeyBoard){// && !letterAlreadyGuessed){
-					
+
+			//checkLetterGuessed();//
+
 			for(unsigned int i=0; i<word.size();i++){
 				if(word.at(i)==currentLetter){
 					guessed=true;
 					indexes=h->getCharOcorrences(currentLetter);
-					UpdateBoard();
 					sucess+=h->getCharOcorrences(currentLetter).size();
+					guessedLetters.push_back(currentLetter);//
+					UpdateBoard();
 					PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);
+					
+					for(int i=0;i<guessedLetters.size();i++){
+						cout<<guessedLetters.at(i); 
+					}
+					
+					cout<<endl;
+					
 					break;
 				}
 			}
-				
+
 			if(!guessed){
 				indexes=h->getCharOcorrences(currentLetter);
 				wrong++;
@@ -520,7 +539,6 @@ void draw(void) {
 			guessed=false;
 		}
 	}
-	//}
 
 	switch(wrong){
 
@@ -584,7 +602,6 @@ void draw(void) {
 
 void playMusic(int value){
 	PlaySound(TEXT("Sounds\\background.wav"), NULL, SND_FILENAME);
-	glutTimerFunc(19000, playMusic, 0);
 }
 
 int main(int argc, char **argv) {
@@ -600,12 +617,7 @@ int main(int argc, char **argv) {
 	glutReshapeFunc(Reshape);
 	glutMouseFunc(MouseButton);
 
-	//playMusic(0);
-	
     // enter GLUT event processing cycle
     glutMainLoop();
-
-	
-
     return 1;
 }
