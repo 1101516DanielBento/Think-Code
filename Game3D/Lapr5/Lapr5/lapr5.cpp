@@ -6,17 +6,17 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-//#include <GL/glaux.h>
+#include <GL/glaux.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-//#include "TextureLoader.h"
-//#include "objLoader.h"
-//#include "WebService_Request.h"
-//#include "User_C.h"
+#include "TextureLoader.h"
+#include "objLoader.h"
+#include "WebService_Request.h"
+#include "User_C.h"
 
 using namespace std;
 
@@ -48,7 +48,7 @@ using namespace std;
 #define CAMERA_LIVRE 1
 #define CAMERA_RASANTE 2
 
-//#define NOME_FUNDO_SOLO "texturas/bottom.jpg"
+#define NOME_FUNDO_SOLO "texturas/bottom.jpg"
 
 #define NOME_FUNDO_FRONT "texturas/front.jpg"
 #define NOME_FUNDO_BACK "texturas/back.jpg"
@@ -121,7 +121,7 @@ int obj = 0;
 
 //######################TEXTURAS############
 
-/*TextureLoader *apTexLoad = new TextureLoader();
+TextureLoader *apTexLoad = new TextureLoader();
 glTexture txtSolo;
 glTexture txtChateado;
 glTexture txtApaixonado;
@@ -132,10 +132,10 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;*/
+glTexture txtBACK;
 
 
-/*void CriarTexturas(GLuint texID[])
+void CriarTexturas(GLuint texID[])
 {
 	
 	
@@ -159,7 +159,7 @@ glTexture txtBACK;*/
 	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 	
 	glBindTexture(GL_TEXTURE_2D, NULL);
-}*/
+}
 
 
 void initModelo()
@@ -1140,7 +1140,7 @@ void desenhaMinimapa(int width, int height)
 	Reshape(width,height);
 }
 
-/*void desenhaSkyBox()
+void desenhaSkyBox()
 {
 	float x = 0;
 	float y = 0;
@@ -1242,7 +1242,6 @@ void desenhaMinimapa(int width, int height)
 	glDisable(GL_TEXTURE_2D);
 	
 }
-*/
 
 
 
@@ -1257,7 +1256,7 @@ void display(void)
 	material(slate);
 	
 	//desenhaSolo();
-	//desenhaSkyBox();
+	desenhaSkyBox();
 	desenhaEixos();
 	
 	desenhaLabirinto();
@@ -1362,10 +1361,12 @@ int picking(/*int x, int y*/){
 	return objid;
 }
 
-bool picking2(){
+bool picking2(float nx,float ny,float nz){
 	
 	int i, n, objid=0;
-	double zmin = 10.0;
+	double zmin = -30.0;
+	double zmax = 30.0;
+	
 	GLuint buffer[100], *ptr;
 	
 	glSelectBuffer(100, buffer);
@@ -1375,12 +1376,12 @@ bool picking2(){
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
-	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	glOrtho(nx-modelo->getObjecto()->getVel(), nx+modelo->getObjecto()->getVel(), nz-modelo->getObjecto()->getVel(), nz+modelo->getObjecto()->getVel(), zmax, zmin);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
-	glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
-	glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
+	//glLoadIdentity();
+	//glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
+	//glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
+	//glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
 	
 	//setCamera();
 	desenhaSolo();
@@ -1390,7 +1391,7 @@ bool picking2(){
 	distribuiNos2();
 	desenhaArcos();
 	//glutPostRedisplay();
-	//display();
+	display();
 	//glPushMatrix();
 	
 	n = glRenderMode(GL_RENDER);
@@ -1530,29 +1531,7 @@ GLfloat pointDistanceArco(Nos noi, Arco arco, Nos* Lnos)
 
 //deteta colisoes esfera-esfera
 //deteta Colisao esfera especifica
-bool colisaoEsferaEsfera(Nos& noCam , float r1, Nos nod , float r2)
-{
-	Nos vec;
-	float dist = pointDistance(noCam,nod);
-	if(dist <= (r1+r2))
-	{
-		float a = sqrt(dist) - (r1+r2);
-		//coordinate vec(c2.x - c1.x,c2.y-c1.y,c2.z-c1.z);//c2-c1
-		vec.x = nod.x - noCam.x;
-		vec.y = nod.y - noCam.y;
-		vec.z = nod.z - noCam.z;
-		float len = sqrt((vec.x*vec.x + vec.y*vec.y + vec.z*vec.z));
-		vec.x/=len;
-		vec.y/=len;
-		vec.z/=len;
 
-		noCam.x = noCam.x+vec.x*a;
-		noCam.y = noCam.y + vec.y*a;
-		noCam.z = noCam.z + vec.z*a;
-		return 1;//true
-	}
-	return 0;
-}
 bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos, Arco* larcos)
 {
 	Nos vec;
@@ -1564,7 +1543,7 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos, Arco* larcos)
 		//cout<<"\ndist:" <<dist;
 		//cout<<"\nraios::"<<(r1+r2);
 		//cout<<"#######";
-		r2 =  ( K_ESFERA*lnos[i].largura/2.0) ;
+		r2 =  ( K_ESFERA*lnos[i].largura/2.0)+1 ;
 		if(dist <= (r1+r2))
 		{
 			float a = sqrt(dist) - (r1+r2);
@@ -1586,6 +1565,8 @@ bool colisaoEsferaEsfera2(Nos& noCam , float r1, Nos* lnos, Arco* larcos)
 	return 0;
 }
 
+
+
 bool detetaColisaoEsferaSubir(Nos &noCam,Nos* lnos)
 {
 	for(int i = 0; i < numNos; i++)
@@ -1599,37 +1580,36 @@ bool detetaColisaoEsferaSubir(Nos &noCam,Nos* lnos)
 	}
 	return false;
 }
-
-bool colisaoArco(Nos& noCamara, /*Arco* arco,*/ Arco* Larco, Nos* Lnos)
+bool detetaColisaoEsferaDescer(Nos &noCam,Nos* lnos)
 {
-	Nos vec;
-	float dist,dist2;
-	for(int i = 0; i < numArcos; i++)
+	for(int i = 0; i < numNos; i++)
 	{
-		dist = pointDistanceArco(noCamara,Larco[i],nos);
-		dist2= (DIMENSAO_CAMARA+(K_ESFERA*(Larco[i].largura/2)));
-		if(dist <= dist2)
+		float r2 =  ( K_ESFERA*lnos[i].largura/2.0) - 1 ;
+		if(noCam.y < lnos[i].y + r2)
 		{
-			float a = sqrt(dist) - (DIMENSAO_CAMARA+(K_ESFERA*Larco[i].largura/2.0));
+			return true;
+		}
+		
+	}
+	return false;
+}
 
-			vec.x = Lnos[Larco[i].nof].x - noCamara.x;
-			vec.y = Lnos[Larco[i].nof].y - noCamara.y;
-			vec.z = Lnos[Larco[i].nof].z - noCamara.z;
-			
-			float len = sqrt((vec.x*vec.x + vec.y*vec.y + vec.z*vec.z));
-			vec.x/=len;
-			vec.y/=len;
-			vec.z/=len;
-			
-			noCamara.x = noCamara.x + vec.x*a;
-			noCamara.y = noCamara.y + vec.y*a;
-			noCamara.z = noCamara.z + vec.z*a;
-			return 1;//true
+bool colisaoArco(float x, float y,float cproj,float desnivel)
+{
+	//float nx = (x-arcos->noi)*cos(x)+(x-y)*sin(x);
+	//float ny = (x-y)*cos(x)-(y-x)*sin(x);
+	
+	
+	for (int i=0; i<numArcos; i++) {
+		if(x<cproj && -desnivel/2<=y && y<=desnivel/2)
+		{
+			return true;
 		}
 	}
-	return 0;//false
+	return false;
 	
 }
+
 
 void moveTo(Nos c)
 {
@@ -1698,7 +1678,7 @@ void Timer(int value)
 	
 	glutTimerFunc(estado->getTimer(), Timer, 0);
 	
-
+	float nx, ny,nx2,ny2,desnivel,cproj;
 	
 
 		if(teclas->getV())
@@ -1824,31 +1804,53 @@ void Timer(int value)
 				if(picking())
 				{
 					cout<<"\ncolidiu";
+					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					
+					nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+					
+					ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+					
+					cproj=pow((nx-modelo->getObjecto()->getX()),2);
+					desnivel=(ny-modelo->getObjecto()->getZ());
+					
+					if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+					{
+						modelo->getObjecto()->setX(nx2);
+						modelo->getObjecto()->setZ(ny2);
+					}
 					Nos cameraPos = camPos();
 				
-				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-					{
-						//cout<<"Colisao\n";
-						//modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						//modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						//moveTo(cameraPos);
-					}
+				
 					
-				else{
-					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
+						if(detetaColisaoEsferaSubir(cameraPos, nos) )
 						{
 							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-							//cout<<"colisao subir\n";
+							cout<<"colisao subir\n";
 						}else{
-							if(/*(modelo->getObjecto()->getY() > nos[1].y) &&*/ (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
+							if( detetaColisaoEsferaDescer(cameraPos,nos) )
 							{
 								modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-								//cout<<"colisao descer\n";
+								cout<<"colisao descer\n";
 							}
 						}
-					}
+					
+					
+					nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+					
+					nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+					
+					ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+					
+					cproj=pow((nx-modelo->getObjecto()->getX()),2);
+					desnivel=(ny-modelo->getObjecto()->getZ());
+					
+					if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+					   {
+					modelo->getObjecto()->setX(nx2);
+					modelo->getObjecto()->setZ(ny2);
+					   }
 				}
 			}
 
@@ -1859,7 +1861,7 @@ void Timer(int value)
 		
 				Nos cameraPos = camPos();
 				
-					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+					if(colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
 						//cout<<"Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
@@ -1902,9 +1904,9 @@ void Timer(int value)
 
 int main(int argc, char **argv)
 {
-	//WebService_Request *ws= new WebService_Request();
-	//int id=ws->login("Quim","qwerty");
-	//vector<User_C> *userList = ws->getNetworkById(id);
+	WebService_Request *ws= new WebService_Request();
+	int id=ws->login("Quim","qwerty");
+	vector<User_C> *userList = ws->getNetworkById(id);
 
 	// tuplo -> conjunto de dados separados
 	// get<> la dentro 0 corresponde a posiçao do int , string ou boolean
