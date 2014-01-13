@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <GL/glaux.h>
-#include <AL/alut.h>
+//#include <AL/alut.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
@@ -15,9 +15,10 @@
 #include "Teclas.h"
 #include "Objecto.h"
 #include "TextureLoader.h"
-#include "objLoader.h"
+//#include "objLoader.h"
 #include "WebService_Request.h"
 #include "User_C.h"
+#include <tuple>
 //#include "Dialog.h"
 
 #pragma comment (lib, "glaux.lib")    /* link with Win32 GLAUX lib */
@@ -643,13 +644,20 @@ void distribuiNos()
 
 }
 
+bool comparaNos(Nos n1, Nos n2){
+
+	if((n1.x == n2.x) && (n1.y == n2.y) && (n1.z == n2.z))
+		return true;
+	return false;
+}
 
 bool checkConnectionOnList(Nos noi,Nos nof, vector<tuple<Nos,Nos>> * lig){
-	tuple<Nos,Nos> *t1 = new tuple<Nos,Nos>(noi,nof);
-	tuple<Nos,Nos> *t2 = new tuple<Nos,Nos>(noi,nof);
 
 	for(int i=0; i<lig->size(); i++){
-		if((lig->at(i) == *t1) ||(lig->at(i) == *t2))
+		Nos nTmp1 = get<0>(lig->at(i));
+		Nos nTmp2 = get<1>(lig->at(i));
+		
+		if((comparaNos(nTmp1, noi) && comparaNos(nTmp2, nof)) ||  (comparaNos(nTmp1, nof) && comparaNos(nTmp2, noi)))
 			return false;
 	}
 
@@ -664,15 +672,15 @@ vector<tuple<Nos,Nos>> *getLigacoes(vector<tuple<int,vector<tuple <int,string>>,
 		vector<tuple<int,string>> tmpU = get<1>(grafo->at(i));
 		for(int j=0; j<tmpU.size(); j++){
 			//Arco arcTmp;
-			Nos noi = get<2>(grafo->at(1)).getNo();
-			Nos nof = get<2>(grafo->at(get<0>(tmpU.at(i)))).getNo();
+			Nos noi = get<2>(grafo->at(i)).getNo();
+			Nos nof = get<2>(grafo->at(get<0>(tmpU.at(j)))).getNo();
 			if(checkConnectionOnList(noi,nof, lig)){
 				tuple<Nos,Nos> *t = new tuple<Nos,Nos>(noi,nof);
 				lig->push_back(*t);
 			}
 		}
 	}
-
+	return lig;
 }
 
 
@@ -1497,7 +1505,7 @@ void display2(void)
 	material(slate);
 	
 	desenhaSolo();
-	//desenhaSkyBox();
+	desenhaSkyBox();
 	desenhaEixos();
 
 
