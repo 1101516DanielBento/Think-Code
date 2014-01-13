@@ -216,15 +216,16 @@ void drawRigthLeg(){
 
 void win(){
 	cout<<"You win!"<<endl;
+	PlaySound(TEXT("Sounds\\winapplause.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
 	exit(0);
 }
 
 void lost(){
 	cout<<"You Lost"<<endl;
+	PlaySound(TEXT("Sounds\\lost.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
 	exit(0);
-	//send stuff to database
 }
 
 void checkGameState(){
@@ -504,40 +505,41 @@ void draw(void) {
 
 		clickedOnKeyBoard = letterClick(get<0>(mouseCoords),get<1>(mouseCoords));
 
-		if(clickedOnKeyBoard){// && !letterAlreadyGuessed){
-
-			checkIfLetterAlreadyGuessed();//
+		if(clickedOnKeyBoard){
+			checkIfLetterAlreadyGuessed();
+			
 			if(letterAlreadyGuessed==false){
-			for(unsigned int i=0; i<word.size();i++){
-				if(word.at(i)==currentLetter){
-					guessed=true;
-					indexes=h->getCharOcorrences(currentLetter);
-					sucess+=h->getCharOcorrences(currentLetter).size();
-					guessedLetters.push_back(currentLetter);//
-					UpdateBoard();
-					PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);					
-					break;
+				
+				for(unsigned int i=0; i<word.size();i++){
+					if(word.at(i)==currentLetter){
+						guessed=true;
+						indexes=h->getCharOcorrences(currentLetter);
+						sucess+=h->getCharOcorrences(currentLetter).size();
+						guessedLetters.push_back(currentLetter);//
+						UpdateBoard();
+						PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);					
+						break;
+					}
 				}
-			}
 
-			if(!guessed){
-				indexes=h->getCharOcorrences(currentLetter);
-				wrong++;
-				PlaySound(TEXT("Sounds\\wrong1.wav"), NULL, SND_FILENAME);
-			}
+				if(!guessed){
+					indexes=h->getCharOcorrences(currentLetter);
+					wrong++;
+					PlaySound(TEXT("Sounds\\wrong1.wav"), NULL, SND_FILENAME);
+				}
 
-			cout<<"Guessed letters: ";
-			for(int i=0;i<guessedLetters.size();i++){
-						cout<<guessedLetters.at(i); 
-			}
+				cout<<"Guessed letters: ";
+				for(int i=0;i<guessedLetters.size();i++){
+							cout<<guessedLetters.at(i); 
+				}
 
-			cout<<endl;
-			cout<<"Ocorrences of "<<currentLetter<<": "<<indexes.size()<<endl;
-			cout<<"Guessed: "<<sucess<<endl;
-			cout<<"Wrong: "<<wrong<<endl;
-			mouseClicked=false;
-			guessed=false;
-			}
+				cout<<endl;
+				cout<<"Ocorrences of "<<currentLetter<<": "<<indexes.size()<<endl;
+				cout<<"Guessed: "<<sucess<<endl;
+				cout<<"Wrong: "<<wrong<<endl;
+				mouseClicked=false;
+				guessed=false;
+				}
 		}
 	}
 
