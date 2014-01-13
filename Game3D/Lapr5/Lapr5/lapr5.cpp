@@ -168,15 +168,7 @@ glTexture txtBACK;
 
 void CriarTexturas(GLuint texID[])
 {
-	/*
-	#define NOME_NEUTRO "texturas/estados/semEstado.jpg"
-	#define NOME_FURIOSO "texturas/estados/Angry.jpg"
-	#define	NOME_DESANIMADO "texturas/estados/Depressed.jpg"
-	#define NOME_CONTENTE "texturas/estados/Happy.jpg"
-	#define NOME_ENTUSIASMADO "texturas/estados/Enthusiastic.jpg"
-	#define NOME_EUFORICO "texturas/estados/Optimistic.jpg"
-
-	*/
+	
 	AUX_RGBImageRec *TextureImage[1];     // Create Storage Space For The Texture
 	glGenTextures(NUM_TEXTURAS,texID);
 	memset(TextureImage,0,sizeof(void *)*1);            // Set The Pointer To NULL
