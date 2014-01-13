@@ -6,17 +6,17 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-#include <GL/glaux.h>
+//#include <GL/glaux.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-#include "TextureLoader.h"
+//#include "TextureLoader.h"
 //#include "objLoader.h"
-#include "WebService_Request.h"
-#include "User_C.h"
+//#include "WebService_Request.h"
+//#include "User_C.h"
 
 using namespace std;
 
@@ -121,7 +121,7 @@ int obj = 0;
 
 //######################TEXTURAS############
 
-TextureLoader *apTexLoad = new TextureLoader();
+/*TextureLoader *apTexLoad = new TextureLoader();
 glTexture txtSolo;
 glTexture txtChateado;
 glTexture txtApaixonado;
@@ -132,10 +132,10 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;
+glTexture txtBACK;*/
 
 
-void CriarTexturas(GLuint texID[])
+/*void CriarTexturas(GLuint texID[])
 {
 	
 	
@@ -159,7 +159,7 @@ void CriarTexturas(GLuint texID[])
 	//apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 	
 	glBindTexture(GL_TEXTURE_2D, NULL);
-}
+}*/
 
 
 void initModelo()
@@ -181,7 +181,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	CriarTexturas(modelo->getTexID());
+	//CriarTexturas(modelo->getTexID());
 }
 
 
@@ -809,6 +809,7 @@ void keyboard(unsigned char key, int x, int y)
 		case 'q':
 		case 'Q':
 			teclas->setQ(GL_TRUE);
+			//teclas->setV(GL_FALSE);
 			//estado.camera.center[2]+=0.2;
 			break;
 		case 'r':
@@ -818,6 +819,7 @@ void keyboard(unsigned char key, int x, int y)
 		case 'v':
 		case 'V':
 			teclas->setV(GL_TRUE);
+			//teclas->setQ(GL_FALSE);
 			break;
 	}
 	if(estado->getDebug())
@@ -1138,7 +1140,7 @@ void desenhaMinimapa(int width, int height)
 	Reshape(width,height);
 }
 
-void desenhaSkyBox()
+/*void desenhaSkyBox()
 {
 	float x = 0;
 	float y = 0;
@@ -1240,7 +1242,7 @@ void desenhaSkyBox()
 	glDisable(GL_TEXTURE_2D);
 	
 }
-
+*/
 
 
 
@@ -1255,7 +1257,7 @@ void display(void)
 	material(slate);
 	
 	//desenhaSolo();
-	desenhaSkyBox();
+	//desenhaSkyBox();
 	desenhaEixos();
 	
 	desenhaLabirinto();
@@ -1283,8 +1285,8 @@ void display2(void)
 	setCamera();
 	material(slate);
 	
-	//desenhaSolo();
-	desenhaSkyBox();
+	desenhaSolo();
+	//desenhaSkyBox();
 	desenhaEixos();
 	
 	desenhaLabirinto();
@@ -1699,10 +1701,12 @@ void Timer(int value)
 
 	
 
-		/*if(teclas->getV())
+		if(teclas->getV())
 		{
+			cout<<"\nVOO LIVRE!";
+			teclas->setR(GL_FALSE);
 			modelo->setCameraMode(CAMERA_LIVRE);
-			modelo->setObjecto(new Objecto());
+			/*modelo->setObjecto(new Objecto());
 			estado->getCamera()->setDirLat(0);
 			estado->getCamera()->setDirLong(0);
 			estado->getCamera()->setFov(30);
@@ -1712,15 +1716,25 @@ void Timer(int value)
 			estado->getCamera()->setEyeZ(0);
 			estado->getCamera()->setCenterX(nos[0].x);
 			estado->getCamera()->setCenterY(nos[0].y);
-			estado->getCamera()->setCenterZ(nos[0].z);
-		}*/
+			estado->getCamera()->setCenterZ(nos[0].z);*/
+		}
+	
+	if(teclas->getR())
+	{
+		cout<<"\nVOO RASANTE!";
+		teclas->setV(GL_FALSE);
+		modelo->setCameraMode(CAMERA_RASANTE);
+		//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
+		//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
+		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
+	}
 
 
 
 	switch(modelo->getCameraMode())
 	{
 		case CAMERA_LIVRE:
-
+			
 			if(teclas->getQ())
 			{
 				Nos cameraPos = camPos();
@@ -1730,7 +1744,7 @@ void Timer(int value)
 					teclas->setQ(GL_FALSE);
 				}
 			}
-
+			
 			if(teclas->getA())
 			{
 				if(!picking())
@@ -1739,29 +1753,37 @@ void Timer(int value)
 					teclas->setA(GL_FALSE);
 				}
 			}
-
+			
 			if(teclas->getLEFT())
 			{
+				
 				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
 				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+				
+				
 			}
-	
+			
 			if(teclas->getRIGHT())
 			{
+				
 				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() + 0.1);
 				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() + 0.1);
+				
 			}
-	
+			
 			if(teclas->getUP())
 			{
 				Nos cameraPos = camPos();
-
-				//condições para os nós
-				if(!picking()){
-					//cout <<"\n\tCOLISAO!";
-					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
 				
+				//condições para os nós
+				if(picking()){
+					cout <<"\n\tCOLISAO!";
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+					{
+						cout<<"Não ha colisao na esfera\n";
+					}
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				}else{
 					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				}
@@ -1769,16 +1791,19 @@ void Timer(int value)
 			if(teclas->getDOWN())
 			{
 				Nos cameraPos = camPos();
-				if(!picking())
+				if(picking())
 				{
 					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-				
+					{
+						cout<<"Não ha colisao na esfera\n";
+					}
+					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				}else{
 					modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 				}
 			}
-
+			
 			break;
 		case CAMERA_RASANTE:
 			
@@ -1796,15 +1821,22 @@ void Timer(int value)
 	
 			if(teclas->getUP())
 			{
-				Nos cameraPos = camPos();
+				if(picking())
+				{
+					cout<<"\ncolidiu";
+					Nos cameraPos = camPos();
 				
 				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 					{
 						//cout<<"Colisao\n";
-						modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						moveTo(cameraPos);
-					}else{
+						//modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						//modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+						//moveTo(cameraPos);
+					}
+					
+				else{
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						if((modelo->getObjecto()->getY() <= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0))/* && (modelo->getObjecto()->getY() >= nos[1].y)*/)
 						{
 							modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
@@ -1817,10 +1849,13 @@ void Timer(int value)
 							}
 						}
 					}
+				}
 			}
 
 			if(teclas->getDOWN())
 			{
+				if(picking())
+				{
 		
 				Nos cameraPos = camPos();
 				
@@ -1829,7 +1864,7 @@ void Timer(int value)
 						//cout<<"Colisao\n";
 						modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 						modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-						moveTo(cameraPos);
+						//moveTo(cameraPos);
 					}else{
 						if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
 						{
@@ -1843,6 +1878,8 @@ void Timer(int value)
 							}
 						}
 					}
+				
+				}
 			}
 		break;
 
@@ -1851,13 +1888,7 @@ void Timer(int value)
 		
 	}
 
-	//if(teclas->getR())
-		//{
-			//modelo->setCameraMode(CAMERA_RASANTE);
-			//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
-			//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
-			//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
-		//}
+	
 			
 	if(!estado->getDebug())
 		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
@@ -1871,9 +1902,9 @@ void Timer(int value)
 
 int main(int argc, char **argv)
 {
-	WebService_Request *ws= new WebService_Request();
-	int id=ws->login("Quim","qwerty");
-	vector<User_C> *userList = ws->getNetworkById(id);
+	//WebService_Request *ws= new WebService_Request();
+	//int id=ws->login("Quim","qwerty");
+	//vector<User_C> *userList = ws->getNetworkById(id);
 
 	// tuplo -> conjunto de dados separados
 	// get<> la dentro 0 corresponde a posiçao do int , string ou boolean
