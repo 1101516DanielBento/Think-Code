@@ -39,7 +39,7 @@
 #endif
 using namespace std;
 
-string word, hint;
+string word, hint, printSucess;
 int wrong=0,sucess=0;
 char* letters[]={"images\\a.bmp","images\\b.bmp","images\\c.bmp","images\\d.bmp",
 				"images\\e.bmp","images\\f.bmp","images\\g.bmp","images\\h.bmp",
@@ -56,7 +56,6 @@ vector<tuple<int, int, char>> references;
 tuple<int,int> mouseCoords;
 char currentLetter;
 bool mouseClicked=false,arrayFilled=false,wordLoaded=false,hintLoaded=false,coordinatesLoaded=false,boardLoaded=false,guessed=false,clickedOnKeyBoard=false,letterAlreadyGuessed=false;
-//vector<tuple<int,int,int,int>> letterCoordinates;
 HangMan* h = new HangMan();
 vector<int> textureIDs,indexes;
 vector<char> wordChars, guessedLetters;
@@ -216,15 +215,16 @@ void drawRigthLeg(){
 
 void win(){
 	cout<<"You win!"<<endl;
+	PlaySound(TEXT("Sounds\\winapplause.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
 	exit(0);
 }
 
 void lost(){
 	cout<<"You Lost"<<endl;
+	PlaySound(TEXT("Sounds\\lost.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
 	exit(0);
-	//send stuff to database
 }
 
 void checkGameState(){
@@ -421,7 +421,25 @@ void mouseCoordinates(int x, int y){
 	get<1>(mouseCoords)=y;
 }
 
-void checkLetterGuessed(){
+void drawSucesses(int sucesses){
+
+	glRasterPos2i(530, 30);
+
+	printSucess = "Sucesses: ";
+	printSucess+=to_string(sucesses);
+	printSucess+=" out of " + to_string(word.size());
+
+	void * font = GLUT_BITMAP_HELVETICA_18;
+
+	for(unsigned int i=0;i<printSucess.size();i++)
+    {
+		char c = printSucess.at(i);
+        glutBitmapCharacter(font, c);
+    }
+}
+
+
+void checkIfLetterAlreadyGuessed(){
 
 	if(guessedLetters.size()>0){
 		
@@ -433,6 +451,7 @@ void checkLetterGuessed(){
 				}
 		}
 	}
+	letterAlreadyGuessed=false;
 	return;
 }
 
@@ -465,8 +484,7 @@ void MouseButton(int button, int state, int x, int y)
 }
 
 void Reshape(GLint width, GLint height){
-	window_width=width;
-	window_height=height;
+	glutReshapeWindow(800,600);
 }
 
 void draw(void) {
@@ -491,7 +509,7 @@ void draw(void) {
 	drawHanger();
 
 	glPopMatrix();
-    
+	
 	glPushMatrix();
     glLoadIdentity();
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -503,42 +521,45 @@ void draw(void) {
 
 		clickedOnKeyBoard = letterClick(get<0>(mouseCoords),get<1>(mouseCoords));
 
-		if(clickedOnKeyBoard){// && !letterAlreadyGuessed){
-
-			//checkLetterGuessed();//
-
-			for(unsigned int i=0; i<word.size();i++){
-				if(word.at(i)==currentLetter){
-					guessed=true;
-					indexes=h->getCharOcorrences(currentLetter);
-					sucess+=h->getCharOcorrences(currentLetter).size();
-					guessedLetters.push_back(currentLetter);//
-					UpdateBoard();
-					PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);
-					
-					for(int i=0;i<guessedLetters.size();i++){
-						cout<<guessedLetters.at(i); 
-					}
-					
-					cout<<endl;
-					
-					break;
-				}
-			}
-
-			if(!guessed){
-				indexes=h->getCharOcorrences(currentLetter);
-				wrong++;
-				PlaySound(TEXT("Sounds\\wrong1.wav"), NULL, SND_FILENAME);
-			}
+		if(clickedOnKeyBoard){
+			checkIfLetterAlreadyGuessed();
 			
-			cout<<"Ocorrences of "<<currentLetter<<": "<<indexes.size()<<endl;
-			cout<<"Guessed: "<<sucess<<endl;
-			cout<<"Wrong: "<<wrong<<endl;
-			mouseClicked=false;
-			guessed=false;
+			if(letterAlreadyGuessed==false){
+				
+				for(unsigned int i=0; i<word.size();i++){
+					if(word.at(i)==currentLetter){
+						guessed=true;
+						indexes=h->getCharOcorrences(currentLetter);
+						sucess+=h->getCharOcorrences(currentLetter).size();
+						guessedLetters.push_back(currentLetter);//
+						UpdateBoard();
+						PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);					
+						break;
+					}
+				}
+
+				if(!guessed){
+					indexes=h->getCharOcorrences(currentLetter);
+					wrong++;
+					PlaySound(TEXT("Sounds\\wrong1.wav"), NULL, SND_FILENAME);
+				}
+
+				cout<<"Guessed letters: ";
+				for(int i=0;i<guessedLetters.size();i++){
+							cout<<guessedLetters.at(i); 
+				}
+
+				cout<<endl;
+				cout<<"Ocorrences of "<<currentLetter<<": "<<indexes.size()<<endl;
+				cout<<"Guessed: "<<sucess<<endl;
+				cout<<"Wrong: "<<wrong<<endl;
+				mouseClicked=false;
+				guessed=false;
+				}
 		}
 	}
+
+	drawSucesses(sucess);
 
 	switch(wrong){
 

@@ -479,7 +479,7 @@ namespace DataModel.DAL
 
         public bool doNegociationGameComplete(int userIdA, int UserIdB, int idGame, int difficulty)
         {
-            string cmd = "UPDATE [GameDataBase].[dbo].[RequestNegociation] SET [status] = 1 WHERE [status]=0 and [idUserA] = " + userIdA + " and [idUserB]=" + UserIdB + " and [idGame]=" + idGame + " and [difficulty]=" + difficulty;
+                        string cmd = "UPDATE [GameDataBase].[dbo].[RequestNegociation] SET [status] = 1 WHERE [status]=0 and [idUserA] = " + userIdA + " and [idUserB]=" + UserIdB + " and [idGame]=" + idGame + " and [difficulty]=" + difficulty;
 
             int res = ExecuteNonQuery(GetConnection(true), cmd);
 
@@ -487,6 +487,48 @@ namespace DataModel.DAL
                 return true;
 
             return false;
+        }
+
+        public bool checkCompletedGames(int userIdA, int UserIdB)
+        {
+            DataSet ds = ExecuteQuery(GetConnection(true), "select count(*) as nr_c from [GameDataBase].[dbo].[RequestNegociation] where status=0 and [idUserA] = " + userIdA + " and [idUserB]=" + UserIdB);
+            bool status = false;
+            
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                if ((int)r["nr_c"] == 0)
+                {
+                    status = true;
+                }
+                
+            }
+
+            if (status)
+            {
+                string cmd = "DELETE FROM [GameDataBase].[dbo].[RequestNegociation] WHERE idUserA=" + userIdA + " and idUserB="+UserIdB;
+
+                int res = ExecuteNonQuery(GetConnection(true), cmd);
+
+
+                if (res != 0)
+                {
+                    cmd = "INSERT INTO [GameDataBase].[dbo].[Friendship] VALUES(" + userIdA + "," + UserIdB + ",SYSDATETIME(),40)";
+                    
+                    res = ExecuteNonQuery(GetConnection(true), cmd);
+
+
+                    if (res != 0)
+                        return true;
+
+                }
+                   
+                return false;
+
+            }
+
+            return true;
+           
+
         }
 
         public bool addPointsToUser(int id, int pointsToAdd)
