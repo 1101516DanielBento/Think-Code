@@ -84,3 +84,12 @@ void User_C::setMoodState(int mood){
 	this->moodState=mood;
 }
 
+Nos User_C::getNo()
+{
+	return no;
+}
+
+void User_C::setNo(Nos no)
+{
+	this->no = no;
+}
