@@ -421,7 +421,7 @@ void mouseCoordinates(int x, int y){
 	get<1>(mouseCoords)=y;
 }
 
-void checkLetterGuessed(){
+void checkIfLetterAlreadyGuessed(){
 
 	if(guessedLetters.size()>0){
 		
@@ -433,6 +433,7 @@ void checkLetterGuessed(){
 				}
 		}
 	}
+	letterAlreadyGuessed=false;
 	return;
 }
 
@@ -505,8 +506,8 @@ void draw(void) {
 
 		if(clickedOnKeyBoard){// && !letterAlreadyGuessed){
 
-			//checkLetterGuessed();//
-
+			checkIfLetterAlreadyGuessed();//
+			if(letterAlreadyGuessed==false){
 			for(unsigned int i=0; i<word.size();i++){
 				if(word.at(i)==currentLetter){
 					guessed=true;
@@ -514,14 +515,7 @@ void draw(void) {
 					sucess+=h->getCharOcorrences(currentLetter).size();
 					guessedLetters.push_back(currentLetter);//
 					UpdateBoard();
-					PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);
-					
-					for(int i=0;i<guessedLetters.size();i++){
-						cout<<guessedLetters.at(i); 
-					}
-					
-					cout<<endl;
-					
+					PlaySound(TEXT("Sounds\\sucess1.wav"), NULL, SND_FILENAME);					
 					break;
 				}
 			}
@@ -531,12 +525,19 @@ void draw(void) {
 				wrong++;
 				PlaySound(TEXT("Sounds\\wrong1.wav"), NULL, SND_FILENAME);
 			}
-			
+
+			cout<<"Guessed letters: ";
+			for(int i=0;i<guessedLetters.size();i++){
+						cout<<guessedLetters.at(i); 
+			}
+
+			cout<<endl;
 			cout<<"Ocorrences of "<<currentLetter<<": "<<indexes.size()<<endl;
 			cout<<"Guessed: "<<sucess<<endl;
 			cout<<"Wrong: "<<wrong<<endl;
 			mouseClicked=false;
 			guessed=false;
+			}
 		}
 	}
 
