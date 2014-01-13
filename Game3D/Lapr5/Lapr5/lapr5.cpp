@@ -6,18 +6,18 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-//#include <GL/glaux.h>
+#include <GL/glaux.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
 #include "Modelo.h"
 #include "Teclas.h"
 #include "Objecto.h"
-//#include "TextureLoader.h"
+#include "TextureLoader.h"
 //#include "objLoader.h"
 #include "WebService_Request.h"
 #include "User_C.h"
-#include "Dialog.h"
+//#include "Dialog.h"
 
 
 using namespace std;
@@ -59,6 +59,21 @@ using namespace std;
 #define NOME_FUNDO_UP "texturas/top.jpg"
 #define NOME_FUNDO_DOWN "texturas/bottom.jpg"
 
+//texturas humor
+/*
+0 - Sem estado de espírito (Minha sugestão: começar em estado "Normal")
+1 - Furioso
+2 - Desanimado
+3 - Contente
+4 - Entusiasmado
+5 - Eufórico
+*/
+#define NOME_NEUTRO
+#define NOME_FURIOSO
+#define	NOME_DESANIMADO
+#define NOME_CONTENTE
+#define NOME_ENTUSIASMADO
+#define NOME_EUFORICO
 
 #define EIXO_X		1
 #define EIXO_Y		2
@@ -123,7 +138,7 @@ int obj = 0;
 
 //######################TEXTURAS############
 
-/*TextureLoader *apTexLoad = new TextureLoader();
+TextureLoader *apTexLoad = new TextureLoader();
 glTexture txtSolo;
 glTexture txtChateado;
 glTexture txtApaixonado;
@@ -134,10 +149,10 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;*/
+glTexture txtBACK;
 
 
-/*void CriarTexturas(GLuint texID[])
+void CriarTexturas(GLuint texID[])
 {
 
 
@@ -161,7 +176,7 @@ apTexLoad->LoadTextureFromDisk(NOME_FUNDO_DOWN, &txtBOTTOM);
 //apTexLoad->LoadTextureFromDisk(NOME_LOGIN, &txtLogin);
 
 glBindTexture(GL_TEXTURE_2D, NULL);
-}*/
+}
 
 
 void initModelo()
@@ -183,7 +198,7 @@ void initModelo()
 	modelo->setGPosLuz1(l1);
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
-	//CriarTexturas(modelo->getTexID());
+	CriarTexturas(modelo->getTexID());
 }
 
 
@@ -1648,6 +1663,68 @@ Nos camPos()
 	return camNewPos;
 }
 
+void desenhaBillboardEstadohumor(User_C *u)
+{
+	/*
+	0 - Sem estado de espírito (Minha sugestão: começar em estado "Normal")
+	1 - Furioso
+	2 - Desanimado
+	3 - Contente
+	4 - Entusiasmado
+	5 - Eufórico
+	*/
+	Ponto *p = u->getPonto();
+	glTexture glt;
+	if(u->getMoodState()== 0)//sem estado de espirito
+		glt = txtNeutro;
+	else
+		if(u->getMoodState()== 1)//Furioso
+			glt = txtFurioso;
+		else
+			if(u->getMoodState()== 2)//Desanimado
+				glt = txtDesanimado;
+			else
+				if(u->getMoodState()== 3)//Contente
+					glt = txtContente;
+				else
+					if(u->getMoodState()== 4)//Entusiasmado
+						glt = txtEntusiasmado;
+					else
+						glt = txtEuforico;
+	glPushMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
+    glBindTexture(GL_TEXTURE_2D, glt.TextureID);
+    glEnable(GL_TEXTURE_2D);
+	if(modelo->getObjecto()->getX()<0)
+		glTranslatef(p->getX(),p->getY()+2,p->getZ()+11);
+	else
+		glTranslatef(p->getX(),p->getY()-2,p->getZ()+11);
+	GLdouble deltaz=4;
+	GLdouble angOrientacao = graus(atan2(modelo->getObjecto()->getZ()-p->getZ(),modelo->getObjecto()->getX()-p->getX()));
+	glRotated(angOrientacao,0,0,1);
+
+    glBegin(GL_QUADS);
+    glNormal3f(0,1,0);
+    
+	glTexCoord2f(0,0);
+    glVertex3f(0,0,0);
+    
+	glTexCoord2f(0,1);
+    glVertex3f(0,0,4);
+    
+	glTexCoord2f(1,1);
+    glVertex3f(0,4,4);
+    
+	glTexCoord2f(1,0);
+    glVertex3f(0,4,0);
+	
+	glEnd();
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_COLOR_MATERIAL);	
+	glBindTexture(GL_TEXTURE_2D, NULL);
+}
 
 
 //definir mouse para mudar de direcao de forma a ter 2 opçoes setas e rato (right mouse button)
@@ -1752,6 +1829,40 @@ void Timer(int value)
 			}
 		}
 
+<<<<<<< HEAD
+			if(teclas->getLEFT())
+			{
+				
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+
+				
+			}
+	
+			if(teclas->getRIGHT())
+			{
+						
+				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() + 0.1);
+				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() + 0.1);
+				
+				}
+	
+			if(teclas->getUP())
+			{
+				Nos cameraPos = camPos();
+
+				//condições para os nós
+				if(picking()){
+					cout <<"\n\tCOLISAO!";
+					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+					{
+						cout<<"Não ha colisao na esfera\n";
+					}
+						modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+				}else{
+					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+=======
 		if(teclas->getLEFT())
 		{
 
@@ -1779,6 +1890,7 @@ void Timer(int value)
 				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 				{
 					cout<<"Não ha colisao na esfera\n";
+>>>>>>> 825e33c78bc15c8d1d3f77e8682bade21834e515
 				}
 				modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
 			}else{
