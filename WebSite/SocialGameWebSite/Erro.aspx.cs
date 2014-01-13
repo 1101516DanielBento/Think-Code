@@ -32,6 +32,7 @@ public partial class Erro : System.Web.UI.Page
                 break;
 
             default: lblTextoErro.Text = "There was an error on page! <br> If the problem persists, please contact us.";
+                break;
         }
     }
 }

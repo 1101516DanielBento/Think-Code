@@ -203,7 +203,7 @@ namespace DataModel.DAL
 
             if (flag)
             {
-                query = "INSERT INTO [GameDataBase].[dbo].[TagList]([tagName],[type]) VALUES ('" + t.TagName + "', 0);SELECT SCOPE_IDENTITY() as idT";
+                query = "INSERT INTO [GameDataBase].[dbo].[TagList]([tagName],[type],[idDictWord]) VALUES ('" + t.TagName + "', 0,1);SELECT SCOPE_IDENTITY() as idT";
 
                 ds = ExecuteQuery(GetConnection(true), query);
 
