@@ -27,6 +27,23 @@ mso-style-textfill-fill-colortransforms:lumm=75000">to a Dictionary
     &nbsp;<asp:Label ID="lblMsgErro" runat="server" Font-Bold="True" CssClass="p_erro"></asp:Label>                
     <br />
     <br />
+&nbsp;<span style="font-size:12.0pt;line-height:107%;color:#548235;
+mso-themecolor:accent6;mso-themeshade:191;mso-style-textfill-fill-color:#548235;
+mso-style-textfill-fill-themecolor:accent6;mso-style-textfill-fill-alpha:100.0%;
+mso-style-textfill-fill-colortransforms:lumm=75000">If you want to add a new dictionary : <br />
+    <br />
+    &nbsp; Dictionary Name &nbsp;
+    <asp:TextBox ID="textNewDic" runat="server" Width="119px"></asp:TextBox>
+&nbsp;</span>&nbsp;&nbsp; <span style="font-size:12.0pt;line-height:107%;color:#548235;
+mso-themecolor:accent6;mso-themeshade:191;mso-style-textfill-fill-color:#548235;
+mso-style-textfill-fill-themecolor:accent6;mso-style-textfill-fill-alpha:100.0%;
+mso-style-textfill-fill-colortransforms:lumm=75000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+    <asp:Button ID="btInserirNewDic" runat="server" OnClick="btInserirNewDic_Click" Text="Insert" />
+&nbsp;&nbsp;&nbsp; </span>&nbsp;<asp:Label ID="lblMensagem0" runat="server" Font-Bold="True" CssClass="p_sucesso"></asp:Label>                
+    &nbsp;<asp:Label ID="lblMsgErro0" runat="server" Font-Bold="True" CssClass="p_erro"></asp:Label>                
+    <br />
+    <br />
+    <br />
     <br />
     <br />
 
@@ -47,6 +64,7 @@ mso-style-textfill-fill-colortransforms:lumm=75000">to a Dictionary
             <asp:BoundField DataField="NomeTag" DataFormatString="{0}" HeaderText="Tag Name" />
             <asp:BoundField DataField="IdTag" DataFormatString="{0}" HeaderText="ID Tag" />
             <asp:BoundField DataField="DicionarioTag" DataFormatString="{0}" HeaderText="Dictionary" />
+            <asp:HyperLinkField DataNavigateUrlFields="IdTag,DicionarioTag" DataNavigateUrlFormatString="RemoveTagFromDictionary.aspx?IdTag={0}&amp;DicTag={1}" DataTextField="texto" DataTextFormatString="{0}" />
         </Columns>
     </asp:GridView>
         </div>
