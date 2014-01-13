@@ -21,15 +21,6 @@
     <ClCompile Include="lapr5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MiniJogoLabirinto.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MinijogoEnforcado.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MinijogoGalo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JogoDoGalo_openGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -58,6 +49,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Teclas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="readjpeg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User_C.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WebService_Request.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLFiles_WS\GameWS.xsd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLFiles_WS\tempuri.org.wsdl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLFiles_WS\tempuri.org.xsd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HangMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,6 +122,42 @@
     <ClInclude Include="Teclas.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameWS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jmorecfg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jpeglib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="User_C.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WebService_Request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLFiles_WS\GameWS.xsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLFiles_WS\schemas.microsoft.com.2003.10.Serialization.xsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLFiles_WS\tempuri.org.wsdl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLFiles_WS\tempuri.org.xsd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dictionary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="exemplo.grafo">
@@ -111,5 +168,13 @@
     <Text Include="exemplo2 grafo.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="..\..\README_textures.txt">
+      <Filter>Header Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xsd Include="XMLFiles_WS\GameWS.xsd">
+      <Filter>Header Files</Filter>
+    </Xsd>
   </ItemGroup>
 </Project>
