@@ -1453,7 +1453,7 @@ void display2(void)
 	material(slate);
 	
 	desenhaSolo();
-	//desenhaSkyBox();
+	desenhaSkyBox();
 	desenhaEixos();
 
 
