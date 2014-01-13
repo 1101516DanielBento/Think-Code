@@ -22,6 +22,8 @@ public partial class TESTING_DM : System.Web.UI.Page
         UserBLL userBll = new UserBLL();
         TagBLL tg = new TagBLL();
 
+
+
         IList<Dictionary> dt=tg.loadAllDictionarys();
         Tuple<bool, Dictionary> op = tg.changeTagToDictionary(2,9);
         Tag t1 = new Tag();
@@ -33,7 +35,7 @@ public partial class TESTING_DM : System.Web.UI.Page
         tr2.TagName = "Amigo";
 
         IList<Tuple<int, DateTime>> friends = userBll.loadFriendsRequestFromUser(4);
-        User u2= userBll.loadUserById(4);
+        User u2= userBll.doNegociationGameComplete(53,54,1,0);
 
         //if (tg.delTagsUser(4, "Isep"))
         //{
