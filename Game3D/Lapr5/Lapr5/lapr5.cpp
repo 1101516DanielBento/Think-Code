@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <GL/glaux.h>
+#include <AL/alut.h>
 #include "grafos.h"
 #include "Camera.h"
 #include "Estado.h"
@@ -17,6 +18,14 @@
 #include "objLoader.h"
 #include "WebService_Request.h"
 #include "User_C.h"
+//#include "Dialog.h"
+
+#pragma comment (lib, "glaux.lib")    /* link with Win32 GLAUX lib */
+#pragma comment (lib, "openAL32.lib")
+#pragma comment (lib, "alut.lib")
+#pragma comment (user, "Compiled on " __DATE__ " at " __TIME__)
+
+
 
 using namespace std;
 
@@ -34,6 +43,7 @@ using namespace std;
 #define rad(X)   (double)((X)*M_PI/180)
 
 #define K_ESFERA 2.1
+#define RAIO_NO 5.0
 #define VELv 0.5
 #define DIMENSAO_CAMARA 5
 #define BUFSIZE 512
@@ -43,6 +53,7 @@ using namespace std;
 #define INFINITESIMO 0,0000000000000001
 #define NF 20
 #define NP 20
+#define EYE_ROTATION 0.01
 
 
 #define CAMERA_LIVRE 1
@@ -73,6 +84,7 @@ using namespace std;
 #define NOME_CONTENTE "texturas/estados/Happy.jpg"
 #define NOME_ENTUSIASMADO "texturas/estados/Enthusiastic.jpg"
 #define NOME_EUFORICO "texturas/estados/Optimistic.jpg"
+
 
 #define EIXO_X		1
 #define EIXO_Y		2
@@ -133,6 +145,7 @@ Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
 int obj = 0;
 
+vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf = new vector<tuple<int,vector<tuple<int,string>>,User_C>>();
 
 
 //######################TEXTURAS############
@@ -150,7 +163,7 @@ glTexture txtTOP;
 glTexture txtLEFT;
 glTexture txtRIGHT;
 glTexture txtFRONT;
-glTexture txtBACK;*/
+glTexture txtBACK;
 
 
 void CriarTexturas(GLuint texID[])
@@ -170,12 +183,14 @@ void CriarTexturas(GLuint texID[])
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	apTexLoad->SetHighQualityTextures(TRUE);
 	apTexLoad->SetTextureFilter(txTrilinear);
+
 	apTexLoad->LoadTextureFromDisk(NOME_NEUTRO, &txtNeutro);
 	apTexLoad->LoadTextureFromDisk(NOME_FURIOSO, &txtChateado);
 	apTexLoad->LoadTextureFromDisk(NOME_DESANIMADO, &txtDesanimado);
 	apTexLoad->LoadTextureFromDisk(NOME_CONTENTE, &txtContente);
 	apTexLoad->LoadTextureFromDisk(NOME_ENTUSIASMADO, &txtEntusiasmado);
 	apTexLoad->LoadTextureFromDisk(NOME_EUFORICO, &txtEuforico);
+
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_BACK, &txtBACK);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_FRONT, &txtFRONT);
 	apTexLoad->LoadTextureFromDisk(NOME_FUNDO_LEFT, &txtLEFT);
@@ -242,7 +257,7 @@ void myInit()
 	
 	//le o grafo exemplo
 	leGrafo();
-	
+
 	modelo->getObjecto()->setX(nos[0].x);
 	modelo->getObjecto()->setY(nos[0].z + K_ESFERA*nos[0].largura/2.0+1.0);
 	modelo->getObjecto()->setZ(nos[0].y);
@@ -492,6 +507,48 @@ void desenhaLigacao(Arco arco)
 }
 
 
+void desenhaLigacao2(Nos noi, Nos nof)
+{
+	//Nos *noi,*nof;
+	//GLdouble desnivel, comprimentoProj, comprimento,raio,orientacao,inclinacao;
+	Nos tmp;
+	if(noi.x==nof.x){
+		// arco vertical
+		if(noi.y < nof.y){
+			noi=noi;
+			nof=nof;
+		}else{
+			tmp = nof;
+			nof = noi;
+			noi = tmp;
+		}
+		glLoadName(obj++);
+		material(red_plastic);
+		desenhaCilindro(noi.x,noi.y,noi.z,nof.x,nof.y,nof.z,noi.largura);
+
+	}else{
+		if(noi.y==nof.y){
+			//arco horizontal
+			if(noi.x<nof.x){
+				noi=noi;
+				nof=nof;
+			}else{
+				tmp = nof;
+				nof = noi;
+				noi = tmp;
+			}
+			glLoadName(obj++);
+			desenhaCilindro(noi.x,noi.y,noi.z,nof.x,nof.y,nof.z,noi.largura);
+		}else{
+			noi=noi;
+			nof=nof;
+			material(red_plastic);
+			glLoadName(obj++);
+			desenhaCilindro(noi.x,noi.y,noi.z,nof.x,nof.y,nof.z,noi.largura);
+		}
+	}
+}
+
 void desenhaNos()
 {
 	for(int i = 0; i < numNos; i++)
@@ -529,26 +586,30 @@ void desenhaNos(GLdouble x, GLdouble y, GLdouble z,GLdouble raio)
 	//}
 }
 
-void distribuiNos2()//funcional
+void distribuiNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)//funcional
 {
 	GLdouble raio;
 	GLdouble inc_lng = 2.0*M_PI/(GLdouble) NF;
 	GLdouble lng = 0.0;
 
 	GLdouble inc_lat = M_PI/(GLdouble) NP;
-	
-	
-	for(int j = 0; j < numNos; j++){
+
+	Nos nu;
+	int numVert = graf->size();
+
+	for(int j = 0; j < numVert; j++){
 		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
 
-		
-				raio = (K_ESFERA*nos[j].largura)/2.0;
-				nos[j].x = 30 * cos(lng)*sin(lat);
-				nos[j].z = 30 * sin(lng)*sin(lat);
-				//nos[j].y = nos[j].y * cos(lat);
-				desenhaNos(nos[j].x,nos[j].y,nos[j].z,raio);
-				lat+=inc_lat;
-		
+
+		raio = (K_ESFERA*RAIO_NO)/2.0;
+		nu.x = 150 * cos(lng)*sin(lat);
+		nu.y = nos[j].y * cos(lat);
+		nu.z = 150 * sin(lng)*sin(lat);
+		get<2>(graf->at(j)).setNo(nu);
+		//desenhaNos(nos[j].x,nos[j].y,nos[j].z,raio);
+		desenhaNos(get<2>(graf->at(j)).getNo().x,get<2>(graf->at(j)).getNo().y,get<2>(graf->at(j)).getNo().z,raio);
+		lat+=inc_lat;
+
 		lng+=inc_lng;
 	}
 }
@@ -581,15 +642,26 @@ void distribuiNos()
 	}
 
 }
-void desenhaArcos()
+void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 {
-	for(int i = 0; i < numArcos; i++)
+	Nos noi,nof;
+
+	for(int k  = 0; k < graf->size(); k++)
 	{
-		desenhaLigacao(arcos[i]);
+		vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
+		for(int i = 0; i < tmpU.size(); i++)
+		{
+			//Arco arcTmp;
+			noi = get<2>(graf->at(k)).getNo();
+			nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
+			desenhaLigacao2(noi,nof);
+		}
 	}
 }
-void desenhaLabirinto(){
-	
+
+
+void desenhaLabirinto(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf){
+
 	glPushMatrix();
 	glTranslatef(0,0,0.05);
 	//glScalef(5,5,5);
@@ -603,9 +675,11 @@ void desenhaLabirinto(){
 		glPopMatrix();
 		//desenhaNo(i);
 	*/
-	distribuiNos2();
-	desenhaArcos();
-		//desenhaNos();
+
+	distribuiNos2(graf);
+	desenhaArcos(graf);
+	//desenhaNos();
+
 	//material(emerald);
 	//for(int i=0; i<numArcos; i++){
 		//desenhaLigacao(arcos[i]);
@@ -1192,7 +1266,7 @@ void minimapaView()
 	estadominimapa->getCamera()->setCenterZ(0);
 	estadominimapa->getCamera()->setCenterX(0);
 	estadominimapa->getCamera()->setCenterY(0);
-	
+
 	estadominimapa->getCamera()->setEyeZ(50);
 	estadominimapa->getCamera()->setEyeX(0);
 	estadominimapa->getCamera()->setEyeY(0);
@@ -1201,7 +1275,11 @@ void minimapaView()
 	//estadominimapa->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
 	//estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
 	estadominimapa->getCamera()->setCenterY(modelo->getObjecto()->getY() + 2 + sin(estadominimapa->getCamera()->getDirLat()));
-	
+
+	estadominimapa->getCamera()->setCenterX(0);
+	estadominimapa->getCamera()->setCenterZ(0);
+	estadominimapa->getCamera()->setCenterY(50);
+
 	putLights((GLfloat*)white_light);
 	
 	gluLookAt(estadominimapa->getCamera()->getEyeY(),estadominimapa->getCamera()->getEyeX(),estadominimapa->getCamera()->getEyeZ(),estadominimapa->getCamera()->getCenterX(),estadominimapa->getCamera()->getCenterY(),estadominimapa->getCamera()->getCenterZ(),0,0,1);
@@ -1215,7 +1293,13 @@ void desenhaMinimapa(int width, int height)
 	glClear(GL_DEPTH_BUFFER_BIT);
 	minimapaView();
 
-	desenhaLabirinto();
+	//desenhaEixos();
+	//material(slate);
+	//desenhaSolo();
+	desenhaLabirinto(graf);
+
+
+	//desenhaLabirinto();
 
 	
 	glFlush();
@@ -1230,99 +1314,99 @@ void desenhaSkyBox()
 	float width  = 512;
 	float height = 512;
 	float length = 512;
-	
-	
+
+
+
 	glEnable(GL_TEXTURE_2D);
-	
+
+
 	glEnable(GL_COLOR_MATERIAL);
 	// centra o cubo
 	x = x - width  / 2;
 	y = y - height / 2;
 	z = z - length / 2;
-	
+
+
 	//BOTTOM
 	glBindTexture(GL_TEXTURE_2D, txtBOTTOM.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
-		glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(0.0f, 0.0f);glVertex3f(x, y + height, z);
+	glTexCoord2f(1.0f,0.0f); glVertex3f(x, y, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y, z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
+
 	//TOP
-	
+
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtTOP.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
-	
-	
+
 	//RIGHT +
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtRIGHT.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y,  z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y,  z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y,  z);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
-	
+
 	//LEFT
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtLEFT.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
-		glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
+
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+	glTexCoord2f(0.0f, 1.0f);  glVertex3f(x, y + height, z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
-	
-	
+
 	//BACK
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtBACK.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y,  z);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y,  z + length);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x, y + height, z + length);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x, y + height, z);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
-	
+
 	//FRONT
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_COLOR_MATERIAL);
 	glBindTexture(GL_TEXTURE_2D, txtFRONT.TextureID);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
-		glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
+
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x + width, y + height, z);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,  z);
+	glTexCoord2f(1.0f, 1.0f);  glVertex3f(x + width, y,  z + length);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x + width, y + height, z + length);
 	glEnd();
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_TEXTURE_2D);
-	
+
 }
 
 
@@ -1340,9 +1424,11 @@ void display(void)
 	//desenhaSolo();
 	desenhaSkyBox();
 	desenhaEixos();
-	
-	desenhaLabirinto();
-	
+
+
+	desenhaLabirinto(graf);
+
+
 	//aselectObjects();
 	
 	if(estado->getEixoTrans()) {
@@ -1369,9 +1455,10 @@ void display2(void)
 	desenhaSolo();
 	//desenhaSkyBox();
 	desenhaEixos();
-	
-	desenhaLabirinto();
-	
+
+
+	desenhaLabirinto(graf);
+
 	//aselectObjects();
 	
 	if(estado->getEixoTrans()) {
@@ -1470,8 +1557,8 @@ bool picking2(float nx,float ny,float nz){
 	
 	desenhaEixos();
 	//desenhaLabirinto();
-	distribuiNos2();
-	desenhaArcos();
+	distribuiNos2(graf);
+	desenhaArcos(graf);
 	//glutPostRedisplay();
 	display();
 	//glPushMatrix();
@@ -1528,14 +1615,17 @@ int selectObjects(/*int x, int y*/)
 	
 	glMatrixMode(GL_MODELVIEW);
 
-		glLoadIdentity();
-		setCamera();
-		//glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
-		//glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
-		//glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
-		glPushMatrix();
-			desenhaLabirinto();
-		glPopMatrix();
+
+
+	glLoadIdentity();
+	setCamera();
+	//glRotatef(graus(-M_PI/2.0 - atan2(estado->getCamera()->getVelv(),modelo->getObjecto()->getVel())),1,0,0);
+	//glRotatef(graus(M_PI/2.0 - modelo->getObjecto()->getDir()),0,0,1);
+	//glTranslatef(-modelo->getObjecto()->getX(),-modelo->getObjecto()->getZ(),-modelo->getObjecto()->getY());
+	glPushMatrix();
+	desenhaLabirinto(graf);
+	glPopMatrix();
+
 
 		hits = glRenderMode(GL_RENDER);
 		if(hits > 0)
@@ -1711,27 +1801,57 @@ Nos camPos()
 
 
 
+void motionNavigateSubWindow(int x, int y)
+{
+	int dif;
+	dif  = y - estado->getYMouse();
+	if(dif > 0)
+	{
+		estado->getCamera()->setDirLat(estado->getCamera()->getDirLat() - 0.001/*dif*rad(EYE_ROTATION)*/);
+		if(estado->getCamera()->getDirLat() < -rad(90))
+			estado->getCamera()->setDirLat(rad(90));
+	}
+	if(dif < 0)
+		estado->getCamera()->setDirLat(estado->getCamera()->getDirLat() + 0.001/*abs(dif)*rad(EYE_ROTATION)*/);
+	if(estado->getCamera()->getDirLat() > rad(90))
+		estado->getCamera()->setDirLat(rad(90));
+
+	dif =  x - estado->getXMouse();
+
+	if(dif > 0)
+	{
+		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir()  - 0.001/*dif*rad(EYE_ROTATION)*/);
+		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.001/*dif*rad(EYE_ROTATION)*/);
+	}
+
+	if(dif < 0)
+	{
+		//modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() +  0.1/*abs(dif)*rad(EYE_ROTATION)*/);
+		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() + 0.1/*abs(dif)*rad(EYE_ROTATION)*/);
+	}
+}
 //definir mouse para mudar de direcao de forma a ter 2 opçoes setas e rato (right mouse button)
 void mouse(int btn, int state, int x, int y){
 	switch(btn) {
-		case GLUT_RIGHT_BUTTON :
-			if(state == GLUT_DOWN){
-				estado->setXMouse(x);
-				estado->setYMouse(y);
-				if(glutGetModifiers() & GLUT_ACTIVE_CTRL){
-					glutMotionFunc(motionZoom);
-					//printf("hello!!!");
-				}else{
-					glutMotionFunc(motionRotate);
-					//printf("hello2!!!");
-				}
-				std::cout << "Right down\n";
-			}
-			else{
-				glutMotionFunc(NULL);
-				std::cout << "Right up\n";
-			}
-			break;
+	case GLUT_RIGHT_BUTTON :
+		if(state == GLUT_DOWN){
+			estado->setXMouse(x);
+			estado->setYMouse(y);
+			//if(glutGetModifiers() & GLUT_ACTIVE_CTRL){
+			//	glutMotionFunc(motionZoom);
+			//	//printf("hello!!!");
+			//}else{
+			//	glutMotionFunc(motionRotate);
+			//	//printf("hello2!!!");
+			//}
+			//std::cout << "Right down\n";
+			glutMotionFunc(motionNavigateSubWindow);
+		}
+		else{
+			glutMotionFunc(NULL);
+			std::cout << "Right up\n";
+		}
+		break;
 		case GLUT_LEFT_BUTTON :
 			if(state == GLUT_DOWN){
 				//estado->setEixoTrans(picking(x,y));
@@ -2015,17 +2135,64 @@ void Timer(int value)
 
 
 
+int getPositionOfVectorByIdUser(vector<User_C> *userList, int idUserToSearch){
+
+	for(int i=0; i<userList->size(); i++){
+		if(userList->at(i).getIdUser() == idUserToSearch){
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+
+
+
+vector<tuple<int,vector<tuple <int,string>>,User_C>> *geraGrafo(vector<User_C> *userList){
+	//Tuple ( idVertice, listaLigacoes, Utilizador correspondente
+	vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = new vector<tuple<int,vector<tuple <int,string>>,User_C>>();
+
+	for(int i=0; i<userList->size(); i++){
+		int idV=i;
+		vector<tuple <int,string>> *vect = new vector<tuple <int,string>>();
+		for(int j=0; j<userList->at(i).getFriends()->size(); j++){		
+			int idVTemp=getPositionOfVectorByIdUser(userList , get<0>(userList->at(i).getFriends()->at(j)));
+			if(idVTemp != -1){
+				string tgNTemp=get<1>(userList->at(i).getFriends()->at(j));
+				tuple <int,string> t(idVTemp,tgNTemp);
+				vect->push_back(t);
+			}
+		}
+
+		tuple<int,vector<tuple <int,string>>,User_C> *tup = new tuple<int,vector<tuple <int,string>>,User_C> (idV,*vect,userList->at(i));
+
+		grafo->push_back(*tup);
+	}
+
+	return grafo;
+
+}
+
+
 
 
 int main(int argc, char **argv)
 {
 	WebService_Request *ws= new WebService_Request();
-	int id=ws->login("Quim","qwerty");
+	int id=ws->login("Manuel","qwerty");
+	//vector<User_C> *userList = ws->getNetworkById(id);
 	vector<User_C> *userList = ws->getNetworkById(id);
+	//vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = geraGrafo(userList);
+	graf = geraGrafo(userList);
+
+//	int id=ws->login("Quim","qwerty");
+//	vector<User_C> *userList = ws->getNetworkById(id);
 
 	// tuplo -> conjunto de dados separados
 	// get<> la dentro 0 corresponde a posiçao do int , string ou boolean
 	// 
+
 
 
      glutInit(&argc, argv);
