@@ -634,21 +634,65 @@ void distribuiNos()
 	}
 
 }
-void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
-{
-	Nos noi,nof;
 
-	for(int k  = 0; k < graf->size(); k++)
-	{
-		vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
-		for(int i = 0; i < tmpU.size(); i++)
-		{
+
+bool checkConnectionOnList(Nos noi,Nos nof, vector<tuple<Nos,Nos>> * lig){
+	tuple<Nos,Nos> *t1 = new tuple<Nos,Nos>(noi,nof);
+	tuple<Nos,Nos> *t2 = new tuple<Nos,Nos>(noi,nof);
+
+	for(int i=0; i<lig->size(); i++){
+		if((lig->at(i) == *t1) ||(lig->at(i) == *t2))
+			return false;
+	}
+
+	return true;
+}
+
+
+vector<tuple<Nos,Nos>> *getLigacoes(vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo){
+	vector<tuple<Nos,Nos>> * lig = new vector<tuple<Nos,Nos>>();
+	for(int i=0; i<grafo->size(); i++){
+		
+		vector<tuple<int,string>> tmpU = get<1>(grafo->at(i));
+		for(int j=0; j<tmpU.size(); j++){
 			//Arco arcTmp;
-			noi = get<2>(graf->at(k)).getNo();
-			nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
-			desenhaLigacao2(noi,nof);
+			Nos noi = get<2>(grafo->at(1)).getNo();
+			Nos nof = get<2>(grafo->at(get<0>(tmpU.at(i)))).getNo();
+			if(checkConnectionOnList(noi,nof, lig)){
+				tuple<Nos,Nos> *t = new tuple<Nos,Nos>(noi,nof);
+				lig->push_back(*t);
+			}
 		}
 	}
+
+}
+
+
+void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
+{
+	//Nos noi,nof;
+
+	//for(int k  = 0; k < graf->size(); k++)
+	//{
+	//	vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
+	//	for(int i = 0; i < tmpU.size(); i++)
+	//	{
+	//		//Arco arcTmp;
+	//		noi = get<2>(graf->at(k)).getNo();
+	//		nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
+	//		desenhaLigacao2(noi,nof);
+	//	}
+	//}
+
+	vector<tuple<Nos,Nos>> *grafo = getLigacoes(graf);
+
+	for(int i=0; i<grafo->size(); i++){
+
+		desenhaLigacao2(get<0>(grafo->at(i)) ,get<1>(grafo->at(i)));
+
+	}
+
+
 }
 
 
