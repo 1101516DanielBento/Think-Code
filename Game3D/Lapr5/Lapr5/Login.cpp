@@ -7,11 +7,13 @@
 // (email Richard Campbell at ulmont@bellsouth.net)
 //
 #include <stdio.h>
+#include <iostream>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
+#include "glui.h"
 
 #include <unistd.h>     // Header file for sleeping.me
 
@@ -81,12 +83,17 @@ void keyPressed(unsigned char key, int x, int y)
     }
 }
 
+void OnGUI () {
+	// Make a multiline text area that modifies stringToEdit.
+	//GLUI.TextField (Rect (10, 10, 200, 100), stringToEdit, 200);
+	GUI.TextField();
+}
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	/* Initialize GLUT state - glut will take any command line arguments that pertain to it or
      X Windows - look at its documentation at http://reality.sgi.com/mjk/spec3/spec3.html */
-	//glutInit(&argc, argv);
+	glutInit(&argc, argv);
 	//printf("entrou");
 	
 	/* Select type of Display mode:
@@ -94,40 +101,41 @@ void keyPressed(unsigned char key, int x, int y)
      RGBA color
      Alpha components supported
      Depth buffer */
-	//glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
 	
 	/* get a 640 x 480 window */
-	//glutInitWindowSize(640, 480);
+	glutInitWindowSize(640, 480);
 	
 	/* the window starts at the upper left corner of the screen */
-	//glutInitWindowPosition(0, 0);
+	glutInitWindowPosition(0, 0);
 	
 	/* Open a window */
-	//window = glutCreateWindow("Think&Code | MENU |");
+	window = glutCreateWindow("Think&Code | MENU |");
 	
 	/* Register the function to do all our OpenGL drawing. */
-	//glutDisplayFunc(&DrawGLScene);
-	
+	glutDisplayFunc(&DrawGLScene);
+	std::string a = "Hello World\nI've got 2 lines...";
+	OnGUI();
 	/* Go fullscreen.  This is as soon as possible. */
 	//    glutFullScreen();
 	
 	/* Even if there are no events, redraw our gl scene. */
-	//glutIdleFunc(&DrawGLScene);
+	glutIdleFunc(&DrawGLScene);
 	
 	/* Register the function called when our window is resized. */
-	//glutReshapeFunc(&ReSizeGLScene);
+	glutReshapeFunc(&ReSizeGLScene);
 	
 	/* Register the function called when the keyboard is pressed. */
-	//glutKeyboardFunc(&keyPressed);
+	glutKeyboardFunc(&keyPressed);
 	
 	/* Initialize our window. */
-	//InitGL(640, 480);
+	InitGL(640, 480);
 	
 	/* Start Event Processing Engine */
-	//glutMainLoop();
+	glutMainLoop();
 	
 	//printf("entrou");
 	
-	//return 1;
-//}
+	return 1;
+}
 
