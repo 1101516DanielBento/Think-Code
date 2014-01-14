@@ -6,7 +6,9 @@ using namespace std;
 char* tictactoe[] = {"swipl.ll","-s","newtictactoe.pl",NULL};
 PlEngine p(3,tictactoe);
 
-void TicTacToe::getState(){
+int computerPos, myPos;
+
+void TicTacToe::RequestAIMove(){
 	
 	PlTermv requestAIMove(0);
 	PlQuery q("makemove",requestAIMove);
@@ -16,15 +18,33 @@ void TicTacToe::getState(){
 	}
 }
 
-
-void TicTacToe::getCoords(){
-
-	string x="x/1";
-
-	PlTermv listing(1);
-	listing[0]=PlCompound(x.c_str());
-	PlQuery q("listing",listing);
+void TicTacToe::getAICoord(){
+	
+	PlTermv x(1);
+	PlQuery q("x",x);
 	while(q.next_solution()){
-		cout<<(char*)listing[1]<<endl;
+		computerPos=x[0];
 	}
+	cout<<"Position played by AI: "<<computerPos<<endl;
 }
+
+void TicTacToe::RequestPlayerMove(int pos){
+
+	string temp = to_string(pos);
+
+	PlTermv playerMove(1);
+	playerMove[0]=PlCompound(temp.c_str());
+	PlCall("makePlayerMove",playerMove);
+
+}
+
+void TicTacToe::getMyCoord(){
+
+	PlTermv o(1);
+	PlQuery q("o",o);
+	while(q.next_solution()){
+		myPos=o[0];
+	}
+	cout<<"Position played by human: "<<myPos;
+}
+
