@@ -10,7 +10,7 @@ public partial class AdminArea : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["id"] == null)
-            Response.Redirect("Login.aspx");
+            Response.Redirect("UserAccountArea.aspx");
         else
             if((int)Session["permission"] != 2) //Naõ tem permissoes
                Response.Redirect("Login.aspx");
