@@ -32,16 +32,13 @@ public partial class ChangeUserInformation : System.Web.UI.Page
             
             if (user.Username != txtNome.Text) //se for o mesmo utilizador
                 sucesso = true;
-            else
-
            
-
             if (sucesso)
             {
                 user.Username = txtNome.Text;
                 user.Email = txtEmail.Text;
 
-                //sucesso = user.Save(); // FALTA IMPLEMENTAR 
+                sucesso = usrBll.editUser((int)Session["id"], user.Username, user.Email);
 
                 if (sucesso)
                 {
