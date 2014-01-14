@@ -216,6 +216,7 @@ void initModelo()
 	modelo->setGPosLuz2(l2);
 	modelo->setCameraMode(1);
 	CriarTexturas(modelo->getTexID());
+
 }
 
 bool comparaNos(Nos n1, Nos n2){
@@ -223,6 +224,7 @@ bool comparaNos(Nos n1, Nos n2){
 	if((n1.x == n2.x) && (n1.y == n2.y) && (n1.z == n2.z))
 		return true;
 	return false;
+
 }
 
 
@@ -708,6 +710,9 @@ void distribuiNos()
 
 }
 
+
+
+
 bool checkConnectionOnList(Nos noi,Nos nof, vector<tuple<Nos,Nos>> * lig){
 
 	for(int i=0; i<lig->size(); i++){
@@ -762,32 +767,21 @@ vector<tuple<Nos,Nos>> *getLigacoes(vector<tuple<int,vector<tuple <int,string>>,
 	return lig;
 }
 
-
 void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 {
-	//Nos noi,nof;
+	Nos noi,nof;
 
-	//for(int k  = 0; k < graf->size(); k++)
-	//{
-	//	vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
-	//	for(int i = 0; i < tmpU.size(); i++)
-	//	{
-	//		//Arco arcTmp;
-	//		noi = get<2>(graf->at(k)).getNo();
-	//		nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
-	//		desenhaLigacao2(noi,nof);
-	//	}
-	//}
-
-	vector<tuple<Nos,Nos>> *grafo = getLigacoes(graf);
-
-	for(int i=0; i<grafo->size(); i++){
-
-		desenhaLigacao2(get<0>(grafo->at(i)) ,get<1>(grafo->at(i)));
-
+	for(int k  = 0; k < graf->size(); k++)
+	{
+		vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
+		for(int i = 0; i < tmpU.size(); i++)
+		{
+			//Arco arcTmp;
+			noi = get<2>(graf->at(k)).getNo();
+			nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
+			desenhaLigacao2(noi,nof);
+		}
 	}
-
-
 }
 
 
@@ -1035,87 +1029,88 @@ bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 void keyboard(unsigned char key, int x, int y)
 {
 
-	switch (key)
-	{
-	case 27 :
-		exit(0);
-		break;
-	case 'h':
-	case 'H':
-		imprime_ajuda();
-		break;
-	case 'l':
-	case 'L':
-		if(estado->getLightViewer())
-			estado->setLightViewer(0);
-		else
-			estado->setLightViewer(1);
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
-		glutPostRedisplay();
-		break;
-	case 'k':
-	case 'K':
-		estado->setLight(!estado->getLight());
-		glutPostRedisplay();
-		break;
-	case 'w':
-	case 'W':
-		glDisable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glutPostRedisplay();
-		break;
-	case 'p':
-	case 'P':
-		glDisable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-		glutPostRedisplay();
-		break;
-	case 's':
-	case 'S':
-		glEnable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glutPostRedisplay();
-		break;
-	case 'c':
-	case 'C':
-		if(glIsEnabled(GL_CULL_FACE))
-			glDisable(GL_CULL_FACE);
-		else
-			glEnable(GL_CULL_FACE);
-		glutPostRedisplay();
-		break;
-	case 'n':
-	case 'N':
-		estado->setApresentaNormais(!estado->getApresentaNormais());
-		glutPostRedisplay();
-		break;
-	case 'i':
-	case 'I':
-		//initEstado();
-		initModelo();
-		glutPostRedisplay();
-		break;
-	case 'a':
-	case 'A':
-		teclas->setA(GL_TRUE);
-		//estado.camera.center[2]-=0.2;
-		printf("carregou no a\n");
-		break;
-	case 'q':
-	case 'Q':
-		teclas->setQ(GL_TRUE);
-		//teclas->setV(GL_FALSE);
-		//estado.camera.center[2]+=0.2;
-		break;
-	case 'r':
-	case 'R':
-		teclas->setR(GL_TRUE);
-		break;
-	case 'v':
-	case 'V':
-		teclas->setV(GL_TRUE);
-		//teclas->setQ(GL_FALSE);
-		break;
+    switch (key)
+    {
+		case 27 :
+			exit(0);
+			break;
+		case 'h':
+		case 'H':
+			imprime_ajuda();
+			break;
+		case 'l':
+		case 'L':
+			if(estado->getLightViewer())
+				estado->setLightViewer(0);
+			else
+				estado->setLightViewer(1);
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, estado->getLightViewer());
+			glutPostRedisplay();
+			break;
+		case 'k':
+		case 'K':
+			estado->setLight(!estado->getLight());
+			glutPostRedisplay();
+			break;
+		case 'w':
+		case 'W':
+			glDisable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glutPostRedisplay();
+			break;
+		case 'p':
+		case 'P':
+			glDisable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			glutPostRedisplay();
+			break;
+		case 's':
+		case 'S':
+			glEnable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glutPostRedisplay();
+			break;
+		case 'c':
+		case 'C':
+			if(glIsEnabled(GL_CULL_FACE))
+				glDisable(GL_CULL_FACE);
+			else
+				glEnable(GL_CULL_FACE);
+			glutPostRedisplay();
+			break;
+		case 'n':
+		case 'N':
+			estado->setApresentaNormais(!estado->getApresentaNormais());
+			glutPostRedisplay();
+			break;
+		case 'i':
+		case 'I':
+			//initEstado();
+			initModelo();
+			glutPostRedisplay();
+			break;
+		case 'a':
+		case 'A':
+			teclas->setA(GL_TRUE);
+			//estado.camera.center[2]-=0.2;
+			printf("carregou no a\n");
+			break;
+		case 'q':
+		case 'Q':
+			teclas->setQ(GL_TRUE);
+			//teclas->setV(GL_FALSE);
+			//estado.camera.center[2]+=0.2;
+			break;
+		case 'r':
+		case 'R':
+			teclas->setR(GL_TRUE);
+			teclas->setV(GL_FALSE);
+			break;
+		case 'v':
+		case 'V':
+			teclas->setV(GL_TRUE);
+			teclas->setR(GL_FALSE);
+			break;
 	}
 	if(estado->getDebug())
 		printf("Carregou na tecla %c\n",key);
@@ -1126,22 +1121,22 @@ void keyboard(unsigned char key, int x, int y)
 void KeyUp(unsigned char key, int x, int y)
 {
 	switch (key) {
-		// ... accoes sobre largar teclas ...
-
-	case 'Q' :
-	case 'q' : teclas->setQ(GL_FALSE);
-		break;
-	case 'A' :
-	case 'a' : teclas->setA(GL_FALSE);
-		break;
-	case 'R':
-	case 'r':
-		teclas->setR(GL_FALSE);
-		break;
-	case 'V':
-	case 'v':
-		teclas->setR(GL_FALSE);
-		break;
+			// ... accoes sobre largar teclas ...
+			
+		case 'Q' :
+		case 'q' : teclas->setQ(GL_FALSE);
+			break;
+		case 'A' :
+		case 'a' : teclas->setA(GL_FALSE);
+			break;
+		case 'R':
+		case 'r':
+			teclas->setR(GL_FALSE);
+			break;
+		case 'V':
+		case 'v':
+			teclas->setV(GL_FALSE);
+			break;
 
 	}
 
@@ -1241,6 +1236,7 @@ bool login()
 	}
 	return false;
 }
+
 
 void loginWindow()
 {
@@ -1574,6 +1570,7 @@ void display(void)
 	glutSwapBuffers();
 
 }
+
 
 void display2(void)
 {
@@ -2201,6 +2198,7 @@ void Timer(int value)
 			modelo->getObjecto()->setX(nx2);
 			modelo->getObjecto()->setZ(ny2);
 			}
+
 			}*/
 		}
 
@@ -2220,6 +2218,79 @@ void Timer(int value)
 				if(tentativas>0)
 					modelo->getObjecto()->setY(ny);
 			}
+
+	
+			if(teclas->getUP())
+						{
+				
+							/*if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
+							{
+								int tentativas = 200;
+								nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+								ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+								nz = modelo->getObjecto()->getY() + 1;
+								while(!detectaColisoesLigacoes2(nx,nz,ny) && tentativas>0){
+									ny -= 0.01;tentativas--;}
+								modelo->getObjecto()->setX(nx);
+								modelo->getObjecto()->setZ(nz);
+					
+								if(tentativas>0)
+									modelo->getObjecto()->setY(ny);
+							}*/
+							if(picking())
+							 {
+							 cout<<"\ncolidiu";
+							 nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 nz = modelo->getObjecto()->getY() + 1;
+				 
+							 nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+				 
+							 ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+				 
+							 cproj=pow((nx-modelo->getObjecto()->getX()),2);
+							 desnivel=(ny-modelo->getObjecto()->getZ());
+				 
+							 if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+							 {
+							 modelo->getObjecto()->setX(nx2);
+							 modelo->getObjecto()->setZ(ny2);
+							 }
+							 Nos cameraPos = camPos();
+				 
+				 
+				 
+							 if(detetaColisaoEsferaSubir(cameraPos, nos) )
+							 {
+							 modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+							 cout<<"colisao subir\n";
+							 }else{
+							 if( detetaColisaoEsferaDescer(cameraPos,nos) )
+							 {
+							 modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
+							 cout<<"colisao descer\n";
+							 }
+							 }
+				 
+				 
+							 nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+							 ny=modelo->getObjecto()->getZ()+sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+				 
+							 nx2=(nx-modelo->getObjecto()->getX())*cos(modelo->getObjecto()->getDir())+(ny-modelo->getObjecto()->getZ())*sin(modelo->getObjecto()->getDir());
+				 
+							 ny2=(ny-modelo->getObjecto()->getZ())*cos(modelo->getObjecto()->getDir())+(nx-modelo->getObjecto()->getX())*sin(modelo->getObjecto()->getDir());
+				 
+							 cproj=pow((nx-modelo->getObjecto()->getX()),2);
+							 desnivel=(ny-modelo->getObjecto()->getZ());
+				 
+							 if(nx2>0.0 && colisaoArco(nx2, ny2,desnivel,cproj))
+							 {
+							 modelo->getObjecto()->setX(nx2);
+							 modelo->getObjecto()->setZ(ny2);
+							 }
+							 }
+						}
+
 
 
 			/*if(picking())
