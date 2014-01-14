@@ -261,7 +261,7 @@ namespace DataModel.DAL
         public int registerUser(User u)
         {
 
-            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [GameDataBase].[dbo].[User]([username],[password],[email],[name],[idPermission],[points],[active],[birthdate][MoodState])VALUES(@username,@pass,@email,@name,@idPer, @points, @active,@birth,0);SELECT SCOPE_IDENTITY()");
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [GameDataBase].[dbo].[User]([username],[password],[email],[name],[idPermission],[points],[active],[birthdate],[MoodState])VALUES(@username,@pass,@email,@name,@idPer, @points, @active,@birth,0);SELECT SCOPE_IDENTITY()");
             string pass = SimpleEncryptor.Encrypt(u.Password, PasswordEncryptionKey);
             int act = Convert.ToInt32(u.Active);
             sqlCmd.Parameters.AddWithValue("@username", "'" + u.Username + "'");
