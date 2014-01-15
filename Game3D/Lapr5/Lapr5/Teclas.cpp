@@ -18,6 +18,9 @@ Teclas::Teclas()
 	a = GL_FALSE;
 	r = GL_FALSE;
 	v = GL_FALSE;
+	g = GL_FALSE;
+	e = GL_FALSE;
+	l = GL_FALSE;
 }
 
 Teclas* Teclas::clone() const
@@ -103,4 +106,34 @@ GLboolean Teclas::getLEFT() const
 GLboolean Teclas::getRIGHT() const
 {
 	return right;
+}
+
+GLboolean Teclas::getG() const
+{
+	return g;
+}
+
+void Teclas::setG(GLboolean g)
+{
+	this->g=g;
+}
+
+GLboolean Teclas::getE() const
+{
+	return e;
+}
+
+void Teclas::setE(GLboolean e)
+{
+	this->e=e;
+}
+
+GLboolean Teclas::getL() const
+{
+	return l;
+}
+
+void Teclas::setL(GLboolean l)
+{
+	this->l=l;
 }
