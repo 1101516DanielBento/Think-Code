@@ -20,7 +20,7 @@ Teclas::Teclas()
 	v = GL_FALSE;
 	g = GL_FALSE;
 	e = GL_FALSE;
-	l = GL_FALSE;
+	m = GL_FALSE;
 }
 
 Teclas* Teclas::clone() const
@@ -128,12 +128,12 @@ void Teclas::setE(GLboolean e)
 	this->e=e;
 }
 
-GLboolean Teclas::getL() const
+GLboolean Teclas::getM() const
 {
-	return l;
+	return m;
 }
 
-void Teclas::setL(GLboolean l)
+void Teclas::setM(GLboolean m)
 {
-	this->l=l;
+	this->m=m;
 }

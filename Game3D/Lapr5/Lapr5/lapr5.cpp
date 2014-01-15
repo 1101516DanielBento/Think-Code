@@ -145,7 +145,7 @@ Estado *estado = new Estado();
 Estado *estadominimapa = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
-int obj = 0,mainWindow,sw1;
+int obj = 0,mainWindow,sw1,gameMode = 0;
 
 vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf = new vector<tuple<int,vector<tuple<int,string>>,User_C>>();
 
@@ -324,16 +324,21 @@ void myInit()
 	gluQuadricNormals(modelo->getQuad(), GLU_OUTSIDE);
 
 
-	//if(gameMode == 1)//modo avançado
-	//{
-	distribuiNos2(graf);
-	//}else{
-	//le o grafo exemplo
-	leGrafo();
-	//}
-	modelo->getObjecto()->setX(get<2>(graf->at(0)).getNo().x);
-	modelo->getObjecto()->setY(get<2>(graf->at(0)).getNo().z + K_ESFERA*RAIO_NO/2.0+1.0);
-	modelo->getObjecto()->setZ(get<2>(graf->at(0)).getNo().y);
+	if(gameMode >= 1)//modo avançado
+	{
+		distribuiNos2(graf);
+		modelo->getObjecto()->setX(get<2>(graf->at(0)).getNo().x);
+		modelo->getObjecto()->setY(get<2>(graf->at(0)).getNo().z + K_ESFERA*RAIO_NO/2.0+1.0);
+		modelo->getObjecto()->setZ(get<2>(graf->at(0)).getNo().y);
+
+	}else{
+		//le o grafo exemplo
+		leGrafo();
+		modelo->getObjecto()->setX(nos[0].x);
+		modelo->getObjecto()->setY(nos[0].z + K_ESFERA*RAIO_NO/2.0+1.0);
+		modelo->getObjecto()->setZ(nos[0].y);
+	}
+
 
 	//por varaiaveis de teste
 }
@@ -351,6 +356,9 @@ void imprime_ajuda(void)
 	printf("p,P - PolygonMode Point \n");
 	printf("c,C - Liga/Desliga Cull Face \n");
 	printf("n,N - Liga/Desliga apresenta?o das normais \n");
+	printf("e,E - Jogar Hangman \n");
+	printf("g,G - Jogar TicTacToe \n");
+	printf("l,L - Jogar Labirinto \n");
 	printf("******* grafos ******* \n");
 	printf("F1  - Grava grafo do ficheiro \n");
 	printf("F2  - L grafo para ficheiro \n");
@@ -686,7 +694,7 @@ void desenhaNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 
 
 
-
+//incompleto
 void distribuiNos()
 {
 	GLdouble raio;
@@ -695,22 +703,22 @@ void distribuiNos()
 
 	GLdouble inc_lat = M_PI/(GLdouble) NP;
 
-	for(int i = 0; i < NF; i++)//percorre o num de fatias
+	for(int i = 0; i < numNos; i++)//percorre o num de fatias
 	{
 		GLdouble lat = -M_PI/2.0 + M_PI/(GLdouble)NP/2.0;
 
-		for(int j = 0; j < NP; j++)//percorre o num de partiçoes
-		{
-			if(j < numNos)//desenha esfera
+		//for(int j = 0; j < NP; j++)//percorre o num de partiçoes
+		//{
+			if(i < numNos)//desenha esfera
 			{
-				raio = (K_ESFERA*nos[j].largura)/2.0;
-				nos[j].x = 30 * cos(lng)*sin(lat);
-				nos[j].z = 30 * sin(lng)*sin(lat);
-				nos[j].y = 30 * cos(lat);
-				desenhaNos(nos[j].x,nos[j].z,nos[j].y,raio);
+				raio = (K_ESFERA*nos[i].largura)/2.0;
+				nos[i].x = 30 * cos(lng)*sin(lat);
+				nos[i].z = 30 * sin(lng)*sin(lat);
+				nos[i].y = 30 * cos(lat);
+				desenhaNos(nos[i].x,nos[i].z,nos[i].y,raio);
 				lat+=inc_lat;
 			}
-		}
+		//}
 		lng+=inc_lng;
 	}
 
@@ -793,6 +801,36 @@ void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 	}
 }
 
+void desenhaLabirinto(){
+
+	glPushMatrix();
+	glTranslatef(0,0,0.05);
+	//glScalef(5,5,5);
+
+	/*for(int i=0; i<numNos; i++){
+	glPushMatrix();
+	material(red_plastic);
+	glTranslatef(nos[i].x,nos[i].y,nos[i].z);
+	//glutSolidCube(0.5);
+	glutSolidSphere((K_ESFERA/2.0),20,20);
+	glPopMatrix();
+	//desenhaNo(i);
+	*/
+	distribuiNos();
+	
+	//distribuiNos2(graf);
+	//desenhaNos2(graf);
+	//desenhaArcos(graf);
+	//desenhaNos();
+
+	//material(emerald);
+	for(int i=0; i<numArcos; i++){
+		desenhaLigacao(arcos[i]);
+	}
+	//Caminho();
+	//}
+	glPopMatrix();
+}
 
 void desenhaLabirinto(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf){
 
@@ -1136,12 +1174,17 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'g':
 	case'G':
+		teclas->setG(GL_TRUE);
 		//sw1 = glutCreateSubWindow(mainWindow,10,10,WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
 		break;
 	case 'e':
 	case 'E':
 		teclas->setE(GL_TRUE);
 		//glutDestroyWindow(sw1);
+		break;
+	case 'm':
+	case 'M':
+		teclas->setM(GL_TRUE);
 		break;
 	}
 	if(estado->getDebug())
@@ -1178,7 +1221,10 @@ void KeyUp(unsigned char key, int x, int y)
 	case 'E':
 		teclas->setE(GL_FALSE);
 		break;
-
+	case 'm':
+	case 'M':
+		teclas->setM(GL_FALSE);
+		break;
 	}
 
 	if(estado->getDebug())
@@ -1596,8 +1642,10 @@ void display(void)
 	//desenhaSolo();
 	desenhaSkyBox();
 	//desenhaEixos();
-
-	desenhaLabirinto(graf);
+	if(gameMode < 1)
+		desenhaLabirinto();
+	else
+		desenhaLabirinto(graf);
 
 
 	//aselectObjects();
@@ -2140,16 +2188,21 @@ void Timer(int value)
 	if(teclas->getG())
 	{
 		cout<<"\nTicTacToe\n";
-		thread ticTactoe();
+		system("TicTacToe.exe");
 
 	}
 
 	if(teclas->getE())
 	{
 		cout<<"\nHangman!\n";
-		system(".\HangMan.exe");
+		system("HangMan.exe");
 	}
 
+	if(teclas->getM())
+	{
+		cout<<"\nLabirinto 3D!\n!";
+		system("Labirinto.exe");
+	}
 	switch(modelo->getCameraMode())
 	{
 	case CAMERA_LIVRE:
@@ -2187,55 +2240,55 @@ void Timer(int value)
 
 		/*if(teclas->getUP())
 		{
-			nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-			ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
-			nz = modelo->getObjecto()->getY() + 1;
-			if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
+		nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+		ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+		nz = modelo->getObjecto()->getY() + 1;
+		if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
 
-			{
+		{
 
-				modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
-				estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
+		modelo->getObjecto()->setDir(modelo->getObjecto()->getDir() - 0.1);
+		estado->getCamera()->setDirLong(estado->getCamera()->getDirLong() - 0.1);
 
 
-			}
+		}
 
-			}*/
+		}*/
 
-			if(teclas->getUP())
-			{
-				Nos cameraPos = camPos();
+		if(teclas->getUP())
+		{
+			Nos cameraPos = camPos();
 
-				//condições para os nós
-				if(picking()){
-					cout <<"\n\tCOLISAO!";
-					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-					{
-						cout<<"Não ha colisao na esfera\n";
-					}
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-				}else{
-					modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-				}
-			}
-			if(teclas->getDOWN())
-			{
-				Nos cameraPos = camPos();
-				if(picking())
+			//condições para os nós
+			if(picking()){
+				cout <<"\n\tCOLISAO!";
+				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
 				{
-					if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-					{
-						cout<<"Não ha colisao na esfera\n";
-					}
-					modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-				}else{
-					modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-					modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+					cout<<"Não ha colisao na esfera\n";
 				}
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+			}else{
+				modelo->getObjecto()->setX(modelo->getObjecto()->getX() + cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() + sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
 			}
+		}
+		if(teclas->getDOWN())
+		{
+			Nos cameraPos = camPos();
+			if(picking())
+			{
+				if(!colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
+				{
+					cout<<"Não ha colisao na esfera\n";
+				}
+				modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
+			}else{
+				modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+				modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
+			}
+		}
 
-			break;
+		break;
 	case CAMERA_RASANTE:
 
 		if(teclas->getLEFT())
@@ -2327,15 +2380,15 @@ void Timer(int value)
 	default:
 		break;
 
-		}
-
-
-
-		if(!estado->getDebug())
-			printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
-
-		glutPostRedisplay();
 	}
+
+
+
+	if(!estado->getDebug())
+		printf("Velocidade %.2f \n",modelo->getObjecto()->getVel());
+
+	glutPostRedisplay();
+}
 
 
 
@@ -2386,13 +2439,35 @@ int main(int argc, char **argv)
 
 	char **argvT = argv;
 	char * x= argvT[1];
-
+	//int id = atoi(x);
+	string username, password;
+	int id = 0;
 	WebService_Request *ws= new WebService_Request();
-	int id=ws->login("Manuel","qwerty");
-	//vector<User_C> *userList = ws->getNetworkById(id);
-	vector<User_C> *userList = ws->getNetworkById(id);
-	//vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = geraGrafo(userList);
-	graf = geraGrafo(userList);
+
+	cout<<"1 - Modo Avançado"<<endl<<"0 - Modo Normal"<<endl;
+	cin>>gameMode;
+	switch(gameMode)
+	{
+	case 1:
+		while(id < 1){
+			cout<<"Username : ";
+			cin>>username;
+			cout<<"\nPassword : ";
+			cin>>password;
+			id=ws->login(username,password);
+			if(id > 0){
+				//vector<User_C> *userList = ws->getNetworkById(id);
+				vector<User_C> *userList = ws->getNetworkById(id);
+				//vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = geraGrafo(userList);
+				graf = geraGrafo(userList);
+			}else{
+				cout<<"Login Falhou! Password ou Username Errado!"<<endl;
+			}
+		}
+		break;
+	default:
+		break;
+	}
 
 	//	int id=ws->login("Quim","qwerty");
 	//	vector<User_C> *userList = ws->getNetworkById(id);
