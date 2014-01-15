@@ -20,8 +20,8 @@ namespace GameManager
         private void btnPlayOffline_Click(object sender, EventArgs e)
         {
                 this.Hide();
-                MainForm frmMain = new MainForm();
-                frmMain.ShowDialog();
+                //MainForm frmMain = new MainForm();
+                //frmMain.ShowDialog();
         
         }
         
@@ -39,17 +39,19 @@ namespace GameManager
                     lblStatus.Text = "Connecting to server...";
                     Application.DoEvents();
 
-                    bool userIsValid = ValidaUtilizador(txtUsername.Text, txtPassword.Text);
+                    int userIsValid_Id = ValidaUtilizador(txtUsername.Text, txtPassword.Text);
 
-                    if (userIsValid)
+                    if (userIsValid_Id != -1)
                     {
-                        MainForm frmMain = new MainForm();
-                        frmMain.Username = txtUsername.Text;
-                        frmMain.Password = txtPassword.Text;
-                        frmMain.IsOnline = true;
+                        MessageBox.Show("Autenticated!");
 
-                        this.Hide();
-                        frmMain.ShowDialog();
+                        //MainForm frmMain = new MainForm();
+                        //frmMain.Username = txtUsername.Text;
+                        //frmMain.Password = txtPassword.Text;
+                        //frmMain.IsOnline = true;
+
+                        //this.Hide();
+                        //frmMain.ShowDialog();
                     }
                     else
                         MessageBox.Show("Invalid username and/or password!", "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -65,11 +67,11 @@ namespace GameManager
             lblStatus.Text = "";
         }
 
-        private bool ValidaUtilizador(string username, string password)
+        private int ValidaUtilizador(string username, string password)
         {
-            WebService classProxy = new WebService();
+            ServiceReference1.GameWebServiceClient client = new ServiceReference1.GameWebServiceClient();
 
-            return classProxy.ValidaUtilizador(username, password);
+            return client.login(username, password, "ThinkCode");
         }
 
     }

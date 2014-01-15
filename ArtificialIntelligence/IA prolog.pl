@@ -56,18 +56,18 @@ user_tags(neves, livros).
 
 %Relações (GRAFO)
 
-relacao(tiago,fred,100).
-relacao(tiago,pedro,60).
-relacao(tiago,daniel,70).
-relacao(tiago,luis,80).
-relacao(tiago,daniel,80).
-relacao(tiago,daniela,70).
-relacao(fred,jose,100).
-relacao(fred,neves,80).
-relacao(luis,daniela,70).
-relacao(daniela,francisco,70).
-relacao(pedro,rocha,100).
-relacao(rocha,antonio,90).
+relacao(tiago,fred,'Conhecido').
+relacao(tiago,pedro,'Amigo').
+relacao(tiago,daniel,'Desconhecido').
+relacao(tiago,luis,'Familia').
+relacao(tiago,daniel,'Other').
+relacao(tiago,daniela,'Amigo').
+relacao(fred,jose,'').
+relacao(fred,neves,'Familia').
+relacao(luis,daniela,'Amigo').
+relacao(daniela,francisco,'').
+relacao(pedro,rocha,'Conhecido').
+relacao(rocha,antonio,'Other').
 %------------------pesquisas para amigos------------------
 %amigos diretos de um utilizador
 amigos_diretos(Utilizador, L):-
@@ -109,11 +109,7 @@ verificaTagComum([_|T],LTagsUtilizador,Valor):-
 verificaTagComum([],_,_).
 
 
-%----------------------------------------------------------
-
-
-
-%tamanho da rede
+%-------------tamanho da rede ate ao terceiro nivel-----------
 
 tamanho_rede_utilizador(Utilizador,LF):-
 	user(Utilizador),
@@ -232,7 +228,7 @@ determinar_caminho_mais_forte22(UtilizadorDestino,[[(Pessoa,Peso)|Caminho]|R],LF
 
 cria(_,[],[]).
 cria(O,[(Y,_)|Ys],R):-member(Y,O),cria(O,Ys,R).
-cria(O,[(Y,S)|Ys],[[(Y,S)|O]|R]):-cria(O,Ys,R).
+cria(O,[(Y,S)|Ys],[[(Y,NS)|O]|R]):-traduz(S,NS),cria(O,Ys,R).
 
 soma(L,0):-length(L,1).
 soma([(_,Peso)|Caminho],PesoTotal):-soma(Caminho,P),PesoTotal is P +Peso.
@@ -244,3 +240,24 @@ maior([[X|Xs],[Y|_]|R],P):-X>Y,
 	maior([[X|Xs]|R],P).
 maior([[X|_],[Y|Ys]|R],P):-Y>=X,
 	maior([[Y|Ys]|R],P).
+
+
+traduz(Peso,Npeso):-Peso == 'Familia', Npeso is 0+10.
+traduz(Peso,Npeso):-Peso == 'Amigo', Npeso is 0+8.
+traduz(Peso,Npeso):-Peso == 'Conhecido', Npeso is 0+6.
+traduz(Peso,Npeso):-Peso == 'Desconhecido', Npeso is 0+4.
+traduz(Peso,Npeso):-Peso == 'Other', Npeso is 0+2.
+traduz(Peso,Npeso):-Peso == '', Npeso is 0+2.
+traduz(_,Npeso):-Npeso is 0+2.
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,12 +1,13 @@
 #include <SWI-cpp.h>
-
+#include <string>
 
 class TicTacToe{
 
 	private:
 
 	public:
-		void getState();
-		void getCoords();
-
+		void RequestAIMove();
+		void RequestPlayerMove(int pos);
+		int getAICoord();
+		void getMyCoord();
 };
