@@ -6,7 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
-#include <GL/glaux.h>
+#include <GL/GLAux.h>
 //#include <AL/alut.h>
 #include "grafos.h"
 #include "Camera.h"
@@ -144,7 +144,7 @@ Estado *estado = new Estado();
 Estado *estadominimapa = new Estado();
 Modelo *modelo = new Modelo();
 Teclas *teclas = new Teclas();
-int obj = 0;
+int obj = 0,mainWindow,sw1;
 
 vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf = new vector<tuple<int,vector<tuple<int,string>>,User_C>>();
 
@@ -254,6 +254,7 @@ void distribuiNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)//f
 
 	Nos nu;
 	int numVert = graf->size();
+	int inc = 10;
 	GLdouble inc_lng = 2.0*M_PI/(GLdouble)numVert;
 	GLdouble inc_lat = M_PI/(GLdouble) numVert;
 
@@ -272,6 +273,7 @@ void distribuiNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)//f
 			//nu.z = (j*3.5445 + 19) * sin(-lat);
 			int z = rand() % 20;
 			nu.z = z;
+			//nu.z = 0;
 			//nu.x = getRandNumber();//* cos(lng) * sin(lat);
 			//nu.y = getRandNumber();//* cos(lat);
 			//nu.z = getRandNumber();//* sin(lng)*sin(lat);
@@ -288,6 +290,7 @@ void distribuiNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)//f
 		lat+=inc_lat;
 
 		lng+=inc_lng;
+		//inc+=10;
 	}
 }
 void myInit()
@@ -295,7 +298,7 @@ void myInit()
 
 	GLfloat LuzAmbiente[]={0.5,0.5,0.5, 0.0};
 	estado->setOrtho(GL_FALSE);
-	estado->setTimer(20);
+	estado->setTimer(10);
 
 	//glClearColor (0.0, 0.0, 0.0, 0.0);
 
@@ -318,16 +321,16 @@ void myInit()
 	gluQuadricDrawStyle(modelo->getQuad(),GLU_FILL);
 	gluQuadricNormals(modelo->getQuad(), GLU_OUTSIDE);
 
-
-	distribuiNos2(graf);
-
-
-	//le o grafo exemplo
-	leGrafo();
-
-	modelo->getObjecto()->setX(nos[0].x);
-	modelo->getObjecto()->setY(nos[0].z + K_ESFERA*nos[0].largura/2.0+1.0);
-	modelo->getObjecto()->setZ(nos[0].y);
+	//if(gameMode == 1)//modo avançado
+	//{
+		distribuiNos2(graf);
+	//}else{
+		//le o grafo exemplo
+		leGrafo();
+	//}
+	modelo->getObjecto()->setX(get<2>(graf->at(0)).getNo().x);
+	modelo->getObjecto()->setY(get<2>(graf->at(0)).getNo().z + K_ESFERA*RAIO_NO/2.0+1.0);
+	modelo->getObjecto()->setZ(get<2>(graf->at(0)).getNo().y);
 
 	//por varaiaveis de teste
 }
@@ -608,7 +611,6 @@ void desenhaLigacao2(Nos noi, Nos nof)
 			material(red_plastic);
 			desenhaCilindro(noi.x,noi.y,noi.z,nof.x,nof.y,nof.z,noi.largura);
 		}else{
-			//QUE É ISTO??? OBVIAMENTE E O ARCO DIAGONAL
 			noi=noi;
 			nof=nof;
 			material(red_plastic);
@@ -667,6 +669,7 @@ void desenhaNos2(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 		glPushMatrix();
 		material(azul);
 		glTranslatef(get<2>(graf->at(j)).getNo().x,get<2>(graf->at(j)).getNo().y,get<2>(graf->at(j)).getNo().z);
+		glLoadName(j);
 		glutSolidSphere(raio,NF,NP);
 		//glTranslatef(nos[i].x,nos[i].y,nos[i].z);
 		//glPushName(100+i);
@@ -770,7 +773,7 @@ vector<tuple<Nos,Nos>> *getLigacoes(vector<tuple<int,vector<tuple <int,string>>,
 void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 {
 	Nos noi,nof;
-
+	int h = graf->size();
 	for(int k  = 0; k < graf->size(); k++)
 	{
 		vector<tuple<int,string>> tmpU = get<1>(graf->at(k));
@@ -779,6 +782,7 @@ void desenhaArcos(vector<tuple<int,vector<tuple<int,string>>,User_C>> *graf)
 			//Arco arcTmp;
 			noi = get<2>(graf->at(k)).getNo();
 			nof = get<2>(graf->at(get<0>(tmpU.at(i)))).getNo();
+			glLoadName(h + i);
 			desenhaLigacao2(noi,nof);
 		}
 	}
@@ -980,6 +984,20 @@ void setCamera(){
 
 }
 
+void setCamera2()
+{
+	estado->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	estado->getCamera()->setCenterY(modelo->getObjecto()->getZ() - sin(estado->getCamera()->getDirLong() * cos(estado->getCamera()->getDirLat())));
+	estado->getCamera()->setCenterZ(modelo->getObjecto()->getY() + 2 + sin(estado->getCamera()->getDirLat()));
+	//}
+
+	putLights((GLfloat*)white_light);
+
+	gluLookAt(modelo->getObjecto()->getX()  , modelo->getObjecto()->getZ() , modelo->getObjecto()->getY() + 2 ,
+		estado->getCamera()->getCenterX() , estado->getCamera()->getCenterY() , estado->getCamera()->getCenterZ() ,
+		0,0,1);
+}
+
 //not done
 bool detectaColisoesLigacoes(GLfloat nx, GLfloat ny, GLfloat nz)
 {
@@ -1111,6 +1129,14 @@ void keyboard(unsigned char key, int x, int y)
 			teclas->setV(GL_TRUE);
 			teclas->setR(GL_FALSE);
 			break;
+		case 'g':
+		case'G':
+			//sw1 = glutCreateSubWindow(mainWindow,10,10,WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
+			break;
+		case 'e':
+		case 'E':
+			//glutDestroyWindow(sw1);
+			break;
 	}
 	if(estado->getDebug())
 		printf("Carregou na tecla %c\n",key);
@@ -1136,6 +1162,14 @@ void KeyUp(unsigned char key, int x, int y)
 		case 'V':
 		case 'v':
 			teclas->setV(GL_FALSE);
+			break;
+		case 'g':
+		case 'G':
+			teclas->setG(GL_FALSE);
+			break;
+		case 'e':
+		case 'E':
+			teclas->setE(GL_FALSE);
 			break;
 
 	}
@@ -1395,9 +1429,9 @@ void minimapaView()
 	estadominimapa->getCamera()->setCenterX(0);
 	estadominimapa->getCamera()->setCenterY(0);
 
-	estadominimapa->getCamera()->setEyeZ(50);
+	estadominimapa->getCamera()->setEyeZ(0);
 	estadominimapa->getCamera()->setEyeX(0);
-	estadominimapa->getCamera()->setEyeY(0);
+	estadominimapa->getCamera()->setEyeY(50);
 
 
 	//estadominimapa->getCamera()->setCenterX(modelo->getObjecto()->getX() + cos(estadominimapa->getCamera()->getDirLong() * cos(estadominimapa->getCamera()->getDirLat())));
@@ -1406,7 +1440,7 @@ void minimapaView()
 
 	estadominimapa->getCamera()->setCenterX(0);
 	estadominimapa->getCamera()->setCenterZ(0);
-	estadominimapa->getCamera()->setCenterY(50);
+	estadominimapa->getCamera()->setCenterY(0);
 
 	putLights((GLfloat*)white_light);
 
@@ -1547,11 +1581,11 @@ void display(void)
 	glLoadIdentity();
 
 	setCamera();
-	material(slate);
+	//material(slate);
 
 	//desenhaSolo();
 	desenhaSkyBox();
-	desenhaEixos();
+	//desenhaEixos();
 
 
 	desenhaLabirinto(graf);
@@ -1579,23 +1613,25 @@ void display2(void)
 	glLoadIdentity();
 
 	setCamera();
-	material(slate);
+	//material(slate);
 
-	desenhaSolo();
+	//desenhaSolo();
 	//desenhaSkyBox();
-	desenhaEixos();
+	//desenhaEixos();
 
+	desenhaNos2(graf);
+	desenhaArcos(graf);
 
-	desenhaLabirinto(graf);
+//	desenhaLabirinto(graf);
 
 	//aselectObjects();
 
-	if(estado->getEixoTrans()) {
+	//if(estado->getEixoTrans()) {
 		//desenha plano de translacção
 		//std::cout << "Translate... " << estado->getEixoTrans() << endl;
-		desenhaPlanoDrag(estado->getEixoTrans());
+		//desenhaPlanoDrag(estado->getEixoTrans());
 
-	}
+	//}
 	desenhaMinimapa(glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_INIT_WINDOW_HEIGHT));
 
 	//glDepthMask(GL_TRUE);
@@ -1612,7 +1648,10 @@ int picking(/*int x, int y*/){
 	int i, n, objid=0;
 	double zmin = 10.0;
 	GLuint buffer[100], *ptr;
-
+//	GLint viewport[4];
+//	GLdouble modelview[16];
+//	GLdouble projection[16];
+//	GLdouble posX, posY, posZ;
 	glSelectBuffer(100, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
@@ -1623,7 +1662,7 @@ int picking(/*int x, int y*/){
 	//setProjection(estado->getCamera()->getEyeX(),estado->getCamera()->getEyeZ(),GL_TRUE);
 
 	//colisao
-	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2*VELv);
+	glOrtho(-DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, -DIMENSAO_CAMARA/2, DIMENSAO_CAMARA/2, 0.0, DIMENSAO_CAMARA/2 + modelo->getObjecto()->getVel());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -1635,8 +1674,12 @@ int picking(/*int x, int y*/){
 	//distribuiNos2();
 	//desenhaArcos();
 	//setCamera();
+	//desenhaNos2(graf);
+	//desenhaArcos(graf);
+	//display();
+	//Nos noAux;
 	display();
-
+	//glutPostRedisplay();
 	n = glRenderMode(GL_RENDER);
 	if (n > 0)
 	{
@@ -1649,7 +1692,16 @@ int picking(/*int x, int y*/){
 			}
 			ptr += 3 + ptr[0]; // ptr[0] contem o número de nomes (normalmente 1); 3 corresponde a numnomes, zmin e zmax
 		}
+		/*glGetDoublev(GL_MODELVIEW_MATRIX,modelview);
+		glGetDoublev(GL_PROJECTION_MATRIX,projection);
+		glGetIntegerv(GL_VIEWPORT, viewport);
+		gluUnProject(estado->getCamera()->getCenterX(),estado->getCamera()->getCenterY(),estado->getCamera()->getCenterZ(),modelview,projection,viewport,&posX,&posY,&posZ);
+		noAux.x = posX;
+		noAux.y = posY;
+		noAux.z = posZ;*/
 	}
+
+
 
 
 	glMatrixMode(GL_PROJECTION); //repõe matriz projecção
@@ -1666,29 +1718,34 @@ bool picking2(float nx,float ny,float nz){
 	double zmax = 30.0;
 
 	GLuint buffer[100], *ptr;
-
+	GLint vport[4];
+	GLdouble model[16];
+	GLdouble proj[16];
+	glGetIntegerv(GL_VIEWPORT, vport);
 	glSelectBuffer(100, buffer);
 	glRenderMode(GL_SELECT);
 	glInitNames();
 
 	glMatrixMode(GL_PROJECTION);
+	glGetDoublev(GL_PROJECTION, proj);
 	glPushMatrix(); // guarda a projecção
 	glLoadIdentity();
 	glOrtho(nx-modelo->getObjecto()->getVel(), nx+modelo->getObjecto()->getVel(), nz-modelo->getObjecto()->getVel(), nz+modelo->getObjecto()->getVel(), zmax, zmin);
 	glMatrixMode(GL_MODELVIEW);
+	glGetDoublev(GL_MODELVIEW, model);
 	//glLoadIdentity();
 	//glRotatef(graus(-M_PI/2)-atan2(1.0, 1.0), 1, 0, 0);
 	//glRotatef(graus((M_PI/2)-modelo->getObjecto()->getDir()), 0, 0, 1);
 	//glTranslatef(-modelo->getObjecto()->getX(), -modelo->getObjecto()->getY(), -modelo->getObjecto()->getZ());
 
 	//setCamera();
-	desenhaSolo();
+	//desenhaSolo();
 
-	desenhaEixos();
+	//desenhaEixos();
 	//desenhaLabirinto();
 	//distribuiNos2(graf);
-	desenhaNos2(graf);
-	desenhaArcos(graf);
+	//desenhaNos2(graf);
+	//desenhaArcos(graf);
 	//glutPostRedisplay();
 	display();
 	//glPushMatrix();
@@ -1709,7 +1766,7 @@ bool picking2(float nx,float ny,float nz){
 
 		}
 
-
+		//gluUnProject(nx,ny,nz,model,proj,vport,modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY());
 	}
 
 	//glPopMatrix();
@@ -2133,7 +2190,9 @@ void Timer(int value)
 
 		if(teclas->getUP())
 		{
-
+				nx=modelo->getObjecto()->getX()+cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+				ny=modelo->getObjecto()->getZ()-sin(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel();
+				nz = modelo->getObjecto()->getY() + 1;
 			if(detectaColisoesLigacoes(modelo->getObjecto()->getX(),modelo->getObjecto()->getZ(),modelo->getObjecto()->getY()) )
 			{
 				int tentativas = 200;
@@ -2200,6 +2259,11 @@ void Timer(int value)
 			}
 
 			}*/
+
+			if(picking2(nx,ny,nz))
+			{
+				
+			}
 		}
 
 		if(teclas->getDOWN())
@@ -2383,6 +2447,10 @@ vector<tuple<int,vector<tuple <int,string>>,User_C>> *geraGrafo(vector<User_C> *
 
 int main(int argc, char **argv)
 {
+
+	char **argvT = argv;
+	char * x= argvT[1];
+
 	WebService_Request *ws= new WebService_Request();
 	int id=ws->login("Manuel","qwerty");
 	//vector<User_C> *userList = ws->getNetworkById(id);
@@ -2390,6 +2458,8 @@ int main(int argc, char **argv)
 	//vector<tuple<int,vector<tuple <int,string>>,User_C>> *grafo = geraGrafo(userList);
 	graf = geraGrafo(userList);
 	
+	
+
 
 	//	int id=ws->login("Quim","qwerty");
 	//	vector<User_C> *userList = ws->getNetworkById(id);
@@ -2406,9 +2476,12 @@ int main(int argc, char **argv)
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
-	glutCreateWindow("Think&Code");
+	//	glutCreateWindow("Think&Code");
+	mainWindow = glutCreateWindow("Think&Code");
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(display);
+
+	
 
 
 	glutTimerFunc(estado->getTimer(), Timer, 0);
