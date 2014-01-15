@@ -49,8 +49,8 @@
             <asp:Label ID="Label2" runat="server" Font-Bold="True" CssClass="p_sucesso"> Friends management :</asp:Label>
                 <br />
                 <br />
-                <a href="ShowFriendsList.aspx" class="link_normal_formularios"> Show friends list</a></p>
-
+            <p class="p_texto_campo_formulario_geral"><a href="ShowFriendsList.aspx" class="link_normal_formularios"> Show friends list</a></p>
+            <p class="p_texto_campo_formulario_geral"><a href="SuggestedFriends.aspx" class="link_normal_formularios"> Suggested friends</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriends.aspx" class="link_normal_formularios">Show friends Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="TagCloudFriendRelations.aspx" class="link_normal_formularios">Show relations Tag Cloud</a></p>
             <p class="p_texto_campo_formulario_geral"><a href="PendingRequest.aspx" class="link_normal_formularios">Show pending friend requests</a></p>
