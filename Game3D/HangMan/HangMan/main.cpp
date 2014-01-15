@@ -6,7 +6,7 @@
 #else
 #include <glut.h>
 #endif
-#include "GL/glu.h"
+#include <GL/glu.h>
 #include "RGBpixmap.h"
 #include <iostream>
 #include <glaux.h>
@@ -319,7 +319,7 @@ void InitBoard(){
 		h->getHint();
 		word=h->Word();
 		hint="Pista: " + h->Hint();
-		cout<<"Word: "<<word<<endl;
+		//cout<<"Word: "<<word<<endl;
 		h->WordChars();
 		wordLoaded=true;
 	}
