@@ -40,15 +40,16 @@
 using namespace std;
 
 string word, hint, printSucess;
+int idUser=0;
 int wrong=0,sucess=0;
 char* letters[]={"images\\a.bmp","images\\b.bmp","images\\c.bmp","images\\d.bmp",
-				"images\\e.bmp","images\\f.bmp","images\\g.bmp","images\\h.bmp",
-				"images\\i.bmp","images\\j.bmp","images\\k.bmp","images\\l.bmp",
-				"images\\m.bmp","images\\n.bmp","images\\o.bmp","images\\p.bmp",
-				"images\\q.bmp","images\\r.bmp","images\\s.bmp","images\\t.bmp",
-				"images\\u.bmp","images\\v.bmp","images\\w.bmp","images\\x.bmp",
-				"images\\y.bmp",
-				"images\\z.bmp"};
+	"images\\e.bmp","images\\f.bmp","images\\g.bmp","images\\h.bmp",
+	"images\\i.bmp","images\\j.bmp","images\\k.bmp","images\\l.bmp",
+	"images\\m.bmp","images\\n.bmp","images\\o.bmp","images\\p.bmp",
+	"images\\q.bmp","images\\r.bmp","images\\s.bmp","images\\t.bmp",
+	"images\\u.bmp","images\\v.bmp","images\\w.bmp","images\\x.bmp",
+	"images\\y.bmp",
+	"images\\z.bmp"};
 
 char chars[]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 int textID[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26};
@@ -80,11 +81,11 @@ void drawBackground(){
 }
 
 void drawHanger(){
-	
+
 	glPushMatrix();
 
 	glTranslatef(500,300,0);
-	
+
 	glBegin(GL_QUADS);
 	glVertex2f(0,230);
 	glVertex2f(230,230);
@@ -111,28 +112,28 @@ void drawHanger(){
 	glVertex2f(50, 230);
 	glVertex2f(50, 190);
 	glEnd();
-	
+
 	glPopMatrix();
 }
 
 void drawHead(){
-	
+
 	glPushMatrix();
 
 	glTranslatef(500,300,0);
 
 	glBegin( GL_TRIANGLE_FAN );
-        glVertex2f(50, 190);
-        for( int n = 0; n <= 20; ++n ) {
-            float const t = 2*M_PI*(float)n/(float)20;
-            glVertex2f(50 + sin(t)*15, 190 + cos(t)*15);
-	    /*glVertex2f(x, y);
-        for( int n = 0; n <= segments; ++n ) {
-            float const t = 2*M_PI*(float)n/(float)segments
-            glVertex2f(x + sin(t)*r, y + cos(t)*r);
-        }*/
-        }
-    glEnd();
+	glVertex2f(50, 190);
+	for( int n = 0; n <= 20; ++n ) {
+		float const t = 2*M_PI*(float)n/(float)20;
+		glVertex2f(50 + sin(t)*15, 190 + cos(t)*15);
+		/*glVertex2f(x, y);
+		for( int n = 0; n <= segments; ++n ) {
+		float const t = 2*M_PI*(float)n/(float)segments
+		glVertex2f(x + sin(t)*r, y + cos(t)*r);
+		}*/
+	}
+	glEnd();
 
 	glPopMatrix();
 }
@@ -217,14 +218,14 @@ void win(){
 	cout<<"You win!"<<endl;
 	PlaySound(TEXT("Sounds\\winapplause.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
-	exit(0);
+	return;
 }
 
 void lost(){
 	cout<<"You Lost"<<endl;
 	PlaySound(TEXT("Sounds\\lost.wav"), NULL, SND_FILENAME);
 	Sleep(2000);
-	exit(0);
+	return;
 }
 
 void checkGameState(){
@@ -240,14 +241,14 @@ void checkGameState(){
 void loadHint(){
 
 	glRasterPos2i(20, 550);
-	
+
 	void * font = GLUT_BITMAP_HELVETICA_18;
 
-    for (string::iterator i = hint.begin(); i != hint.end(); ++i)
-    {
-        char c = *i;
-        glutBitmapCharacter(font, c);
-    }
+	for (string::iterator i = hint.begin(); i != hint.end(); ++i)
+	{
+		char c = *i;
+		glutBitmapCharacter(font, c);
+	}
 }
 
 int UpdateBoard(){
@@ -258,7 +259,7 @@ int UpdateBoard(){
 	image="images\\";
 	image.push_back(currentLetter);
 	image+=".bmp";
-	
+
 	int index;
 
 	if(indexes.size()!=0){
@@ -313,7 +314,7 @@ int UpdateBoard(){
 }
 
 void InitBoard(){
-	
+
 	if(!wordLoaded){
 		h->getWord();
 		h->getHint();
@@ -324,13 +325,13 @@ void InitBoard(){
 		wordLoaded=true;
 	}
 
-	
+
 	RGBpixmap pixmap;
 	pixmap.readBMPFile("images\\underscore.bmp");
 	pixmap.setTexture(27);
 	pixmap.readBMPFile("images\\space.bmp");
 	pixmap.setTexture(28);
-	  
+
 	for(unsigned int i=0;i<word.size();i++){
 		if(word.at(i)==' ')
 			textureIDs.push_back(28);
@@ -347,12 +348,12 @@ void loadKeyBoard(){
 		RGBpixmap pixmap;
 		pixmap.readBMPFile(letters[i]);//
 		pixmap.setTexture(i+1);
-	
+
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, i+1);
 
-	    tuple<int,int,char> temp;
-		
+		tuple<int,int,char> temp;
+
 		if(i<8){
 			glPushMatrix();
 			glTranslatef(220,150,0);
@@ -401,7 +402,7 @@ void loadKeyBoard(){
 			glTexCoord2d(0.0,1.0); glVertex2d(m,60);
 			glEnd();
 			glPopMatrix();
-			
+
 			if(!arrayFilled){
 				get<0>(temp)=m+185;
 				get<1>(temp)=30+30;
@@ -432,23 +433,23 @@ void drawSucesses(int sucesses){
 	void * font = GLUT_BITMAP_HELVETICA_18;
 
 	for(unsigned int i=0;i<printSucess.size();i++)
-    {
+	{
 		char c = printSucess.at(i);
-        glutBitmapCharacter(font, c);
-    }
+		glutBitmapCharacter(font, c);
+	}
 }
 
 
 void checkIfLetterAlreadyGuessed(){
 
 	if(guessedLetters.size()>0){
-		
+
 		for(unsigned int i=0;i<guessedLetters.size();i++){//checks for already guessed letters
-			
+
 			if(guessedLetters.at(i)==currentLetter){
 				letterAlreadyGuessed=true;
 				return;
-				}
+			}
 		}
 	}
 	letterAlreadyGuessed=false;
@@ -456,10 +457,10 @@ void checkIfLetterAlreadyGuessed(){
 }
 
 bool letterClick(int mouseX,int mouseY){
-	
+
 	for(unsigned int i=0; i<26 ;i++){
 		if(mouseX<get<0>(references.at(i))+LETTER_WIDTH && mouseX>get<0>(references.at(i)) && mouseY<get<1>(references.at(i))+LETTER_HEIGHT && mouseY>get<1>(references.at(i))){
-			
+
 			currentLetter=get<2>(references.at(i));//gets char associated with image
 
 			cout<<"You clicked on a letter!"<<endl;
@@ -472,7 +473,7 @@ bool letterClick(int mouseX,int mouseY){
 
 void MouseButton(int button, int state, int x, int y)
 {
-	 if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		mouseClicked=true;
 		for(unsigned int i=0; i<references.size(); i++){
 			cout<<"Letter: "<<get<2>(references.at(i))<<"   X: "<<get<0>(references.at(i))<<"   Y: "<<get<1>(references.at(i))<<endl;
@@ -489,43 +490,43 @@ void Reshape(GLint width, GLint height){
 
 void draw(void) {
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D(0.0, window_width, 0.0, window_height);
-    glMatrixMode(GL_MODELVIEW);
- 
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0, window_width, 0.0, window_height);
+	glMatrixMode(GL_MODELVIEW);
+
 	glPushMatrix();
 
 	drawBackground();
 
 	if(!boardLoaded)
 		InitBoard();
-	
+
 	UpdateBoard();
 	loadKeyBoard();
 	drawHanger();
 
 	glPopMatrix();
-	
+
 	glPushMatrix();
-    glLoadIdentity();
-    glColor3f(1.0f, 1.0f, 1.0f);
+	glLoadIdentity();
+	glColor3f(1.0f, 1.0f, 1.0f);
 	loadHint();
 
 	checkGameState();
-	
+
 	if(mouseClicked==true){
 
 		clickedOnKeyBoard = letterClick(get<0>(mouseCoords),get<1>(mouseCoords));
 
 		if(clickedOnKeyBoard){
 			checkIfLetterAlreadyGuessed();
-			
+
 			if(letterAlreadyGuessed==false){
-				
+
 				for(unsigned int i=0; i<word.size();i++){
 					if(word.at(i)==currentLetter){
 						guessed=true;
@@ -546,7 +547,7 @@ void draw(void) {
 
 				cout<<"Guessed letters: ";
 				for(int i=0;i<guessedLetters.size();i++){
-							cout<<guessedLetters.at(i); 
+					cout<<guessedLetters.at(i); 
 				}
 
 				cout<<endl;
@@ -555,7 +556,7 @@ void draw(void) {
 				cout<<"Wrong: "<<wrong<<endl;
 				mouseClicked=false;
 				guessed=false;
-				}
+			}
 		}
 	}
 
@@ -563,62 +564,62 @@ void draw(void) {
 
 	switch(wrong){
 
-		case 1:
-			drawHead();
-			glutPostRedisplay();
-			break;
+	case 1:
+		drawHead();
+		glutPostRedisplay();
+		break;
 
-		case 2:
-			drawHead();
-			drawBody();
-			glutPostRedisplay();
-			break;
+	case 2:
+		drawHead();
+		drawBody();
+		glutPostRedisplay();
+		break;
 
-		case 3:
-			drawHead();
-			drawBody();
-			drawLeftArm();
-			glutPostRedisplay();
-			break;
+	case 3:
+		drawHead();
+		drawBody();
+		drawLeftArm();
+		glutPostRedisplay();
+		break;
 
-		case 4:
-			drawHead();
-			drawBody();
-			drawLeftArm();
-			drawRigthArm();
-			glutPostRedisplay();
-			break;
+	case 4:
+		drawHead();
+		drawBody();
+		drawLeftArm();
+		drawRigthArm();
+		glutPostRedisplay();
+		break;
 
-		case 5:
-			drawHead();
-			drawBody();
-			drawLeftArm();
-			drawRigthArm();
-			drawLeftLeg();
-			glutPostRedisplay();
-			break;
+	case 5:
+		drawHead();
+		drawBody();
+		drawLeftArm();
+		drawRigthArm();
+		drawLeftLeg();
+		glutPostRedisplay();
+		break;
 
-		case 6:
-			drawHead();
-			drawBody();
-			drawLeftArm();
-			drawRigthArm();
-			drawLeftLeg();
-			drawRigthLeg();
-			glutPostRedisplay();
-			break;
+	case 6:
+		drawHead();
+		drawBody();
+		drawLeftArm();
+		drawRigthArm();
+		drawLeftLeg();
+		drawRigthLeg();
+		glutPostRedisplay();
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glEnable(GL_TEXTURE_2D);
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
-    glutPostRedisplay();
+	glutPostRedisplay();
 }
 
 void playMusic(int value){
@@ -626,19 +627,22 @@ void playMusic(int value){
 }
 
 int main(int argc, char **argv) {
-	
-    // init GLUT and create Window
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowPosition(100, 100);
+
+
+
+	// init GLUT and create Window
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(window_width, window_height);
-    glutCreateWindow("HangMan");
-    // register callbacks
-    glutDisplayFunc(draw);
+	glutCreateWindow("HangMan");
+	// register callbacks
+	glutDisplayFunc(draw);
 	glutReshapeFunc(Reshape);
 	glutMouseFunc(MouseButton);
 
-    // enter GLUT event processing cycle
-    glutMainLoop();
-    return 1;
+	// enter GLUT event processing cycle
+	glutMainLoop();
+	return 1;
+
 }

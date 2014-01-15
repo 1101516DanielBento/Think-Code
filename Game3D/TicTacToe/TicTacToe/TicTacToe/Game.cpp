@@ -188,19 +188,19 @@ void updateState(char turn,int index){//array com posicoes que ja foram jogadas
 void playerWin(){
 	cout<<"Player wins!"<<endl;
 	_sleep(2000);
-	exit(0);
+	return;
 }
 
 void AiWin(){
 	cout<<"Computer wins!"<<endl;
 	_sleep(2000);
-	exit(0);
+	return;
 }
 
 void itsADraw(){
 	cout<<"Draw!"<<endl;
 	_sleep(2000);
-	exit(0);
+	return;
 }
 
 void checkState(){

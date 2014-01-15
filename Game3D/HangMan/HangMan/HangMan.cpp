@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "HangMan.h"
 
+
 char* arg[] = {"swipl.ll","-s","hangman.pl",NULL};
 PlEngine e(3,arg);
 
