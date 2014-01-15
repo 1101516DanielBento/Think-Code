@@ -2122,17 +2122,6 @@ void Timer(int value)
 		cout<<"\nVOO LIVRE!";
 		teclas->setR(GL_FALSE);
 		modelo->setCameraMode(CAMERA_LIVRE);
-		//modelo->setObjecto(new Objecto());
-		/*estado->getCamera()->setDirLat(0);
-		estado->getCamera()->setDirLong(0);
-		estado->getCamera()->setFov(10);
-		estado->getCamera()->setDistance(10);
-		estado->getCamera()->setEyeX(0);
-		estado->getCamera()->setEyeY(0);
-		estado->getCamera()->setEyeZ(0);
-		estado->getCamera()->setCenterX(nos[0].x);
-		estado->getCamera()->setCenterY(nos[0].y);
-		estado->getCamera()->setCenterZ(nos[0].z);*/
 	}
 
 	if(teclas->getR())
@@ -2140,9 +2129,10 @@ void Timer(int value)
 		cout<<"\nVOO RASANTE!";
 		teclas->setV(GL_FALSE);
 		modelo->setCameraMode(CAMERA_RASANTE);
-		//modelo->getObjecto()->setX(/*u->getPoint()->getX()+0.1*/nos[0].x + 0.1);
-		//modelo->getObjecto()->setY(/*u->getPoint()->getZ()+u->getDimEsfera()-2*/nos[0].z + K_ESFERA*nos[0].largura/2.0 + 0.1);
-		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
+		modelo->getObjecto()->setX(get<2>(graf->at(0)).getNo().x);
+		modelo->getObjecto()->setY(get<2>(graf->at(0)).getNo().z + K_ESFERA*RAIO_NO/2.0+1.0);
+		modelo->getObjecto()->setZ(get<2>(graf->at(0)).getNo().y);
+
 	}
 
 
@@ -2316,34 +2306,6 @@ void Timer(int value)
 				if(tentativas>0)
 					modelo->getObjecto()->setY(ny);
 			}
-
-
-			/*if(picking())
-			{
-
-			Nos cameraPos = camPos();
-
-			if(colisaoEsferaEsfera2(cameraPos,DIMENSAO_CAMARA,nos,arcos))
-			{
-			//cout<<"Colisao\n";
-			modelo->getObjecto()->setX(modelo->getObjecto()->getX() - cos(modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-			modelo->getObjecto()->setZ(modelo->getObjecto()->getZ() - sin(-modelo->getObjecto()->getDir())*modelo->getObjecto()->getVel());
-			//moveTo(cameraPos);
-			}else{
-			if((modelo->getObjecto()->getY() < modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)) && (modelo->getObjecto()->getY() >= nos[1].y))
-			{
-			modelo->getObjecto()->setY(modelo->getObjecto()->getY() + 0.1);
-			//cout<<"colisao subir\n";
-			}else{
-			if((modelo->getObjecto()->getY() >= nos[1].y) && (modelo->getObjecto()->getY() >= modelo->getObjecto()->getY() + (K_ESFERA*nos[1].largura/2.0)))
-			{
-			modelo->getObjecto()->setY(modelo->getObjecto()->getY() - 0.1);
-			//cout<<"colisao descer\n";
-			}
-			}
-			}
-
-			}*/
 
 
 		}
