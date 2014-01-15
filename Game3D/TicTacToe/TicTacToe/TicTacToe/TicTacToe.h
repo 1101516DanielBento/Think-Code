@@ -8,6 +8,6 @@ class TicTacToe{
 	public:
 		void RequestAIMove();
 		void RequestPlayerMove(int pos);
-		void getAICoord();
+		int getAICoord();
 		void getMyCoord();
 };

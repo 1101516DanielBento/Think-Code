@@ -21,7 +21,7 @@ GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 //variaveis do mouse: W = tamanho janela(windows), mouse = posicao mouse
 GLint mouse_x,mouse_y, W_x,W_y,obj_select;
-TicTacToe* t = new TicTacToe();
+//TicTacToe* t = new TicTacToe();
 
 //variaveis de estado, state variables para Ortho/Perpective view, lighting on/off
 static int view_state = 0, light_state = 0;
@@ -512,41 +512,3 @@ void mouse_Galo(GLint button, GLint state, GLint x,GLint y)
 }
 
 
-int main (int argc, char** argv)
-{
-	/*glutInit(&argc,argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(500,500);
-	glutInitWindowPosition(10,10);
-	glutCreateWindow(argv[0]);
-	glutSetWindowTitle("JOGO DO GALO 3D");
-	init();
-	glutDisplayFunc(displayGalo);
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(keyboard_Galo);
-	glutMouseFunc(mouse_Galo);
-	glutTimerFunc(10, TimerGalo,1);
-	glutMainLoop();*/
-
-	int i=0;
-
-	TicTacToe* t = new TicTacToe();
-
-	int pos;
-
-	while(i<10){
-
-	t->RequestAIMove();
-	t->getAICoord();
-
-	cout<<"You play"<<endl;
-	cin>>pos;
-
-	t->RequestPlayerMove(pos);
-	t->getMyCoord();
-
-	cin.get();
-	
-}
-	return 0;
-}

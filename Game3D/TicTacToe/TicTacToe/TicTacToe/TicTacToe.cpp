@@ -18,13 +18,15 @@ void TicTacToe::RequestAIMove(){
 	}
 }
 
-void TicTacToe::getAICoord(){
+int TicTacToe::getAICoord(){
 	
 	PlTermv x(1);
 	PlQuery q("x",x);
 	while(q.next_solution()){
 		computerPos=x[0];
 	}
+
+	return computerPos;
 	cout<<"Position played by AI: "<<computerPos<<endl;
 }
 
