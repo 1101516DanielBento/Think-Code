@@ -17,6 +17,8 @@ tuple<int,int> mouseCoords;
 tuple<int,int,int> temp;
 bool circle=false;
 vector<tuple<int,int,int>> myPlays, aiPlays;
+vector<int> xSpots, oSpots;
+int state[]={0,0,0,0,0,0,0,0,0};
 TicTacToe* t = new TicTacToe();
 
 void drawBoard(){
@@ -181,6 +183,13 @@ void MouseButton(int button, int state, int x, int y)
 	 }
 }
 
+void updateState(int index){//array com posicoes que ja foram jogadas
+	state[index-1]=index;
+}
+
+void checkState(){
+}
+
 tuple<int,int,int> findCoordsByBoxNum(int n){
 
 	for(unsigned int i=0;i<references.size();i++){
@@ -208,13 +217,20 @@ void draw(){
     glLoadIdentity();
     glColor3f(1.0f, 1.0f, 1.0f);
 
+	checkState();//check if game ended
+
 	if(mouseClicked==true){
+		//Player
 		temp = BoxClick(get<0>(mouseCoords),get<1>(mouseCoords));
 		myPlays.push_back(temp);
 		t->RequestPlayerMove(get<2>(temp));
-		cout<<get<2>(temp)<<endl;
-
-		aiPlays.push_back(findCoordsByBoxNum(RequestAIMove()));
+		updateState(get<2>(temp));
+		
+		//AI
+		temp=findCoordsByBoxNum(RequestAIMove());
+		//aiPlays.push_back(findCoordsByBoxNum(RequestAIMove()));
+		aiPlays.push_back(temp);
+		updateState(get<2>(temp));
 
 		mouseClicked=false;
 	}
