@@ -18,8 +18,9 @@ tuple<int,int,int> temp;
 bool circle=false;
 vector<tuple<int,int,int>> myPlays, aiPlays;
 vector<int> xSpots, oSpots;
-int state[]={0,0,0,0,0,0,0,0,0};
+char state[]={'t','t','t','t','t','t','t','t','t'};
 TicTacToe* t = new TicTacToe();
+int numPlays=0,countPlays=0;
 
 void drawBoard(){
 	
@@ -116,11 +117,6 @@ void drawCircle(int boxX,int boxY){
         for(int n = 0; n <= 40; ++n) {
             float const t = 2*M_PI*(float)n/(float)40;
             glVertex2f(0 + sin(t)*60, 0 + cos(t)*60);
-	    /*glVertex2f(x, y);
-        for( int n = 0; n <= segments; ++n ) {
-            float const t = 2*M_PI*(float)n/(float)segments
-            glVertex2f(x + sin(t)*r, y + cos(t)*r);
-        }*/
         }
     glEnd();
 
@@ -180,21 +176,133 @@ void MouseButton(int button, int state, int x, int y)
 		 mouseCoordinates(x,600-y);
 		 cout<<"Mouse X: "<<get<0>(mouseCoords)<<endl;
 		 cout<<"Mouse Y: "<<get<1>(mouseCoords)<<endl;
-	 }
+	}
 }
 
-void updateState(int index){//array com posicoes que ja foram jogadas
-	state[index-1]=index;
+
+void updateState(char turn,int index){//array com posicoes que ja foram jogadas
+	state[index-1]=turn;
+	numPlays++;
+}
+
+void playerWin(){
+	cout<<"Player wins!"<<endl;
+	_sleep(2000);
+	exit(0);
+}
+
+void AiWin(){
+	cout<<"Computer wins!"<<endl;
+	_sleep(2000);
+	exit(0);
+}
+
+void itsADraw(){
+	cout<<"Draw!"<<endl;
+	_sleep(2000);
+	exit(0);
 }
 
 void checkState(){
+
+		//check for player victory
+		//horizontal win
+		if(state[0]=='o' && state[1]=='o' && state[2]=='o'){
+			playerWin();
+			return;
+		}
+
+		if(state[3]=='o' && state[4]=='o' && state[5]=='o'){
+			playerWin();
+			return;
+		}
+			
+		if(state[6]=='o' && state[7]=='o' && state[8]=='o'){
+			playerWin();
+			return;
+		}
+		//vertical win
+		if(state[0]=='o' && state[3]=='o' && state[6]=='o'){
+			playerWin();
+			return;
+		}
+
+		if(state[1]=='o' && state[4]=='o' && state[7]=='o'){
+			playerWin();
+			return;
+		}
+			
+		if(state[2]=='o' && state[5]=='o' && state[8]=='o'){
+			playerWin();
+			return;
+		}
+		//diagonal win
+		if(state[0]=='o' && state[4]=='o' && state[8]=='o'){
+			playerWin();
+			return;
+		}
+
+		if(state[2]=='o' && state[4]=='o' && state[6]=='o'){
+			playerWin();
+			return;
+		}
+
+		//check for AI victory
+		//horizontal win
+		if(state[0]=='x' && state[1]=='x' && state[2]=='x'){
+			AiWin();
+			return;
+		}
+
+		if(state[3]=='x' && state[4]=='x' && state[5]=='x'){
+			AiWin();
+			return;
+		}
+			
+		if(state[6]=='x' && state[7]=='x' && state[8]=='x'){
+			AiWin();
+			return;
+		}
+		//vertical win
+		if(state[0]=='x' && state[3]=='x' && state[6]=='x'){
+			AiWin();
+			return;
+		}
+
+		if(state[1]=='x' && state[4]=='x' && state[6]=='x'){
+			AiWin();
+			return;
+		}
+			
+		if(state[2]=='x' && state[5]=='x' && state[8]=='x'){
+			AiWin();
+			return;
+		}
+		//diagonal win
+		if(state[0]=='x' && state[4]=='x' && state[8]=='x'){
+			AiWin();
+			return;
+		}
+
+		if(state[2]=='x' && state[4]=='x' && state[6]=='x'){
+			AiWin();
+			return;
+		}
+		//check draw
+
+		if(countPlays==8){
+			itsADraw();
+			return;
+		}
 }
+
+
 
 tuple<int,int,int> findCoordsByBoxNum(int n){
 
 	for(unsigned int i=0;i<references.size();i++){
 		if(n==get<2>(references.at(i)))
-		return references.at(i);
+			return references.at(i);
 	}
 }
 
@@ -210,27 +318,31 @@ void draw(){
  
 	glPushMatrix();
 	drawBoard();
-	//drawCircle();
 	glPopMatrix();
 	
 	glPushMatrix();
     glLoadIdentity();
     glColor3f(1.0f, 1.0f, 1.0f);
 
-	checkState();//check if game ended
-
 	if(mouseClicked==true){
 		//Player
 		temp = BoxClick(get<0>(mouseCoords),get<1>(mouseCoords));
 		myPlays.push_back(temp);
 		t->RequestPlayerMove(get<2>(temp));
-		updateState(get<2>(temp));
+		updateState('o',get<2>(temp));
+		cout<<get<2>(temp)<<endl;
+		countPlays++;
 		
 		//AI
 		temp=findCoordsByBoxNum(RequestAIMove());
-		//aiPlays.push_back(findCoordsByBoxNum(RequestAIMove()));
 		aiPlays.push_back(temp);
-		updateState(get<2>(temp));
+		updateState('x',get<2>(temp));
+		cout<<get<2>(temp)<<endl;
+		countPlays++;
+
+		for(unsigned int i=0;i<9;i++){
+			 cout<<state[i]<<endl;
+		}
 
 		mouseClicked=false;
 	}
@@ -250,7 +362,7 @@ void draw(){
     glEnable(GL_TEXTURE_2D);
 	glutSwapBuffers();
     glutPostRedisplay();
-
+	checkState();//check if game ended
 }
 
 void Reshape(GLint x, GLint y){
@@ -275,18 +387,5 @@ int main (int argc, char** argv)
 	glutMouseFunc(MouseButton);
 	glutMainLoop();
 
-
-
-	//t->RequestAIMove();
-	//t->getAICoord();
-
-	//cout<<"You play"<<endl;
-	//cin>>pos;
-
-	//t->RequestPlayerMove(pos);
-	//t->getMyCoord();
-
-	//cin.get();
-	
 	return 0;
 }
