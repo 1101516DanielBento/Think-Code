@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
+#include <thread>
 #include <string>
 #include <GL/GLAux.h>
 //#include <AL/alut.h>
@@ -1139,6 +1140,7 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'e':
 	case 'E':
+		teclas->setE(GL_TRUE);
 		//glutDestroyWindow(sw1);
 		break;
 	}
@@ -2145,7 +2147,18 @@ void Timer(int value)
 		//modelo->getObjecto()->setZ(/*u->getPoint()->getY()+0.1*/nos[0].y - 2);
 	}
 
+	if(teclas->getG())
+	{
+		cout<<"\nTicTacToe\n";
+		thread ticTactoe();
 
+	}
+
+	if(teclas->getE())
+	{
+		cout<<"\nHangman!\n";
+		system(".\HangMan.exe");
+	}
 
 	switch(modelo->getCameraMode())
 	{
