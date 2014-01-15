@@ -14,6 +14,9 @@ using namespace std;
 
 vector<tuple<int,int,int>> references;//tuple<boxX,boxY,boxNum
 tuple<int,int> mouseCoords;
+tuple<int,int,int> temp;
+bool circle=false;
+vector<tuple<int,int,int>> myPlays, aiPlays;
 TicTacToe* t = new TicTacToe();
 
 void drawBoard(){
@@ -100,18 +103,17 @@ void loadReferences(){
 	references.push_back(temp9);
 }
 
-
-void drawCircle(int boardX,int boardY){
+void drawCircle(int boxX,int boxY){
     
 	glPushMatrix();
 
-	glTranslatef(boardX,boardY,0);
+	glTranslatef(boxX+100,boxY+100,0);
 
 	glBegin(GL_TRIANGLE_FAN);
         glVertex2f(0, 0);
         for(int n = 0; n <= 40; ++n) {
             float const t = 2*M_PI*(float)n/(float)40;
-            glVertex2f(50 + sin(t)*100, 190 + cos(t)*100);
+            glVertex2f(0 + sin(t)*60, 0 + cos(t)*60);
 	    /*glVertex2f(x, y);
         for( int n = 0; n <= segments; ++n ) {
             float const t = 2*M_PI*(float)n/(float)segments
@@ -122,13 +124,36 @@ void drawCircle(int boardX,int boardY){
 
 	glPopMatrix();
 }
-tuple<int,int> BoxClick(int mouseX,int mouseY){
+
+void drawCross(int boxX, int boxY){
+	
+	glPushMatrix();
+
+	glTranslatef(boxX+20,boxY+20,0);
+
+	glLineWidth(5.0);
+	glBegin(GL_LINES);
+	glVertex2f(0,0);
+	glVertex2f(160,160);
+	glEnd();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINES);
+	glVertex2f(0,160);
+	glVertex2f(160,0);
+	glEnd();
+
+	glPopMatrix();
+}
+
+tuple<int,int,int> BoxClick(int mouseX,int mouseY){
 	
 	for(unsigned int i=0; i<9 ;i++){
 		if(mouseX < get<0>(references.at(i))+200 && mouseX > get<0>(references.at(i)) && mouseY < get<1>(references.at(i))+200 && mouseY > get<1>(references.at(i))){
-			tuple<int,int> temp;
+			tuple<int,int,int> temp;
 			get<0>(temp)=get<0>(references.at(i));
-			get<1>(temp)=get<0>(references.at(i));
+			get<1>(temp)=get<1>(references.at(i));
+			get<2>(temp)=get<2>(references.at(i));
 			cout<<"You clicked on a box!"<<endl;
 			cout<<"Box number "<<get<2>(references.at(i))<<endl;
 			return temp;
@@ -141,7 +166,7 @@ void mouseCoordinates(int x, int y){
 	get<1>(mouseCoords)=y;
 }
 
-int AIMove(){
+int RequestAIMove(){
 	t->RequestAIMove();
 	return t->getAICoord();
 }
@@ -156,6 +181,14 @@ void MouseButton(int button, int state, int x, int y)
 	 }
 }
 
+tuple<int,int,int> findCoordsByBoxNum(int n){
+
+	for(unsigned int i=0;i<references.size();i++){
+		if(n==get<2>(references.at(i)))
+		return references.at(i);
+	}
+}
+
 void draw(){
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -168,7 +201,7 @@ void draw(){
  
 	glPushMatrix();
 	drawBoard();
-	//drawCircle(0,100);
+	//drawCircle();
 	glPopMatrix();
 	
 	glPushMatrix();
@@ -176,11 +209,22 @@ void draw(){
     glColor3f(1.0f, 1.0f, 1.0f);
 
 	if(mouseClicked==true){
-		tuple<int,int> temp=BoxClick(get<0>(mouseCoords),get<1>(mouseCoords));
-		glPushMatrix();
-		drawCircle(get<0>(temp),get<1>(temp));
-		glPopMatrix();
+		temp = BoxClick(get<0>(mouseCoords),get<1>(mouseCoords));
+		myPlays.push_back(temp);
+		t->RequestPlayerMove(get<2>(temp));
+		cout<<get<2>(temp)<<endl;
+
+		aiPlays.push_back(findCoordsByBoxNum(RequestAIMove()));
+
 		mouseClicked=false;
+	}
+
+	for(unsigned int i=0;i<myPlays.size();i++){
+		drawCircle(get<0>(myPlays.at(i)),get<1>(myPlays.at(i)));
+	}
+	
+	for(unsigned int i=0;i<aiPlays.size();i++){
+		drawCross(get<0>(aiPlays.at(i)),get<1>(aiPlays.at(i)));
 	}
 
     glMatrixMode(GL_MODELVIEW);
